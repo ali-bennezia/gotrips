@@ -15,15 +15,16 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
 	{
 		http
-		.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.authorizeHttpRequests(authz->
 			authz
 				.requestMatchers("/user/register", "/user/signin", "/flight/search?**", "/hotel/search?**", "/activity/search?**").permitAll()
 				.requestMatchers("/flight/create", "/flight/{id}", "/flight/edit", "/flight/delete").hasAnyRole("ADMIN", "FLIGHT_COMPANY")
 				.requestMatchers("/hotel/create", "/hotel/{id}", "/hotel/edit", "/hotel/delete").hasAnyRole("ADMIN", "HOTEL_COMPANY")
 				.requestMatchers("/activity/create", "/activity/{id}", "/activity/edit", "/activity/delete").hasAnyRole("ADMIN", "ACTIVITY_COMPANY")
-				
-		);
+		)
+		.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+		.csrf(csrf -> csrf.disable())
+		.httpBasic(basic -> basic.disable());
 		return http.build();
 	}
 	

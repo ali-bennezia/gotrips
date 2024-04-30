@@ -6,11 +6,13 @@ import javax.crypto.SecretKey;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
+@Component
 @ConfigurationProperties(prefix="jwt")
 @ConfigurationPropertiesScan
 public class JWTUtils {
