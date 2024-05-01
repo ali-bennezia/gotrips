@@ -3,10 +3,12 @@ package fr.alib.gotrips.model.entity.company;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.alib.gotrips.model.entity.User;
+import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.offers.Activity;
+import fr.alib.gotrips.model.entity.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -29,5 +31,7 @@ public class ActivityCompany {
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "id")
 	private List<Activity> activities = new ArrayList<Activity>();
+	@Embedded
+	private Address address;
 	
 }

@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @EnableWebSecurity
@@ -22,10 +23,17 @@ public class SecurityConfig {
 				.requestMatchers("/hotel/create", "/hotel/{id}", "/hotel/edit", "/hotel/delete").hasAnyRole("ADMIN", "HOTEL_COMPANY")
 				.requestMatchers("/activity/create", "/activity/{id}", "/activity/edit", "/activity/delete").hasAnyRole("ADMIN", "ACTIVITY_COMPANY")
 		)
+		.formLogin(login -> login.disable())
+		.logout(logout -> logout.disable())
 		.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.csrf(csrf -> csrf.disable())
 		.httpBasic(basic -> basic.disable());
 		return http.build();
+	}
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
 	
 }
