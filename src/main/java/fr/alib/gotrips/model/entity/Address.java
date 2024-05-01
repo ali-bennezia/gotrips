@@ -18,6 +18,7 @@ public class Address {
 	private Integer zipCode;
 	@Column( nullable = false )
 	private String country;
+	
 	public String getStreet() {
 		return street;
 	}

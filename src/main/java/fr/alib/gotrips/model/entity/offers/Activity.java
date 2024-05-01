@@ -24,13 +24,16 @@ public class Activity {
 	private Long id;
 	@ManyToOne(targetEntity = ActivityCompany.class)
 	private ActivityCompany activityCompany;
+	
 	@OneToMany(orphanRemoval = false)
 	@JoinColumn(name="activity_reservations_id", referencedColumnName = "id")
 	private List<ActivityReservation> activities = new ArrayList<ActivityReservation>();
+	
 	@Column( nullable = false, unique = true )
 	private String title;
 	@Column( nullable = false, unique = false )
 	private String description;
+	
 	@Embedded
 	private Address address;
 	@Column( nullable = false )

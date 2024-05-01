@@ -29,17 +29,25 @@ public class Flight {
 	private Long id;
 	@ManyToOne( targetEntity = FlightCompany.class )
 	private FlightCompany flightCompany;
+	
 	@OneToMany(orphanRemoval = false)
 	@JoinColumn(name = "flight_reservations_id", referencedColumnName = "id")
 	private List<FlightReservation> flightReservations = new ArrayList<FlightReservation>();
+	
+	@OneToMany(orphanRemoval = true)
+	@JoinColumn(name = "flight_evaluations_id", referencedColumnName = "id")
+	private List<Evaluation> evaluations = new ArrayList<Evaluation>();
+	
 	@Temporal( TemporalType.TIMESTAMP )
 	private Timestamp departureDate;
 	@Temporal( TemporalType.TIMESTAMP )
 	private Timestamp landingDate;
+	
 	@Embedded
 	private Address departureAddress;
 	@Embedded
 	private Address arrivalAddress;
+	
 	@Column( precision = 12, scale = 2 )
 	private BigDecimal price;
 	@Column( precision = 3, scale = 0 )
