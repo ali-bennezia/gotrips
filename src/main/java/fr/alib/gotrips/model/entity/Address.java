@@ -2,7 +2,7 @@ package fr.alib.gotrips.model.entity;
 
 import java.util.Objects;
 
-import fr.alib.gotrips.model.dto.AddressDTO;
+import fr.alib.gotrips.model.dto.inbound.AddressDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;

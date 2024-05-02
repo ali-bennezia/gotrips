@@ -1,5 +1,7 @@
 package fr.alib.gotrips.model.auth;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +12,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.alib.gotrips.model.dto.UserLoginDTO;
-import fr.alib.gotrips.model.dto.UserRegisterDTO;
+import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
+import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
+import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
@@ -20,6 +23,8 @@ import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.company.ActivityCompanyRepository;
 import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.company.HotelCompanyRepository;
+import fr.alib.gotrips.utils.JWTUtils;
+import io.jsonwebtoken.lang.Arrays;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,6 +37,9 @@ public class UserService implements UserDetailsService {
 	private ActivityCompanyRepository acRepo;
 	
 	@Autowired
+	private JWTUtils jwtUtils;
+	
+	@Autowired
 	private UserRepository userRepo;
 	
 	@Override
@@ -41,10 +49,16 @@ public class UserService implements UserDetailsService {
 		return new CustomUserDetails(result.get());
 	}
 	
-	public String login(UserLoginDTO dto, PasswordEncoder pwdEncoder)
+	public AuthenticationSessionDTO login(UserLoginDTO dto, PasswordEncoder pwdEncoder)
 	{
 		Optional<User> usr = this.userRepo.findUserByUsernameOrEmail(null, dto.getEmail());
-		return (usr.isPresent() && pwdEncoder.matches(dto.getPassword(), usr.get().getPassword())) ? usr.get().getUsername() : null;
+		return (usr.isPresent() && pwdEncoder.matches(dto.getPassword(), usr.get().getPassword())) ? 
+				new AuthenticationSessionDTO(
+						this.jwtUtils.generateToken(usr.get().getUsername()),
+						usr.get().getUsername(),
+						usr.get().getEmail(),
+						Arrays.asList(usr.get().getRoles().split(", "))
+				) : null;
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
@@ -55,6 +69,8 @@ public class UserService implements UserDetailsService {
 		}
 		
 		User user = null;
+		List<String> roles = new ArrayList<String>();
+		roles.add("USER");
 
 		user = new User(dto, pwdEncoder, null, null, null, "USER");
 		user = userRepo.save(user);
@@ -63,14 +79,23 @@ public class UserService implements UserDetailsService {
 		HotelCompany hCompany = dto.getHotelCompany() != null ? new HotelCompany(dto.getHotelCompany(), user) : null;
 		ActivityCompany aCompany = dto.getActivityCompany() != null ? new ActivityCompany(dto.getActivityCompany(), user) : null;
 		
-		fCompany = fcRepo.save(fCompany);
-		hCompany = hcRepo.save(hCompany);
-		aCompany = acRepo.save(aCompany);
+		if (fCompany != null){
+			fCompany = fcRepo.save(fCompany);
+			user.setFlightCompany(fCompany);
+			roles.add("FLIGHT_COMPANY");
+		}
+		if (hCompany != null) { 
+			hCompany = hcRepo.save(hCompany);
+			user.setHotelCompany(hCompany);
+			roles.add("HOTEL_COMPANY");
+		}
+		if (aCompany != null) { 
+			aCompany = acRepo.save(aCompany);
+			user.setActivityCompany(aCompany);
+			roles.add("ACTIVITY_COMPANY");
+		}
 		
-		user.setFlightCompany(fCompany);
-		user.setHotelCompany(hCompany);
-		user.setActivityCompany(aCompany);
-		
+		user.setRoles(String.join(", ", roles));
 		user = userRepo.save(user);
 
 		return new CustomUserDetails(user);

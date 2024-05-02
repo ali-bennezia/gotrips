@@ -5,6 +5,8 @@ import java.util.Objects;
 import fr.alib.gotrips.model.entity.PaymentData;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -12,6 +14,7 @@ import jakarta.persistence.Table;
 @Table( name = "FACTURATIONDATA" )
 public class FacturationData {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Embedded
 	private PaymentData paymentData;

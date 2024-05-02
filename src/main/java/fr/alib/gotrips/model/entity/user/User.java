@@ -8,7 +8,7 @@ import java.util.Objects;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import fr.alib.gotrips.model.dto.UserRegisterDTO;
+import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
@@ -19,6 +19,8 @@ import fr.alib.gotrips.model.entity.reservation.HotelReservation;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -32,6 +34,7 @@ import jakarta.persistence.TemporalType;
 public class User {
 	
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(nullable = false, unique = true)
 	private String username;
@@ -55,13 +58,13 @@ public class User {
 	private List<ActivityReservation> activityReservations = new ArrayList<ActivityReservation>();
 	
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-	@JoinColumn(name = "flight_company_id", referencedColumnName = "id")
+	@JoinColumn(name = "flight_company_id", referencedColumnName = "id", nullable = true)
 	private FlightCompany flightCompany;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-	@JoinColumn(name = "hotel_company_id", referencedColumnName = "id")
+	@JoinColumn(name = "hotel_company_id", referencedColumnName = "id", nullable = true)
 	private HotelCompany hotelCompany;
 	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, optional = true)
-	@JoinColumn(name = "activity_company_id", referencedColumnName = "id")
+	@JoinColumn(name = "activity_company_id", referencedColumnName = "id", nullable = true)
 	private ActivityCompany activityCompany;
 
 	@Column(nullable = false)

@@ -1,4 +1,4 @@
-package fr.alib.gotrips.model.dto;
+package fr.alib.gotrips.model.dto.inbound;
 
 import java.util.Objects;
 

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import fr.alib.gotrips.model.dto.CompanyDTO;
+import fr.alib.gotrips.model.dto.inbound.CompanyDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.offers.Hotel;
@@ -13,6 +13,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
@@ -24,6 +26,7 @@ import jakarta.persistence.Table;
 public class HotelCompany {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@OneToOne(mappedBy = "hotelCompany")
 	private User user;
