@@ -40,6 +40,10 @@ public class User {
 	private String username;
 	@Column(nullable = false, unique = true)
 	private String email;
+	@Column(nullable = false, unique = false)
+	private String firstName;
+	@Column(nullable = false, unique = false)
+	private String lastName;
 	@Column(nullable = false)
 	private String password;
 	@Column
@@ -190,10 +194,35 @@ public class User {
 		this.cards = cards;
 	}
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+
+	public void setEvaluations(List<Evaluation> evaluations) {
+		this.evaluations = evaluations;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(activityCompany, activityReservations, cards, createdAt, email, enabled, flightCompany,
-				flightReservations, hotelCompany, hotelReservations, id, password, roles, username);
+		return Objects.hash(activityCompany, activityReservations, cards, createdAt, email, enabled, evaluations,
+				firstName, flightCompany, flightReservations, hotelCompany, hotelReservations, id, lastName, password,
+				roles, username);
 	}
 
 	@Override
@@ -209,15 +238,35 @@ public class User {
 				&& Objects.equals(activityReservations, other.activityReservations)
 				&& Objects.equals(cards, other.cards) && Objects.equals(createdAt, other.createdAt)
 				&& Objects.equals(email, other.email) && enabled == other.enabled
+				&& Objects.equals(evaluations, other.evaluations) && Objects.equals(firstName, other.firstName)
 				&& Objects.equals(flightCompany, other.flightCompany)
 				&& Objects.equals(flightReservations, other.flightReservations)
 				&& Objects.equals(hotelCompany, other.hotelCompany)
 				&& Objects.equals(hotelReservations, other.hotelReservations) && Objects.equals(id, other.id)
-				&& Objects.equals(password, other.password) && Objects.equals(roles, other.roles)
-				&& Objects.equals(username, other.username);
+				&& Objects.equals(lastName, other.lastName) && Objects.equals(password, other.password)
+				&& Objects.equals(roles, other.roles) && Objects.equals(username, other.username);
 	}
 
-	public User(Long id, String username, String email, String password, boolean enabled, Timestamp createdAt,
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", password=" + password + ", enabled=" + enabled + ", createdAt="
+				+ createdAt + ", flightReservations=" + flightReservations + ", hotelReservations=" + hotelReservations
+				+ ", activityReservations=" + activityReservations + ", flightCompany=" + flightCompany
+				+ ", hotelCompany=" + hotelCompany + ", activityCompany=" + activityCompany + ", roles=" + roles
+				+ ", cards=" + cards + ", evaluations=" + evaluations + ", getId()=" + getId() + ", getUsername()="
+				+ getUsername() + ", getEmail()=" + getEmail() + ", getPassword()=" + getPassword() + ", isEnabled()="
+				+ isEnabled() + ", getCreatedAt()=" + getCreatedAt() + ", getFlightReservations()="
+				+ getFlightReservations() + ", getHotelReservations()=" + getHotelReservations()
+				+ ", getActivityReservations()=" + getActivityReservations() + ", getFlightCompany()="
+				+ getFlightCompany() + ", getHotelCompany()=" + getHotelCompany() + ", getActivityCompany()="
+				+ getActivityCompany() + ", getRoles()=" + getRoles() + ", getCards()=" + getCards()
+				+ ", getFirstName()=" + getFirstName() + ", getLastName()=" + getLastName() + ", getEvaluations()="
+				+ getEvaluations() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass() + ", toString()="
+				+ super.toString() + "]";
+	}
+
+	public User(Long id, String username, String email, String firstName, String lastName, String password, boolean enabled, Timestamp createdAt,
 			List<FlightReservation> flightReservations, List<HotelReservation> hotelReservations,
 			List<ActivityReservation> activityReservations, FlightCompany flightCompany, HotelCompany hotelCompany,
 			ActivityCompany activityCompany, String roles, List<FacturationData> cards) {
@@ -225,6 +274,8 @@ public class User {
 		this.id = id;
 		this.username = username;
 		this.email = email;
+		this.firstName = firstName;
+		this.lastName = lastName;
 		this.password = password;
 		this.enabled = enabled;
 		this.createdAt = createdAt;
@@ -242,6 +293,8 @@ public class User {
 		super();
 		this.username = dto.getUsername();
 		this.email = dto.getEmail();
+		this.firstName = dto.getFirstName();
+		this.lastName = dto.getLastName();
 		this.password = pwdEncoder.encode(dto.getPassword());
 		this.enabled = true;
 		this.createdAt = Timestamp.from(Instant.now());
@@ -255,14 +308,7 @@ public class User {
 		super();
 	}
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
-				+ ", enabled=" + enabled + ", createdAt=" + createdAt + ", flightReservations=" + flightReservations
-				+ ", hotelReservations=" + hotelReservations + ", activityReservations=" + activityReservations
-				+ ", flightCompany=" + flightCompany + ", hotelCompany=" + hotelCompany + ", activityCompany="
-				+ activityCompany + ", roles=" + roles + ", cards=" + cards + "]";
-	}
+
 
 	
 	

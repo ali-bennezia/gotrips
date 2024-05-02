@@ -14,6 +14,10 @@ public class UserRegisterDTO {
 	@Email
 	private String email;
 	@NotEmpty
+	private String firstName;
+	@NotEmpty
+	private String lastName;
+	@NotEmpty
 	@Size(min = 8, max = 128)
 	private String password;
 	
@@ -67,9 +71,28 @@ public class UserRegisterDTO {
 		this.activityCompany = activityCompany;
 	}
 
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(activityCompany, email, flightCompany, hotelCompany, password, username);
+		return Objects.hash(activityCompany, email, firstName, flightCompany, hotelCompany, lastName, password,
+				username);
 	}
 
 	@Override
@@ -82,9 +105,9 @@ public class UserRegisterDTO {
 			return false;
 		UserRegisterDTO other = (UserRegisterDTO) obj;
 		return Objects.equals(activityCompany, other.activityCompany) && Objects.equals(email, other.email)
-				&& Objects.equals(flightCompany, other.flightCompany)
-				&& Objects.equals(hotelCompany, other.hotelCompany) && Objects.equals(password, other.password)
-				&& Objects.equals(username, other.username);
+				&& Objects.equals(firstName, other.firstName) && Objects.equals(flightCompany, other.flightCompany)
+				&& Objects.equals(hotelCompany, other.hotelCompany) && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(password, other.password) && Objects.equals(username, other.username);
 	}
 
 	public UserRegisterDTO(@NotEmpty @Size(min = 6, max = 60) String username, @Email String email,
