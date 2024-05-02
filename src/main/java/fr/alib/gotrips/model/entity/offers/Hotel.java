@@ -3,6 +3,7 @@ package fr.alib.gotrips.model.entity.offers;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
@@ -33,4 +34,74 @@ public class Hotel {
 	private Address address;
 	@Column( precision = 4, scale = 2 )
 	private BigDecimal pricePerNight;
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public HotelCompany getHotelCompany() {
+		return hotelCompany;
+	}
+	public void setHotelCompany(HotelCompany hotelCompany) {
+		this.hotelCompany = hotelCompany;
+	}
+	public List<HotelReservation> getActivities() {
+		return activities;
+	}
+	public void setActivities(List<HotelReservation> activities) {
+		this.activities = activities;
+	}
+	public Integer getRooms() {
+		return rooms;
+	}
+	public void setRooms(Integer rooms) {
+		this.rooms = rooms;
+	}
+	public Address getAddress() {
+		return address;
+	}
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+	public BigDecimal getPricePerNight() {
+		return pricePerNight;
+	}
+	public void setPricePerNight(BigDecimal pricePerNight) {
+		this.pricePerNight = pricePerNight;
+	}
+	@Override
+	public int hashCode() {
+		return Objects.hash(activities, address, hotelCompany, id, pricePerNight, rooms);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Hotel other = (Hotel) obj;
+		return Objects.equals(activities, other.activities) && Objects.equals(address, other.address)
+				&& Objects.equals(hotelCompany, other.hotelCompany) && Objects.equals(id, other.id)
+				&& Objects.equals(pricePerNight, other.pricePerNight) && Objects.equals(rooms, other.rooms);
+	}
+	public Hotel(Long id, HotelCompany hotelCompany, List<HotelReservation> activities, Integer rooms, Address address,
+			BigDecimal pricePerNight) {
+		super();
+		this.id = id;
+		this.hotelCompany = hotelCompany;
+		this.activities = activities;
+		this.rooms = rooms;
+		this.address = address;
+		this.pricePerNight = pricePerNight;
+	}
+	public Hotel() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
 }

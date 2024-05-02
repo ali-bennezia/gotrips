@@ -66,5 +66,180 @@ public class User {
 	@JoinColumn( name = "id" )
 	private List<FacturationData> cards = new ArrayList<FacturationData>();
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public List<FlightReservation> getFlightReservations() {
+		return flightReservations;
+	}
+
+	public void setFlightReservations(List<FlightReservation> flightReservations) {
+		this.flightReservations = flightReservations;
+	}
+
+	public List<HotelReservation> getHotelReservations() {
+		return hotelReservations;
+	}
+
+	public void setHotelReservations(List<HotelReservation> hotelReservations) {
+		this.hotelReservations = hotelReservations;
+	}
+
+	public List<ActivityReservation> getActivityReservations() {
+		return activityReservations;
+	}
+
+	public void setActivityReservations(List<ActivityReservation> activityReservations) {
+		this.activityReservations = activityReservations;
+	}
+
+	public FlightCompany getFlightCompany() {
+		return flightCompany;
+	}
+
+	public void setFlightCompany(FlightCompany flightCompany) {
+		this.flightCompany = flightCompany;
+	}
+
+	public HotelCompany getHotelCompany() {
+		return hotelCompany;
+	}
+
+	public void setHotelCompany(HotelCompany hotelCompany) {
+		this.hotelCompany = hotelCompany;
+	}
+
+	public ActivityCompany getActivityCompany() {
+		return activityCompany;
+	}
+
+	public void setActivityCompany(ActivityCompany activityCompany) {
+		this.activityCompany = activityCompany;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	public List<FacturationData> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<FacturationData> cards) {
+		this.cards = cards;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(activityCompany, activityReservations, cards, createdAt, email, enabled, flightCompany,
+				flightReservations, hotelCompany, hotelReservations, id, password, roles, username);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(activityCompany, other.activityCompany)
+				&& Objects.equals(activityReservations, other.activityReservations)
+				&& Objects.equals(cards, other.cards) && Objects.equals(createdAt, other.createdAt)
+				&& Objects.equals(email, other.email) && enabled == other.enabled
+				&& Objects.equals(flightCompany, other.flightCompany)
+				&& Objects.equals(flightReservations, other.flightReservations)
+				&& Objects.equals(hotelCompany, other.hotelCompany)
+				&& Objects.equals(hotelReservations, other.hotelReservations) && Objects.equals(id, other.id)
+				&& Objects.equals(password, other.password) && Objects.equals(roles, other.roles)
+				&& Objects.equals(username, other.username);
+	}
+
+	public User(Long id, String username, String email, String password, boolean enabled, Timestamp createdAt,
+			List<FlightReservation> flightReservations, List<HotelReservation> hotelReservations,
+			List<ActivityReservation> activityReservations, FlightCompany flightCompany, HotelCompany hotelCompany,
+			ActivityCompany activityCompany, String roles, List<FacturationData> cards) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.enabled = enabled;
+		this.createdAt = createdAt;
+		this.flightReservations = flightReservations;
+		this.hotelReservations = hotelReservations;
+		this.activityReservations = activityReservations;
+		this.flightCompany = flightCompany;
+		this.hotelCompany = hotelCompany;
+		this.activityCompany = activityCompany;
+		this.roles = roles;
+		this.cards = cards;
+	}
+
+	public User() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", email=" + email + ", password=" + password
+				+ ", enabled=" + enabled + ", createdAt=" + createdAt + ", flightReservations=" + flightReservations
+				+ ", hotelReservations=" + hotelReservations + ", activityReservations=" + activityReservations
+				+ ", flightCompany=" + flightCompany + ", hotelCompany=" + hotelCompany + ", activityCompany="
+				+ activityCompany + ", roles=" + roles + ", cards=" + cards + "]";
+	}
+
+	
 	
 }
