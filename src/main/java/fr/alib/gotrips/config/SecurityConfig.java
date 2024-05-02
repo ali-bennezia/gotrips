@@ -3,6 +3,7 @@ package fr.alib.gotrips.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -28,7 +29,7 @@ public class SecurityConfig {
 		http
 		.authorizeHttpRequests( authz -> 
 			authz
-			.requestMatchers("/api/user/delete/**", "/api/**/reservation/create", "/api/**/reservation/get/**").hasAnyRole("USER", "ADMIN")
+			.requestMatchers("/api/user/delete/*", "/api/*/reservation/create", "/api/*/reservation/get/*").hasAnyRole("USER", "ADMIN")
 			.requestMatchers("/api/flight/create", "/api/flight/edit", "/api/flight/delete").hasAnyRole("ADMIN, FLIGHT_COMPANY")
 			.requestMatchers("/api/hotel/create", "/api/hotel/edit", "/api/hotel/delete").hasAnyRole("ADMIN, HOTEL_COMPANY")
 			.requestMatchers("/api/activity/create", "/api/activity/edit", "/api/activity/delete").hasAnyRole("ADMIN, ACTIVITY_COMPANY")
@@ -36,6 +37,7 @@ public class SecurityConfig {
 		);
 		
 		http
+		.cors(Customizer.withDefaults())
 		.formLogin(login -> login.disable())
 		.logout(logout -> logout.disable())
 		.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

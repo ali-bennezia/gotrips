@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.CompanyDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.user.User;
@@ -95,6 +96,13 @@ public class FlightCompany {
 		this.description = description;
 		this.flights = flights;
 		this.address = address;
+	}
+	public FlightCompany(CompanyDTO dto, User user) {
+		super();
+		this.user = user;
+		this.name = dto.getName();
+		this.description = dto.getDescription();
+		this.address = new Address(dto.getAddress());
 	}
 	public FlightCompany() {
 		super();

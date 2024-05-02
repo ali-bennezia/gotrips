@@ -1,10 +1,14 @@
 package fr.alib.gotrips.model.entity.user;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import fr.alib.gotrips.model.dto.UserRegisterDTO;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
@@ -230,10 +234,22 @@ public class User {
 		this.roles = roles;
 		this.cards = cards;
 	}
+	
+	public User(UserRegisterDTO dto, PasswordEncoder pwdEncoder, FlightCompany fComp, HotelCompany hComp, ActivityCompany aComp, String roles) {
+		super();
+		this.username = dto.getUsername();
+		this.email = dto.getEmail();
+		this.password = pwdEncoder.encode(dto.getPassword());
+		this.enabled = true;
+		this.createdAt = Timestamp.from(Instant.now());
+		this.flightCompany = fComp;
+		this.hotelCompany = hComp;
+		this.activityCompany = aComp;
+		this.roles = roles;
+	}
 
 	public User() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

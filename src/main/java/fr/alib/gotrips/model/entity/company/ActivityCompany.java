@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.CompanyDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.offers.Activity;
 import fr.alib.gotrips.model.entity.user.User;
@@ -97,9 +98,15 @@ public class ActivityCompany {
 		this.activities = activities;
 		this.address = address;
 	}
+	public ActivityCompany(CompanyDTO dto, User user) {
+		super();
+		this.user = user;
+		this.name = dto.getName();
+		this.description = dto.getDescription();
+		this.address = new Address(dto.getAddress());
+	}
 	public ActivityCompany() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

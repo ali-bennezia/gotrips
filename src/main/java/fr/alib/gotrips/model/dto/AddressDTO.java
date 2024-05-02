@@ -1,23 +1,18 @@
-package fr.alib.gotrips.model.entity;
+package fr.alib.gotrips.model.dto;
 
 import java.util.Objects;
 
-import fr.alib.gotrips.model.dto.AddressDTO;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
-@Embeddable
-public class Address {
-	@Column( nullable = false )
+public class AddressDTO {
+	@NotEmpty
 	private String street;
-	@Column( nullable = false )
+	@NotEmpty
 	private String city;
-	@Column( nullable = false, precision = 6, scale = 0 )
+	@NotNull
 	private Integer zipCode;
-	@Column( nullable = false )
+	@NotEmpty
 	private String country;
 	
 	public String getStreet() {
@@ -44,23 +39,6 @@ public class Address {
 	public void setCountry(String country) {
 		this.country = country;
 	}
-	public Address(String street, String city, Integer zipCode, String country) {
-		super();
-		this.street = street;
-		this.city = city;
-		this.zipCode = zipCode;
-		this.country = country;
-	}
-	public Address(AddressDTO dto) {
-		super();
-		this.street = dto.getStreet();
-		this.city = dto.getCity();
-		this.zipCode = dto.getZipCode();
-		this.country = dto.getCountry();
-	}
-	public Address() {
-		super();
-	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(city, country, street, zipCode);
@@ -73,8 +51,22 @@ public class Address {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Address other = (Address) obj;
+		AddressDTO other = (AddressDTO) obj;
 		return Objects.equals(city, other.city) && Objects.equals(country, other.country)
 				&& Objects.equals(street, other.street) && Objects.equals(zipCode, other.zipCode);
 	}
+	public AddressDTO(@NotEmpty String street, @NotEmpty String city, @NotNull Integer zipCode,
+			@NotEmpty String country) {
+		super();
+		this.street = street;
+		this.city = city;
+		this.zipCode = zipCode;
+		this.country = country;
+	}
+	public AddressDTO() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+	
+	
 }
