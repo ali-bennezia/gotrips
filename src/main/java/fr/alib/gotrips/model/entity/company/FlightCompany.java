@@ -23,7 +23,7 @@ public class FlightCompany {
 
 	@Id
 	private Long id;
-	@OneToOne(mappedBy = "USER")
+	@OneToOne(mappedBy = "flightCompany")
 	private User user;
 	@Column(nullable = false, unique = true)
 	private String name;

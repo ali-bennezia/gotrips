@@ -23,7 +23,7 @@ public class ActivityCompany {
 
 	@Id
 	private Long id;
-	@OneToOne(mappedBy = "USER")
+	@OneToOne(mappedBy = "activityCompany")
 	private User user;
 	@Column(nullable = false, unique = true)
 	private String name;

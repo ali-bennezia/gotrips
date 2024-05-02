@@ -8,6 +8,7 @@ import java.util.Objects;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
+import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.reservation.ActivityReservation;
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
 import fr.alib.gotrips.model.entity.reservation.HotelReservation;
@@ -65,6 +66,10 @@ public class User {
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
 	@JoinColumn( name = "id" )
 	private List<FacturationData> cards = new ArrayList<FacturationData>();
+	
+	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
+	@JoinColumn(name = "evaluation_user_id", referencedColumnName = "id")
+	private List<Evaluation> evaluations = new ArrayList<Evaluation>();
 
 	public Long getId() {
 		return id;

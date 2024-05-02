@@ -11,6 +11,8 @@ import java.util.Objects;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -44,8 +46,20 @@ public class Flight {
 	@Temporal( TemporalType.TIMESTAMP )
 	private Timestamp landingDate;
 	
+	@AttributeOverrides({
+		@AttributeOverride(name="street", column=@Column(name="departureStreet")),
+		@AttributeOverride(name="city", column=@Column(name="departureCity")),
+		@AttributeOverride(name="zipCode", column=@Column(name="departureZipCode")),
+		@AttributeOverride(name="country", column=@Column(name="departureCountry")),
+	})
 	@Embedded
 	private Address departureAddress;
+	@AttributeOverrides({
+		@AttributeOverride(name="street", column=@Column(name="arrivalStreet")),
+		@AttributeOverride(name="city", column=@Column(name="arrivalCity")),
+		@AttributeOverride(name="zipCode", column=@Column(name="arrivalZipCode")),
+		@AttributeOverride(name="country", column=@Column(name="arrivalCountry")),
+	})
 	@Embedded
 	private Address arrivalAddress;
 	

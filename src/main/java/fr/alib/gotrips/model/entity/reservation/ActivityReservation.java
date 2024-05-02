@@ -24,7 +24,7 @@ public class ActivityReservation {
 	private Long id;
 	@ManyToOne(targetEntity = User.class)
 	private User user;
-	@ManyToOne(targetEntity = Activity.class, optional = true)
+	@ManyToOne(targetEntity = Activity.class)
 	private Activity activity;
 	@Column(nullable = false, precision = 8, scale = 2)
 	private BigDecimal price;

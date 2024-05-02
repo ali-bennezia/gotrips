@@ -24,7 +24,7 @@ public class HotelCompany {
 
 	@Id
 	private Long id;
-	@OneToOne(mappedBy = "USER")
+	@OneToOne(mappedBy = "hotelCompany")
 	private User user;
 	@Column(nullable = false, unique = true)
 	private String name;

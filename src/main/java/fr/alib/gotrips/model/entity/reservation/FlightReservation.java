@@ -23,7 +23,7 @@ public class FlightReservation {
 
 	@Id
 	private Long id;
-	@OneToOne(mappedBy = "USER")
+	@ManyToOne(targetEntity = User.class)
 	private User user;
 	@ManyToOne(targetEntity = Flight.class)
 	private Flight flight;

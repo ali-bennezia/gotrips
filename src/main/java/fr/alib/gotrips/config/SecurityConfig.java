@@ -3,14 +3,17 @@ package fr.alib.gotrips.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import fr.alib.gotrips.filter.AuthenticationFilter;
+import fr.alib.gotrips.model.auth.UserService;
 
 @EnableWebSecurity
 @Configuration
@@ -39,7 +42,7 @@ public class SecurityConfig {
 		.csrf(csrf -> csrf.disable())
 		.httpBasic(basic -> basic.disable());
 		
-		http.addFilter(authFilter);
+		http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
 		
 		return http.build();
 	}
@@ -47,6 +50,11 @@ public class SecurityConfig {
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	
+	@Autowired
+	void config(AuthenticationManagerBuilder builder) throws Exception {
+		builder.userDetailsService(new UserService());
 	}
 	
 }
