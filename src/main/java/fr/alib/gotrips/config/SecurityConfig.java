@@ -1,5 +1,6 @@
 package fr.alib.gotrips.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,10 +10,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import fr.alib.gotrips.filter.AuthenticationFilter;
+
 @EnableWebSecurity
 @Configuration
 public class SecurityConfig {
 
+	@Autowired
+	private AuthenticationFilter authFilter;
+	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
 	{
@@ -29,6 +35,9 @@ public class SecurityConfig {
 		.sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.csrf(csrf -> csrf.disable())
 		.httpBasic(basic -> basic.disable());
+		
+		http.addFilter(authFilter);
+		
 		return http.build();
 	}
 	
