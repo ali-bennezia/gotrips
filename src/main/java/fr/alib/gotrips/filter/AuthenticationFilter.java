@@ -37,17 +37,18 @@ public class AuthenticationFilter extends OncePerRequestFilter {
 			if (username != null) {
 				try {
 					UserDetails usr = this.userService.loadUserByUsername(username);
-					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-							usr, 
-							null, 
-							usr == null ? List.of() : usr.getAuthorities()
-					);
-					SecurityContextHolder.getContext().setAuthentication(authentication);
+					if (usr.isEnabled() && usr.isCredentialsNonExpired() && usr.isAccountNonLocked() && usr.isAccountNonExpired()) {
+						UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+								usr, 
+								null, 
+								usr == null ? List.of() : usr.getAuthorities()
+						);
+						SecurityContextHolder.getContext().setAuthentication(authentication);
+					}
 				} catch (UsernameNotFoundException ex) {
 				}
 			}
 		}
-		
 		filterChain.doFilter(request, response);
 	}
 
