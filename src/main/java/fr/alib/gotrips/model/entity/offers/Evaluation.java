@@ -2,6 +2,7 @@ package fr.alib.gotrips.model.entity.offers;
 
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.entity.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -132,10 +133,16 @@ public class Evaluation {
 		this.activity = activity;
 		this.note = note;
 	}
+	
+	public Evaluation(EvaluationDTO dto) {
+		super();
+		this.title = dto.getTitle();
+		this.content = dto.getContent();
+		this.note = dto.getNote();
+	}
 
 	public Evaluation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

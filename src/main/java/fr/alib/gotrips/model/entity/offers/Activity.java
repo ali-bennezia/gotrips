@@ -38,6 +38,9 @@ public class Activity {
 	@Column( nullable = false, unique = false )
 	private String description;
 	
+	@Column( nullable = false, unique = false, precision = 2, scale = 1 )
+	private BigDecimal averageEvaluation;
+	
 	@Embedded
 	private Address address;
 	@Column( nullable = false )
@@ -83,10 +86,18 @@ public class Activity {
 	}
 	public void setPricePerDay(BigDecimal pricePerDay) {
 		this.pricePerDay = pricePerDay;
+	}	
+	public BigDecimal getAverageEvaluation() {
+		return averageEvaluation;
 	}
+	public void setAverageEvaluation(BigDecimal averageEvaluation) {
+		this.averageEvaluation = averageEvaluation;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(activities, activityCompany, address, description, id, pricePerDay, title);
+		return Objects.hash(activities, activityCompany, address, averageEvaluation, description, id, pricePerDay,
+				title);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -98,9 +109,9 @@ public class Activity {
 			return false;
 		Activity other = (Activity) obj;
 		return Objects.equals(activities, other.activities) && Objects.equals(activityCompany, other.activityCompany)
-				&& Objects.equals(address, other.address) && Objects.equals(description, other.description)
-				&& Objects.equals(id, other.id) && Objects.equals(pricePerDay, other.pricePerDay)
-				&& Objects.equals(title, other.title);
+				&& Objects.equals(address, other.address) && Objects.equals(averageEvaluation, other.averageEvaluation)
+				&& Objects.equals(description, other.description) && Objects.equals(id, other.id)
+				&& Objects.equals(pricePerDay, other.pricePerDay) && Objects.equals(title, other.title);
 	}
 	public Activity(Long id, ActivityCompany activityCompany, List<ActivityReservation> activities, String title,
 			String description, Address address, BigDecimal pricePerDay) {
@@ -112,10 +123,11 @@ public class Activity {
 		this.description = description;
 		this.address = address;
 		this.pricePerDay = pricePerDay;
+		this.averageEvaluation = new BigDecimal("0");
 	}
+	
 	public Activity() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

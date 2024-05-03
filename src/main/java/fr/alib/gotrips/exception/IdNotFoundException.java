@@ -9,5 +9,9 @@ public class IdNotFoundException extends AuthenticationException {
 	public IdNotFoundException(String msg) {
 		super(msg);
 	}
+	
+	public IdNotFoundException(String msg, Throwable cause) {
+		super(msg, cause);
+	}
 
 }

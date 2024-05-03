@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import fr.alib.gotrips.filter.AuthenticationFilter;
-import fr.alib.gotrips.model.auth.UserService;
+import fr.alib.gotrips.service.UserService;
 
 @EnableWebSecurity
 @Configuration

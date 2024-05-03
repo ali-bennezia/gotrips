@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.alib.gotrips.exception.IdNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
-import fr.alib.gotrips.model.auth.UserService;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
 import fr.alib.gotrips.model.dto.outbound.UserDetailsDTO;
 import fr.alib.gotrips.model.entity.user.User;
 import fr.alib.gotrips.model.repository.UserRepository;
+import fr.alib.gotrips.service.UserService;
 import fr.alib.gotrips.utils.JWTUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -60,7 +60,7 @@ public class UserController {
 	@PostMapping("/register")
 	public ResponseEntity<String> register(@Valid @RequestBody UserRegisterDTO dto)
 	{
-		UserDetails user = uService.register(dto, pwdEncoder);
+		UserDetails user = uService.register(dto, pwdEncoder, false);
 		if (user != null) {
 			return ResponseEntity.created(null).body("Created");
 		}else {

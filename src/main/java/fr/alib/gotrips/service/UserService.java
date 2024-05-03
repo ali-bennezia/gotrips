@@ -1,4 +1,4 @@
-package fr.alib.gotrips.model.auth;
+package fr.alib.gotrips.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.alib.gotrips.exception.IdNotFoundException;
+import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
@@ -81,7 +82,7 @@ public class UserService implements UserDetailsService {
 	 * @return A UserDetails if successful, null otherwise.
 	 */
 	@Transactional(rollbackFor = Exception.class)
-	public UserDetails register(UserRegisterDTO dto, PasswordEncoder pwdEncoder)
+	public UserDetails register(UserRegisterDTO dto, PasswordEncoder pwdEncoder, boolean isAdmin)
 	{
 		if (userRepo.findUserByUsernameOrEmail(dto.getUsername(), dto.getEmail()).isPresent()) {
 			return null;
@@ -89,9 +90,10 @@ public class UserService implements UserDetailsService {
 		
 		User user = null;
 		List<String> roles = new ArrayList<String>();
-		roles.add("USER");
+		roles.add("ROLE_USER");
+		if (isAdmin) roles.add("ROLE_ADMIN");
 
-		user = new User(dto, pwdEncoder, null, null, null, "USER");
+		user = new User(dto, pwdEncoder, null, null, null, String.join(", ", roles));
 		user = userRepo.save(user);
 		
 		FlightCompany fCompany = dto.getFlightCompany() != null ? new FlightCompany(dto.getFlightCompany(), user) : null;
@@ -101,17 +103,17 @@ public class UserService implements UserDetailsService {
 		if (fCompany != null){
 			fCompany = fcRepo.save(fCompany);
 			user.setFlightCompany(fCompany);
-			roles.add("FLIGHT_COMPANY");
+			roles.add("ROLE_FLIGHT_COMPANY");
 		}
 		if (hCompany != null) { 
 			hCompany = hcRepo.save(hCompany);
 			user.setHotelCompany(hCompany);
-			roles.add("HOTEL_COMPANY");
+			roles.add("ROLE_HOTEL_COMPANY");
 		}
 		if (aCompany != null) { 
 			aCompany = acRepo.save(aCompany);
 			user.setActivityCompany(aCompany);
-			roles.add("ACTIVITY_COMPANY");
+			roles.add("ROLE_ACTIVITY_COMPANY");
 		}
 		
 		user.setRoles(String.join(", ", roles));

@@ -2,12 +2,12 @@ package fr.alib.gotrips.model.entity;
 
 import java.util.Objects;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+
 import fr.alib.gotrips.model.dto.inbound.AddressDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+
 
 @Embeddable
 public class Address {
@@ -77,4 +77,6 @@ public class Address {
 		return Objects.equals(city, other.city) && Objects.equals(country, other.country)
 				&& Objects.equals(street, other.street) && Objects.equals(zipCode, other.zipCode);
 	}
+	
+	
 }

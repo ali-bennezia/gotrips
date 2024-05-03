@@ -35,6 +35,8 @@ public class Hotel {
 	private Integer rooms;
 	@Embedded
 	private Address address;
+	@Column( nullable = false, unique = false, precision = 2, scale = 1 )
+	private BigDecimal averageEvaluation;
 	@Column( precision = 4, scale = 2 )
 	private BigDecimal pricePerNight;
 	public Long getId() {
@@ -73,9 +75,15 @@ public class Hotel {
 	public void setPricePerNight(BigDecimal pricePerNight) {
 		this.pricePerNight = pricePerNight;
 	}
+	public BigDecimal getAverageEvaluation() {
+		return averageEvaluation;
+	}
+	public void setAverageEvaluation(BigDecimal averageEvaluation) {
+		this.averageEvaluation = averageEvaluation;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(activities, address, hotelCompany, id, pricePerNight, rooms);
+		return Objects.hash(activities, address, averageEvaluation, hotelCompany, id, pricePerNight, rooms);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -87,6 +95,7 @@ public class Hotel {
 			return false;
 		Hotel other = (Hotel) obj;
 		return Objects.equals(activities, other.activities) && Objects.equals(address, other.address)
+				&& Objects.equals(averageEvaluation, other.averageEvaluation)
 				&& Objects.equals(hotelCompany, other.hotelCompany) && Objects.equals(id, other.id)
 				&& Objects.equals(pricePerNight, other.pricePerNight) && Objects.equals(rooms, other.rooms);
 	}
@@ -99,10 +108,10 @@ public class Hotel {
 		this.rooms = rooms;
 		this.address = address;
 		this.pricePerNight = pricePerNight;
+		this.averageEvaluation = new BigDecimal("0");
 	}
 	public Hotel() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

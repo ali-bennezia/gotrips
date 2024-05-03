@@ -8,11 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+
+import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -40,14 +45,22 @@ public class Flight {
 	@JoinColumn(name = "flight_reservations_id", referencedColumnName = "id")
 	private List<FlightReservation> flightReservations = new ArrayList<FlightReservation>();
 	
-	@OneToMany(orphanRemoval = true)
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "flight_evaluations_id", referencedColumnName = "id")
 	private List<Evaluation> evaluations = new ArrayList<Evaluation>();
+	
+	@Column( nullable = false, unique = false, precision = 2, scale = 1 )
+	private BigDecimal averageEvaluation;
 	
 	@Temporal( TemporalType.TIMESTAMP )
 	private Timestamp departureDate;
 	@Temporal( TemporalType.TIMESTAMP )
 	private Timestamp landingDate;
+	
+	@Column( nullable = false )
+	private String departureAirport;
+	@Column( nullable = false )
+	private String arrivalAirport;
 	
 	@AttributeOverrides({
 		@AttributeOverride(name="street", column=@Column(name="departureStreet")),
@@ -130,10 +143,32 @@ public class Flight {
 	public void setSeats(Integer seats) {
 		this.seats = seats;
 	}
+
+	
+	public BigDecimal getAverageEvaluation() {
+		return averageEvaluation;
+	}
+	public void setAverageEvaluation(BigDecimal averageEvaluation) {
+		this.averageEvaluation = averageEvaluation;
+	}
+	
+	public String getDepartureAirport() {
+		return departureAirport;
+	}
+	public void setDepartureAirport(String departureAirport) {
+		this.departureAirport = departureAirport;
+	}
+	public String getArrivalAirport() {
+		return arrivalAirport;
+	}
+	public void setArrivalAirport(String arrivalAirport) {
+		this.arrivalAirport = arrivalAirport;
+	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(arrivalAddress, departureAddress, departureDate, evaluations, flightCompany,
-				flightReservations, id, landingDate, price, seats);
+		return Objects.hash(arrivalAddress, arrivalAirport, averageEvaluation, departureAddress, departureAirport,
+				departureDate, evaluations, flightCompany, flightReservations, id, landingDate, price, seats);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -145,7 +180,10 @@ public class Flight {
 			return false;
 		Flight other = (Flight) obj;
 		return Objects.equals(arrivalAddress, other.arrivalAddress)
+				&& Objects.equals(arrivalAirport, other.arrivalAirport)
+				&& Objects.equals(averageEvaluation, other.averageEvaluation)
 				&& Objects.equals(departureAddress, other.departureAddress)
+				&& Objects.equals(departureAirport, other.departureAirport)
 				&& Objects.equals(departureDate, other.departureDate) && Objects.equals(evaluations, other.evaluations)
 				&& Objects.equals(flightCompany, other.flightCompany)
 				&& Objects.equals(flightReservations, other.flightReservations) && Objects.equals(id, other.id)
@@ -154,6 +192,7 @@ public class Flight {
 	}
 	public Flight(Long id, FlightCompany flightCompany, List<FlightReservation> flightReservations,
 			List<Evaluation> evaluations, Timestamp departureDate, Timestamp landingDate, Address departureAddress,
+			String departureAirport, String arrivalAirport,
 			Address arrivalAddress, BigDecimal price, Integer seats) {
 		super();
 		this.id = id;
@@ -164,12 +203,26 @@ public class Flight {
 		this.landingDate = landingDate;
 		this.departureAddress = departureAddress;
 		this.arrivalAddress = arrivalAddress;
+		this.departureAirport = departureAirport;
+		this.arrivalAirport = arrivalAirport;
 		this.price = price;
 		this.seats = seats;
+		this.averageEvaluation = new BigDecimal("0");
+	}
+	public Flight(FlightDTO dto) {
+		super();
+		this.departureDate = new Timestamp( dto.getDepartureDate().getTime() );
+		this.landingDate = new Timestamp( dto.getLandingDate().getTime() );
+		this.departureAddress = new Address( dto.getDepartureAddress() );
+		this.arrivalAddress = new Address( dto.getArrivalAddress() );
+		this.departureAirport = dto.getDepartureAirport();
+		this.arrivalAirport = dto.getArrivalAirport();
+		this.price = new BigDecimal( Float.toString(dto.getPrice()) );
+		this.seats = dto.getSeats();
+		this.averageEvaluation = new BigDecimal("0");
 	}
 	public Flight() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	
