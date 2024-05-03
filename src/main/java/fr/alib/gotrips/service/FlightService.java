@@ -46,7 +46,7 @@ public class FlightService {
 	private UserService uService;
 	
 	private final String[] filterOptions = new String[] {
-			"qry", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr", "dates"
+			"qry", "page", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr", "dates"
 	};
 	private final String[] sortingOptions = new String[] {
 			"price", "average_evaluation", "seats", "arrival_city", "arrival_country", "departure_city", "departure_country"
