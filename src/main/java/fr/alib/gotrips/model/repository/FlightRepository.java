@@ -23,8 +23,8 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 			+ "( :dcntry IS NULL OR f.arrival_country = :dcntry ) AND "
 			+ "( :miprc IS NULL OR f.price >= :miprc ) AND "
 			+ "( :mxprc IS NULL OR f.price <= :mxprc ) AND "
-			+ "( :midate IS NULL OR f.departure_date >= :midate AND f.landing_date >= :midate ) AND "
-			+ "( :mxdate IS NULL OR f.departure_date <= :mxdate AND f.landing_date <= :mxdate ) AND "
+			+ "( :midate IS NULL OR f.departure_date = :midate ) AND "
+			+ "( :mxdate IS NULL OR f.landing_date = :mxdate ) AND "
 			+ "( :mieval IS NULL OR f.average_evalution >= :mieval ) AND "
 			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
 			+ "", nativeQuery = true)

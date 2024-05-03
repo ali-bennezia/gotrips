@@ -1,12 +1,16 @@
 package fr.alib.gotrips.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -19,12 +23,14 @@ import fr.alib.gotrips.exception.OfferNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
+import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.user.User;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
+import io.jsonwebtoken.lang.Arrays;
 
 @Service
 @Transactional
@@ -39,8 +45,30 @@ public class FlightService {
 	@Autowired
 	private UserService uService;
 	
-	public List<Flight> getFlights(Map<String, String> params)
+	private final String[] filterOptions = new String[] {
+			"qry", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr", "dates"
+	};
+	private final String[] sortingOptions = new String[] {
+			"price", "average_evaluation", "seats", "arrival_city", "arrival_country", "departure_city", "departure_country"
+	};
+	
+	private final List<String> filterOpts = Arrays.asList(filterOptions);
+	private final List<String> sortOpts = Arrays.asList(sortingOptions);
+	
+	public List<FlightDetailsDTO> getFlights(Map<String, String> params) throws IllegalArgumentException
 	{
+		for (String key : params.keySet()) {
+			if (!filterOpts.contains(key)) {
+				throw new IllegalArgumentException();
+			}
+		}
+		
+		String sortOption = params.get("srtby");
+		if (sortOption != null && !sortOpts.contains(sortOption)) {
+			throw new IllegalArgumentException();
+		}
+		
+		
 		try {
 			Integer order = params.get("srtordr") == null ? 1 : -1;
 			Pageable pageable = PageRequest.of(
@@ -51,13 +79,28 @@ public class FlightService {
 							order == 1 ? Sort.by(params.get("srtby")).ascending() : Sort.by(params.get("srtby")).descending()
 			);
 			
+			Page<Flight> result = this.fRepo.findFullTextSearchAll(
+					params.get("qry"), 
+					params.get("ocntry"), 
+					params.get("dcntry"), 
+					Float.valueOf( params.get("miprc") ), 
+					Float.valueOf( params.get("mxprc") ), 
+					new Date( Long.valueOf(params.get("midate")) ), 
+					new Date( Long.valueOf(params.get("mxdate")) ), 
+					Float.valueOf( params.get("mieval") ), 
+					Float.valueOf( params.get("mxeval") ), 
+					pageable
+					);
+			
+			List<FlightDetailsDTO> flightDetails = result.toList().stream().map((f)->{
+				return new FlightDetailsDTO(f);
+			}).collect(Collectors.toList());
+			
+			return flightDetails;
 		} catch (Exception e) {
-			return new ArrayList<Flight>();
+			return new ArrayList<FlightDetailsDTO>();
 		}
 		
-
-		
-		return new ArrayList<Flight>();
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
