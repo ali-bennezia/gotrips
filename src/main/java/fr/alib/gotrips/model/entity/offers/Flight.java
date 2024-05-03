@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
@@ -190,6 +187,16 @@ public class Flight {
 				&& Objects.equals(landingDate, other.landingDate) && Objects.equals(price, other.price)
 				&& Objects.equals(seats, other.seats);
 	}
+	public void applyDTO(FlightDTO dto) {
+		this.departureDate = new Timestamp( dto.getDepartureDate().getTime() );
+		this.landingDate = new Timestamp( dto.getLandingDate().getTime() );
+		this.departureAddress = new Address( dto.getDepartureAddress() );
+		this.arrivalAddress = new Address( dto.getArrivalAddress() );
+		this.departureAirport = dto.getDepartureAirport();
+		this.arrivalAirport = dto.getArrivalAirport();
+		this.price = new BigDecimal( Float.toString(dto.getPrice()) );
+		this.seats = dto.getSeats();
+	}
 	public Flight(Long id, FlightCompany flightCompany, List<FlightReservation> flightReservations,
 			List<Evaluation> evaluations, Timestamp departureDate, Timestamp landingDate, Address departureAddress,
 			String departureAirport, String arrivalAirport,
@@ -211,14 +218,7 @@ public class Flight {
 	}
 	public Flight(FlightDTO dto) {
 		super();
-		this.departureDate = new Timestamp( dto.getDepartureDate().getTime() );
-		this.landingDate = new Timestamp( dto.getLandingDate().getTime() );
-		this.departureAddress = new Address( dto.getDepartureAddress() );
-		this.arrivalAddress = new Address( dto.getArrivalAddress() );
-		this.departureAirport = dto.getDepartureAirport();
-		this.arrivalAirport = dto.getArrivalAirport();
-		this.price = new BigDecimal( Float.toString(dto.getPrice()) );
-		this.seats = dto.getSeats();
+		this.applyDTO(dto);
 		this.averageEvaluation = new BigDecimal("0");
 	}
 	public Flight() {
