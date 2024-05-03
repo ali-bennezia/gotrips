@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.alib.gotrips.exception.IdNotFoundException;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
@@ -49,6 +50,20 @@ public class UserService implements UserDetailsService {
 		return new CustomUserDetails(result.get());
 	}
 	
+	public UserDetails loadUserById(Long id) throws IdNotFoundException
+	{
+		Optional<User> result = this.userRepo.findById(id);
+		if (result.isPresent()) {
+			return new CustomUserDetails( result.get() );
+		}else {
+			throw new IdNotFoundException("Couldn't find user with id '" + id + "'.");
+		}
+	}
+	
+	/**
+	 * Checks user credentials.
+	 * @return An AuthenticationSessionDTO if successful, null otherwise.
+	 */
 	public AuthenticationSessionDTO login(UserLoginDTO dto, PasswordEncoder pwdEncoder)
 	{
 		Optional<User> usr = this.userRepo.findUserByUsernameOrEmail(null, dto.getEmail());
@@ -61,6 +76,10 @@ public class UserService implements UserDetailsService {
 				) : null;
 	}
 	
+	/**
+	 * Registers a new user.
+	 * @return A UserDetails if successful, null otherwise.
+	 */
 	@Transactional(rollbackFor = Exception.class)
 	public UserDetails register(UserRegisterDTO dto, PasswordEncoder pwdEncoder)
 	{
@@ -99,6 +118,24 @@ public class UserService implements UserDetailsService {
 		user = userRepo.save(user);
 
 		return new CustomUserDetails(user);
+	}
+	
+	/**
+	 * Disables a user.
+	 * @return true if the operation was successful, false otherwise.
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean disableUser(Long id)
+	{
+		Optional<User> userResult = this.userRepo.findById(id);
+		if (userResult.isPresent()) {
+			User user = userResult.get();
+			user.setEnabled(false);
+			userRepo.save(user);
+			return true;
+		}else {
+			return false;
+		}
 	}
 
 }

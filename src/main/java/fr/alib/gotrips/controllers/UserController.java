@@ -3,9 +3,11 @@ package fr.alib.gotrips.controllers;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.alib.gotrips.exception.IdNotFoundException;
+import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.auth.UserService;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
@@ -22,6 +26,8 @@ import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
 import fr.alib.gotrips.model.dto.outbound.UserDetailsDTO;
 import fr.alib.gotrips.model.entity.user.User;
 import fr.alib.gotrips.model.repository.UserRepository;
+import fr.alib.gotrips.utils.JWTUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
@@ -36,6 +42,9 @@ public class UserController {
 	
 	@Autowired
 	private UserRepository uRepo;
+	
+	@Autowired
+	private JWTUtils jwtUtils;
 	
 	@PostMapping("/signin")
 	public ResponseEntity<AuthenticationSessionDTO> signin(@Valid @RequestBody UserLoginDTO dto) {
@@ -71,8 +80,25 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> delete(@PathVariable("id") Long id)
+	public ResponseEntity<String> delete(HttpServletRequest request, @PathVariable("id") Long id)
 	{
-		return ResponseEntity.ok("");
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String currentUsername = this.jwtUtils.extractUsername(token);
+			try {
+				CustomUserDetails targetUser = (CustomUserDetails) this.uService.loadUserById(id);
+				if ( request.isUserInRole("ROLE_ADMIN") || targetUser.getUsername().equals(currentUsername) ) {
+					this.uService.disableUser(id);
+					return ResponseEntity.status(HttpStatusCode.valueOf(204)).body("No Content");
+				}else {
+					return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Forbidden");
+				}
+			}catch(IdNotFoundException ex) {
+				return ResponseEntity.status(HttpStatusCode.valueOf(400)).body("Bad Request");
+			}
+		}else {
+			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
+		}
 	}
 }
