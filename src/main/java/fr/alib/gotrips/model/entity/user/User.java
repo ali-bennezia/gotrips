@@ -75,7 +75,7 @@ public class User {
 	private String roles;
 	
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
-	@JoinColumn( name = "id" )
+	@JoinColumn( name = "facturation_data_id", referencedColumnName = "id" )
 	private List<FacturationData> cards = new ArrayList<FacturationData>();
 	
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )

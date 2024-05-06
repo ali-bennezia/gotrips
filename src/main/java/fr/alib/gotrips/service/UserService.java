@@ -3,24 +3,31 @@ package fr.alib.gotrips.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.alib.gotrips.exception.IdNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
+import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
+import fr.alib.gotrips.model.dto.outbound.CardDetailsDTO;
+import fr.alib.gotrips.model.entity.PaymentData;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.company.HotelCompany;
+import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.entity.user.User;
+import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.company.ActivityCompanyRepository;
 import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
@@ -37,6 +44,12 @@ public class UserService implements UserDetailsService {
 	private HotelCompanyRepository hcRepo;
 	@Autowired
 	private ActivityCompanyRepository acRepo;
+	@Autowired
+	private FacturationDataRepository factRepo;
+	
+	@Autowired
+	private TextEncryptor encryptor;
+	
 	
 	@Autowired
 	private JWTUtils jwtUtils;
@@ -139,5 +152,74 @@ public class UserService implements UserDetailsService {
 			return false;
 		}
 	}
-
+	
+	/**
+	 * Adds a payment method.
+	 * @returns The newly created entity.
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public FacturationData addFacturationData(Long userId, PaymentDataDTO dto) throws IdNotFoundException
+	{
+		Optional<User> userResult = this.userRepo.findById(userId);
+		if (userResult.isPresent()) {
+			FacturationData data = new FacturationData( dto, encryptor );
+			data.setUser(userResult.get());
+			User user = userResult.get();
+			user.getCards().add(data);
+			user = this.userRepo.save(user);
+			return data;
+		}else {
+			throw new IdNotFoundException("Couldn't find user with id '" + userId + "'.");
+		}
+	}
+	
+	/**
+	 * Fetches a user's payment data.
+	 * @returns A list of the user's payment data.
+	 */
+	public List<CardDetailsDTO> getFacturationDataList(Long userId) throws IdNotFoundException
+	{
+		Optional<User> userResult = this.userRepo.findById(userId);
+		if (userResult.isPresent()) {
+			User user = userResult.get();
+			return this.factRepo.findAllByUserId(userId).stream().map(f -> {
+				return new CardDetailsDTO(f, encryptor);
+			}).collect(Collectors.toList());
+		}else {
+			throw new IdNotFoundException("Couldn't find user with id '" + userId + "'.");
+		}
+	}
+	
+	/**
+	 * Edits a payment method.
+	 * @return the entity if successful, null otherwise.
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public FacturationData editFacturationData(Long facturationDataId, PaymentDataDTO dto)
+	{
+		if (this.factRepo.existsById(facturationDataId)) {
+			Optional<FacturationData> data = this.factRepo.findById(facturationDataId);
+			if (data.isPresent()) {
+				FacturationData fData = data.get();
+				fData.applyDTO(dto, encryptor);
+				return this.factRepo.save(fData);
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Deletes a payment method.
+	 * @return true if the operation was successful, false otherwise.
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean deletePaymentData(Long facturationDataId)
+	{
+		if (this.factRepo.existsById(facturationDataId)) {
+			this.factRepo.deleteById(facturationDataId);
+			return true;
+		}
+		return false;
+	}
+	
 }

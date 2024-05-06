@@ -3,6 +3,8 @@ package fr.alib.gotrips.model.dto.inbound;
 import java.util.Date;
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.duplex.AddressDTO;
+
 public class FlightDTO {
 	private Date departureDate;
 	private Date landingDate;

@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.alib.gotrips.exception.IdNotFoundException;
+import fr.alib.gotrips.exception.OfferNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
+import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
 import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
@@ -101,4 +104,106 @@ public class UserController {
 			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
 		}
 	}
+	
+	@PostMapping("/{id}/cards/add")
+	public ResponseEntity<?> addCard(@PathVariable("id") Long id, @Valid @RequestBody PaymentDataDTO dto, HttpServletRequest request)
+	{
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String currentUsername = this.jwtUtils.extractUsername(token);
+			try {
+				CustomUserDetails targetUser = (CustomUserDetails) this.uService.loadUserById(id);
+				if ( targetUser.getUsername().equals(currentUsername) ) {
+					this.uService.addFacturationData(id, dto);
+					return ResponseEntity.created(null).build();
+				}else {
+					return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Forbidden");
+				}
+			}catch(IdNotFoundException ex) {
+				return ResponseEntity.status(HttpStatusCode.valueOf(400)).body("Bad Request");
+			}
+		}else {
+			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
+		}
+	}
+	
+	@GetMapping("/{id}/cards/getAll")
+	public ResponseEntity<?> getAllCards(@PathVariable("id") Long id, HttpServletRequest request)
+	{
+
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String currentUsername = this.jwtUtils.extractUsername(token);
+			try {
+				CustomUserDetails targetUser = (CustomUserDetails) this.uService.loadUserById(id);
+				if ( targetUser.getUsername().equals(currentUsername) ) {
+					return ResponseEntity.ok(this.uService.getFacturationDataList(id));
+				}else {
+					return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Forbidden");
+				}
+			}catch(IdNotFoundException ex) {
+				return ResponseEntity.status(HttpStatusCode.valueOf(400)).body("Bad Request");
+			}
+		}else {
+			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
+		}
+
+
+	}
+	
+	@PutMapping("/{id}/cards/{cardId}/edit")
+	public ResponseEntity<?> editCard(
+			@PathVariable("id") Long id, 
+			@PathVariable("cardId") Long cardId,
+			@Valid @RequestBody PaymentDataDTO dto, 
+			HttpServletRequest request
+			)
+	{
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String currentUsername = this.jwtUtils.extractUsername(token);
+			try {
+				CustomUserDetails targetUser = (CustomUserDetails) this.uService.loadUserById(id);
+				if ( targetUser.getUsername().equals(currentUsername) ) {
+					this.uService.editFacturationData(cardId, dto);
+					return ResponseEntity.ok().build();
+				}else {
+					return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Forbidden");
+				}
+			}catch(IdNotFoundException|OfferNotFoundException ex) {
+				return ResponseEntity.status(HttpStatusCode.valueOf(400)).body("Bad Request");
+			}
+		}else {
+			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
+		}
+	}
+	
+	@DeleteMapping("/{id}/cards/{cardId}/delete")
+	public ResponseEntity<?> deleteCard(
+			@PathVariable("id") Long id,
+			@PathVariable("cardId") Long cardId,
+			HttpServletRequest request
+			)
+	{
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String currentUsername = this.jwtUtils.extractUsername(token);
+			try {
+				CustomUserDetails targetUser = (CustomUserDetails) this.uService.loadUserById(id);
+				if ( targetUser.getUsername().equals(currentUsername) ) {
+					this.uService.deletePaymentData(cardId);
+					return ResponseEntity.noContent().build();
+				}else {
+					return ResponseEntity.status(HttpStatusCode.valueOf(403)).body("Forbidden");
+				}
+			}catch(IdNotFoundException|OfferNotFoundException ex) {
+				return ResponseEntity.status(HttpStatusCode.valueOf(400)).body("Bad Request");
+			}
+		}else {
+			return ResponseEntity.status(HttpStatusCode.valueOf(401)).body("Unauthorized");
+		}	}
 }

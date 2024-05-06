@@ -2,6 +2,7 @@ package fr.alib.gotrips.model.dto.inbound;
 
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.duplex.AddressDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

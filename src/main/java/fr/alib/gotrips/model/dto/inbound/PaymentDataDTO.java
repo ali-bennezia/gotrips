@@ -2,9 +2,15 @@ package fr.alib.gotrips.model.dto.inbound;
 
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.duplex.AddressDTO;
+import jakarta.validation.constraints.NotEmpty;
+
 public class PaymentDataDTO {
+	@NotEmpty
 	private String creditCardName;
+	@NotEmpty
 	private String creditCardNumber;
+	@NotEmpty
 	private String creditCardCode;
 	private AddressDTO address;
 	public String getCreditCardName() {

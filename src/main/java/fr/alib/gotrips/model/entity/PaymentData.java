@@ -61,6 +61,12 @@ public class PaymentData {
 				&& Objects.equals(creditCardNameEncrypted, other.creditCardNameEncrypted)
 				&& Objects.equals(creditCardNumberEncrypted, other.creditCardNumberEncrypted);
 	}
+	public void applyDTO(PaymentDataDTO dto, TextEncryptor encryptor) {
+		this.creditCardNameEncrypted = encryptor.encrypt(dto.getCreditCardName());
+		this.creditCardNumberEncrypted = encryptor.encrypt(dto.getCreditCardNumber());
+		this.creditCardCodeEncrypted = encryptor.encrypt(dto.getCreditCardCode());
+		this.address = new Address(dto.getAddress());
+	}
 	public PaymentData(String creditCardNameEncrypted, String creditCardNumberEncrypted, String creditCardCodeEncrypted,
 			Address address) {
 		super();
@@ -71,10 +77,7 @@ public class PaymentData {
 	}
 	public PaymentData(PaymentDataDTO dto, TextEncryptor encryptor) {
 		super();
-		this.creditCardNameEncrypted = encryptor.encrypt(dto.getCreditCardName());
-		this.creditCardNumberEncrypted = encryptor.encrypt(dto.getCreditCardNumber());
-		this.creditCardCodeEncrypted = encryptor.encrypt(dto.getCreditCardCode());
-		this.address = new Address(dto.getAddress());
+		this.applyDTO(dto, encryptor);
 	}
 	public PaymentData() {
 		super();

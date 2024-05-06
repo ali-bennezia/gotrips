@@ -1,7 +1,8 @@
-package fr.alib.gotrips.model.dto.inbound;
+package fr.alib.gotrips.model.dto.duplex;
 
 import java.util.Objects;
 
+import fr.alib.gotrips.model.entity.Address;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
@@ -62,6 +63,13 @@ public class AddressDTO {
 		this.city = city;
 		this.zipCode = zipCode;
 		this.country = country;
+	}
+	public AddressDTO(Address address) {
+		super();
+		this.street = address.getStreet();
+		this.city = address.getCity();
+		this.zipCode = address.getZipCode();
+		this.country = address.getCountry();
 	}
 	public AddressDTO() {
 		super();
