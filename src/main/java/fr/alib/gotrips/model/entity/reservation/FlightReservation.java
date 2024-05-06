@@ -99,6 +99,7 @@ public class FlightReservation {
 		this.paymentTime = paymentTime;
 		this.paymentData = paymentData;
 	}
+
 	public FlightReservation() {
 		super();
 		// TODO Auto-generated constructor stub

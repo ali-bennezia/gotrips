@@ -2,6 +2,9 @@ package fr.alib.gotrips.model.entity;
 
 import java.util.Objects;
 
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+
+import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.Embedded;
@@ -66,9 +69,15 @@ public class PaymentData {
 		this.creditCardCodeEncrypted = creditCardCodeEncrypted;
 		this.address = address;
 	}
+	public PaymentData(PaymentDataDTO dto, TextEncryptor encryptor) {
+		super();
+		this.creditCardNameEncrypted = encryptor.encrypt(dto.getCreditCardName());
+		this.creditCardNumberEncrypted = encryptor.encrypt(dto.getCreditCardNumber());
+		this.creditCardCodeEncrypted = encryptor.encrypt(dto.getCreditCardCode());
+		this.address = new Address(dto.getAddress());
+	}
 	public PaymentData() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	

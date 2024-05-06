@@ -9,6 +9,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
+import org.springframework.security.crypto.keygen.KeyGenerators;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -29,11 +32,51 @@ public class SecurityConfig {
 		http
 		.authorizeHttpRequests( authz -> 
 			authz
-			.requestMatchers("/api/user/delete/*", "/api/*/reservation/create", "/api/*/reservation/get/*").hasAnyRole("USER", "ADMIN")
-			.requestMatchers("/api/*/evaluations/create", "/api/*/evaluations/edit/*", "/api/*/evaluations/delete/*").hasAnyRole("USER", "ADMIN")
-			.requestMatchers("/api/flight/create", "/api/flight/edit", "/api/flight/delete").hasAnyRole("ADMIN, FLIGHT_COMPANY")
-			.requestMatchers("/api/hotel/create", "/api/hotel/edit", "/api/hotel/delete").hasAnyRole("ADMIN, HOTEL_COMPANY")
-			.requestMatchers("/api/activity/create", "/api/activity/edit", "/api/activity/delete").hasAnyRole("ADMIN, ACTIVITY_COMPANY")
+			.requestMatchers(
+					"/api/user/*/delete", 
+					
+					"/api/flight/*/reservations/create", 
+					"/api/flight/*/reservations/get/*",
+					"/api/flight/*/reservations/getAll",
+					
+					"/api/hotel/*/reservations/create", 
+					"/api/hotel/*/reservations/get/*",
+					"/api/hotel/*/reservations/getAll",
+					
+					"/api/activity/*/reservations/create", 
+					"/api/activity/*/reservations/get/*",
+					"/api/activity/*/reservations/getAll"
+					)
+			.hasAnyRole("USER", "ADMIN")
+			.requestMatchers(
+					"/api/flight/*/evaluations/create", 
+					"/api/flight/*/evaluations/edit/*", 
+					"/api/flight/*/evaluations/delete/*",
+					
+					"/api/hotel/*/evaluations/create", 
+					"/api/hotel/*/evaluations/edit/*", 
+					"/api/hotel/*/evaluations/delete/*",
+					
+					"/api/activity/*/evaluations/create", 
+					"/api/activity/*/evaluations/edit/*", 
+					"/api/activity/*/evaluations/delete/*"
+					)
+			.hasAnyRole("USER", "ADMIN")
+			.requestMatchers(
+					"/api/flight/create", 
+					"/api/flight/*/edit", 
+					"/api/flight/*/delete")
+			.hasAnyRole("ADMIN, FLIGHT_COMPANY")
+			.requestMatchers(
+					"/api/hotel/create", 
+					"/api/hotel/*/edit", 
+					"/api/hotel/*/delete")
+			.hasAnyRole("ADMIN, HOTEL_COMPANY")
+			.requestMatchers(
+					"/api/activity/create", 
+					"/api/activity/*/edit", 
+					"/api/activity/*/delete")
+			.hasAnyRole("ADMIN, ACTIVITY_COMPANY")
 			.anyRequest().permitAll()
 		);
 		

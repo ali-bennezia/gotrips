@@ -31,6 +31,7 @@ import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.user.User;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
+import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
 import io.jsonwebtoken.lang.Arrays;
 
 @Service
@@ -39,6 +40,9 @@ public class FlightService {
 
 	@Autowired
 	private FlightRepository fRepo;
+	
+	@Autowired
+	private FlightReservationRepository fResRepo;
 	
 	@Autowired
 	private EvaluationRepository evalRepo;
@@ -154,6 +158,8 @@ public class FlightService {
 		this.fRepo.deleteById(flightId);
 	}
 	
+	// Evaluations
+	
 	@Transactional(rollbackFor = Exception.class)
 	public Flight updateFlightAverageEvaluation(Long flightId) throws OfferNotFoundException
 	{
@@ -230,6 +236,13 @@ public class FlightService {
 		return this.evalRepo.findAllByFlightId(flightId, pageable).stream().map(e -> {
 			return new EvaluationDetailsDTO(e);
 		}).collect(Collectors.toList());
+	}
+	
+	// Reservations
+	
+	public void createReservation(Long flightId, PaymentDataDTO dto)
+	{
+		
 	}
 	
 }

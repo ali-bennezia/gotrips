@@ -68,7 +68,7 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/details/{id}")
+	@GetMapping("/{id}/details")
 	public ResponseEntity<UserDetailsDTO> details(@PathVariable("id") Long id)
 	{
 		Optional<User> user = this.uRepo.findById(id);
@@ -79,7 +79,7 @@ public class UserController {
 		}
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/{id}/delete")
 	public ResponseEntity<String> delete(HttpServletRequest request, @PathVariable("id") Long id)
 	{
 		String token = request.getHeader("Authorization");

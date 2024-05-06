@@ -100,7 +100,6 @@ public class ActivityReservation {
 	}
 	public ActivityReservation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {
