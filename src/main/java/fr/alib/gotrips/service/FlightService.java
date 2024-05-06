@@ -23,6 +23,7 @@ import fr.alib.gotrips.exception.OfferNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
+import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
@@ -52,8 +53,14 @@ public class FlightService {
 			"price", "average_evaluation", "seats", "arrival_city", "arrival_country", "departure_city", "departure_country"
 	};
 	
+	private final String[] evaluationsFilterOptions = new String[] {
+			"page"
+	};
+	
 	private final List<String> filterOpts = Arrays.asList(filterOptions);
 	private final List<String> sortOpts = Arrays.asList(sortingOptions);
+	private final List<String> evaluationsFilterOpts = Arrays.asList(evaluationsFilterOptions);
+
 	
 	public List<FlightDetailsDTO> getFlights(Map<String, String> params) throws IllegalArgumentException
 	{
@@ -180,6 +187,22 @@ public class FlightService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
+	public EvaluationDetailsDTO editEvaluation(Long evaluationId, EvaluationDTO dto) throws OfferNotFoundException
+	{
+		if (!this.evalRepo.existsById(evaluationId)) throw new OfferNotFoundException("Couldn't find evaluation with id '" + evaluationId + "'.");
+		Optional<Evaluation> eval = this.evalRepo.findById(evaluationId);
+		if (eval.isPresent()) {
+			Evaluation data = eval.get();
+			data.applyDTO(dto);
+			data = this.evalRepo.save(data);
+			updateFlightAverageEvaluation(data.getFlight().getId());
+			return new EvaluationDetailsDTO(data);
+		}else {
+			throw new OfferNotFoundException("Couldn't find evaluation with id '" + evaluationId + "'.");
+		}
+	}
+	
+	@Transactional(rollbackFor = Exception.class)
 	public void removeEvaluation(Long evaluationId) throws OfferNotFoundException
 	{
 		Optional<Evaluation> ev = this.evalRepo.findById(evaluationId);
@@ -190,6 +213,23 @@ public class FlightService {
 		}else {
 			throw new OfferNotFoundException("Couldn't find evaluation with id '" + evaluationId + "'.");
 		}
+	}
+	
+	public List<EvaluationDetailsDTO> getEvaluations(Long flightId, Map<String, String> params) throws IllegalArgumentException
+	{
+		if (!this.fRepo.existsById(flightId)) throw new OfferNotFoundException("Couldn't find flight with id '" + flightId + "'.");
+		
+		for (String key : params.keySet()) {
+			if (!evaluationsFilterOpts.contains(key)) {
+				throw new IllegalArgumentException();
+			}
+		}
+		
+		final Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
+		Pageable pageable = PageRequest.of(page, 10);
+		return this.evalRepo.findAllByFlightId(flightId, pageable).stream().map(e -> {
+			return new EvaluationDetailsDTO(e);
+		}).collect(Collectors.toList());
 	}
 	
 }

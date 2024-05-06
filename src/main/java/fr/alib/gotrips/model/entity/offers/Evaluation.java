@@ -121,6 +121,12 @@ public class Evaluation {
 				&& Objects.equals(title, other.title) && Objects.equals(user, other.user);
 	}
 
+	public void applyDTO(EvaluationDTO dto) {
+		this.title = dto.getTitle();
+		this.content = dto.getContent();
+		this.note = dto.getNote();
+	}
+	
 	public Evaluation(Long id, User user, String title, String content, Flight flight, Hotel hotel, Activity activity,
 			Integer note) {
 		super();
@@ -136,9 +142,7 @@ public class Evaluation {
 	
 	public Evaluation(EvaluationDTO dto) {
 		super();
-		this.title = dto.getTitle();
-		this.content = dto.getContent();
-		this.note = dto.getNote();
+		this.applyDTO(dto);
 	}
 
 	public Evaluation() {

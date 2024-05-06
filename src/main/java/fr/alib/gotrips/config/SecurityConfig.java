@@ -30,6 +30,7 @@ public class SecurityConfig {
 		.authorizeHttpRequests( authz -> 
 			authz
 			.requestMatchers("/api/user/delete/*", "/api/*/reservation/create", "/api/*/reservation/get/*").hasAnyRole("USER", "ADMIN")
+			.requestMatchers("/api/*/evaluations/create", "/api/*/evaluations/edit/*", "/api/*/evaluations/delete/*").hasAnyRole("USER", "ADMIN")
 			.requestMatchers("/api/flight/create", "/api/flight/edit", "/api/flight/delete").hasAnyRole("ADMIN, FLIGHT_COMPANY")
 			.requestMatchers("/api/hotel/create", "/api/hotel/edit", "/api/hotel/delete").hasAnyRole("ADMIN, HOTEL_COMPANY")
 			.requestMatchers("/api/activity/create", "/api/activity/edit", "/api/activity/delete").hasAnyRole("ADMIN, ACTIVITY_COMPANY")
