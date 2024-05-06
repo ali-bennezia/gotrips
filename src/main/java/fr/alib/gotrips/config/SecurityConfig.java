@@ -33,10 +33,10 @@ public class SecurityConfig {
 		.authorizeHttpRequests( authz -> 
 			authz
 			.requestMatchers(
-					"/api/user/*/cards/add",
-					"/api/user/*/cards/getAll",
-					"/api/user/*/cards/*/edit",
-					"/api/user/*/cards/*/delete"
+					"/api/user/*/card/add",
+					"/api/user/*/card/getAll",
+					"/api/user/*/card/*/edit",
+					"/api/user/*/card/*/delete"
 					)
 			.hasAnyRole("USER")
 			.requestMatchers(

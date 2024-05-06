@@ -1,6 +1,7 @@
 package fr.alib.gotrips.service;
 
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +26,20 @@ import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
+import fr.alib.gotrips.model.dto.inbound.ReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
+import fr.alib.gotrips.model.entity.PaymentData;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.offers.Flight;
+import fr.alib.gotrips.model.entity.reservation.FlightReservation;
+import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.entity.user.User;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
+import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
+import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
 import io.jsonwebtoken.lang.Arrays;
 
@@ -43,13 +51,22 @@ public class FlightService {
 	private FlightRepository fRepo;
 	
 	@Autowired
+	private UserRepository uRepo;
+	
+	@Autowired
 	private FlightReservationRepository fResRepo;
+	
+	@Autowired
+	private FacturationDataRepository facRepo;
 	
 	@Autowired
 	private EvaluationRepository evalRepo;
 	
 	@Autowired
 	private UserService uService;
+	
+	@Autowired
+	private TextEncryptor encryptor;
 	
 	private final String[] filterOptions = new String[] {
 			"qry", "page", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr", "dates"
@@ -241,9 +258,47 @@ public class FlightService {
 	
 	// Reservations
 	
-	public void createReservation(Long flightId, PaymentDataDTO dto)
-	{
+	public FlightReservation createReservation(Long userId, Long flightId, ReservationDTO dto) throws IdNotFoundException
+	{	
+		Optional<User> userOptional = this.uRepo.findById(userId);
+		Optional<Flight> flightOptional = this.fRepo.findById(flightId);
 		
+		if (userOptional.isPresent() && flightOptional.isPresent()) {
+			User user = userOptional.get();
+			Flight flight = flightOptional.get();
+			Optional<FacturationData> fDataOptional = this.facRepo.findById( dto.getCardId().longValue() );
+			if (fDataOptional.isPresent()) {
+				FacturationData fData = fDataOptional.get();
+				FlightReservation reservation = new FlightReservation(user, flight, fData.getPaymentData());
+				reservation = this.fResRepo.save(reservation);
+				return reservation;
+			}else {
+				throw new IdNotFoundException("Card with id '" + dto.getCardId() + "' couldn't be found.");
+			}
+			
+		}else {
+			 throw new IdNotFoundException("User or flight with given id couldn't be found.");
+		}
+	}
+	
+	public FlightReservation getReservation(Long reservationId) throws IdNotFoundException
+	{	
+		Optional<FlightReservation> fResData = this.fResRepo.findById(reservationId);
+		if (fResData.isPresent()) {
+			return fResData.get();
+		}else {
+			 throw new IdNotFoundException("Reservation with given id '" + reservationId + "' couldn't be found.");
+		}
+	}
+	
+	public List<FlightReservation> getReservations(Long flightId, Integer page) throws IdNotFoundException
+	{	
+		if (this.fRepo.existsById(flightId)) {
+			Pageable pageable = PageRequest.of(page, 10);
+			return this.fResRepo.findAllByFlightId(flightId, pageable);
+		}else {
+			 throw new IdNotFoundException("Flight with given id '" + flightId + "' couldn't be found.");
+		}
 	}
 	
 }

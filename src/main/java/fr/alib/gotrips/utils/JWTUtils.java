@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.PropertySource;
@@ -13,11 +14,11 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
-@PropertySource("classpath:credentials.properties")
 @Component
 @ConfigurationProperties(prefix="jwt")
 @ConfigurationPropertiesScan
 public class JWTUtils {
+	@Value("${jwt.secret-key}")
 	private String secretKey;
 	private final long expirationTime = 864_000_000;
 	

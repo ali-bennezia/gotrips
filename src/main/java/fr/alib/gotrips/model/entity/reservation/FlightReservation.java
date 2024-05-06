@@ -2,6 +2,7 @@ package fr.alib.gotrips.model.entity.reservation;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.PaymentData;
@@ -89,20 +90,17 @@ public class FlightReservation {
 				&& Objects.equals(paymentData, other.paymentData) && Objects.equals(paymentTime, other.paymentTime)
 				&& Objects.equals(price, other.price) && Objects.equals(user, other.user);
 	}
-	public FlightReservation(Long id, User user, Flight flight, BigDecimal price, Timestamp paymentTime,
-			PaymentData paymentData) {
+	public FlightReservation(User user, Flight flight, PaymentData paymentData) {
 		super();
-		this.id = id;
 		this.user = user;
 		this.flight = flight;
-		this.price = price;
-		this.paymentTime = paymentTime;
+		this.price = flight.getPrice();
+		this.paymentTime = Timestamp.from(Instant.now());
 		this.paymentData = paymentData;
 	}
 
 	public FlightReservation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	@Override
 	public String toString() {

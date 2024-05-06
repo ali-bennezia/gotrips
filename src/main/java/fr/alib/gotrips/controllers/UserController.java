@@ -105,7 +105,7 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/{id}/cards/add")
+	@PostMapping("/{id}/card/add")
 	public ResponseEntity<?> addCard(@PathVariable("id") Long id, @Valid @RequestBody PaymentDataDTO dto, HttpServletRequest request)
 	{
 		String token = request.getHeader("Authorization");
@@ -128,7 +128,7 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("/{id}/cards/getAll")
+	@GetMapping("/{id}/card/getAll")
 	public ResponseEntity<?> getAllCards(@PathVariable("id") Long id, HttpServletRequest request)
 	{
 
@@ -153,7 +153,7 @@ public class UserController {
 
 	}
 	
-	@PutMapping("/{id}/cards/{cardId}/edit")
+	@PutMapping("/{id}/card/{cardId}/edit")
 	public ResponseEntity<?> editCard(
 			@PathVariable("id") Long id, 
 			@PathVariable("cardId") Long cardId,
@@ -181,7 +181,7 @@ public class UserController {
 		}
 	}
 	
-	@DeleteMapping("/{id}/cards/{cardId}/delete")
+	@DeleteMapping("/{id}/card/{cardId}/delete")
 	public ResponseEntity<?> deleteCard(
 			@PathVariable("id") Long id,
 			@PathVariable("cardId") Long cardId,
