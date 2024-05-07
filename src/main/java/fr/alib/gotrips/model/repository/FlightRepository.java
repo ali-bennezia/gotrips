@@ -1,6 +1,7 @@
 package fr.alib.gotrips.model.repository;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,9 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 			@Param("mxeval") Float maxEvaluation,
 			Pageable pageeable
 	);
+	
+	List<Flight> findAllByDepartureDateBetween(Date minDate, Date maxDate);
+	List<Flight> findAllByLandingDateBetween(Date minDate, Date maxDate);
 	
 	@Query("select avg(e.note) from Evaluation e WHERE e.flight.id = :id")
 	Double findAverageNoteById(@Param("id") Long id);

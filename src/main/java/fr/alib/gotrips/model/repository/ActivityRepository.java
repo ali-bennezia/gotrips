@@ -7,33 +7,33 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import fr.alib.gotrips.model.entity.offers.Hotel;
-
+import fr.alib.gotrips.model.entity.offers.Activity;
+import fr.alib.gotrips.model.entity.offers.Flight;
 
 @Repository
-public interface HotelRepository extends JpaRepository<Hotel, Long> {
-	@Query(value = "SELECT f.* FROM HOTEL f WHERE MATCH "
-			+ "(f.city, f.country, f.street, f.zip_code)"
+public interface ActivityRepository extends JpaRepository<Activity, Long> {
+	@Query(value = "SELECT f.* FROM ACTIVITY f WHERE MATCH "
+			+ "(f.city, f.country, f.street, f.zip_code, f.description, f.title )"
 			+ " AGAINST (:text IN NATURAL LANGUAGE MODE) "
 			+ "WHERE "
 			+ "( :cntry IS NULL OR f.country = :cntry ) AND "
 			+ "( :city IS NULL OR f.city = :city ) AND "
-			+ "( :miprc IS NULL OR f.price_per_night >= :miprc ) AND "
-			+ "( :mxprc IS NULL OR f.price_per_night <= :mxprc ) AND "
+			+ "( :miprc IS NULL OR f.price_per_day >= :miprc ) AND "
+			+ "( :mxprc IS NULL OR f.price_per_day <= :mxprc ) AND "
 			+ "( :mieval IS NULL OR f.average_evaluation >= :mieval ) AND "
 			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
 			+ "", nativeQuery = true)
-	Page<Hotel> findFullTextSearchAll(
+	Page<Flight> findFullTextSearchAll(
 			@Param("text") String text, 
 			@Param("cntry") String country,
 			@Param("city") String city,
 			@Param("miprc") Float minPrice,
 			@Param("mxprc") Float maxPrice,
-			@Param("mieval") Float minEval,
-			@Param("mxeval") Float maxEval,
+			@Param("mieval") Float minEvaluation,
+			@Param("mxeval") Float maxEvaluation,
 			Pageable pageeable
 	);
 	
-	@Query("select avg(e.note) from Evaluation e WHERE e.hotel.id = :id")
+	@Query("select avg(e.note) from Evaluation e WHERE e.activity.id = :id")
 	Double findAverageNoteById(@Param("id") Long id);
 }

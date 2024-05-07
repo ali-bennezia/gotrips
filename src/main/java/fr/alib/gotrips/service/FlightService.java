@@ -27,6 +27,7 @@ import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
 import fr.alib.gotrips.model.dto.inbound.ReservationDTO;
+import fr.alib.gotrips.model.dto.outbound.CalendarPairUnitDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.entity.PaymentData;
@@ -83,6 +84,19 @@ public class FlightService {
 	private final List<String> sortOpts = Arrays.asList(sortingOptions);
 	private final List<String> evaluationsFilterOpts = Arrays.asList(evaluationsFilterOptions);
 
+	public List<CalendarPairUnitDTO> getCalendarByDepartureDate(Date minDate, Date maxDate)
+	{
+		return this.fRepo.findAllByDepartureDateBetween(minDate, maxDate).stream().map(f -> {
+			return new CalendarPairUnitDTO(f.getDepartureDate().getTime(), true);
+		}).collect(Collectors.toList());
+	}
+	
+	public List<CalendarPairUnitDTO> getCalendarByLandingDate(Date minDate, Date maxDate)
+	{
+		return this.fRepo.findAllByLandingDateBetween(minDate, maxDate).stream().map(f -> {
+			return new CalendarPairUnitDTO(f.getLandingDate().getTime(), true);
+		}).collect(Collectors.toList());
+	}
 	
 	public List<FlightDetailsDTO> getFlights(Map<String, String> params) throws IllegalArgumentException
 	{

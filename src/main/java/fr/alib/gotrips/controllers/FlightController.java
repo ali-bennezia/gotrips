@@ -1,6 +1,7 @@
 package fr.alib.gotrips.controllers;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -71,6 +72,28 @@ public class FlightController {
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		}
+	}
+	
+	@GetMapping("/calendar/search/departure/{begindate}/{enddate}")
+	public ResponseEntity<?> calendarDeparture(
+			@PathVariable("begindate") Long beginTime,
+			@PathVariable("enddate") Long endTime
+			)
+	{
+		Date beginDate = new Date(beginTime);
+		Date endDate = new Date(endTime);
+		return ResponseEntity.ok( this.fService.getCalendarByDepartureDate(beginDate, endDate) );
+	}
+	
+	@GetMapping("/calendar/search/landing/{begindate}/{enddate}")
+	public ResponseEntity<?> calendarLanding(
+			@PathVariable("begindate") Long beginTime,
+			@PathVariable("enddate") Long endTime
+			)
+	{
+		Date beginDate = new Date(beginTime);
+		Date endDate = new Date(endTime);
+		return ResponseEntity.ok( this.fService.getCalendarByLandingDate(beginDate, endDate) );
 	}
 	
 	@PostMapping("/create")
