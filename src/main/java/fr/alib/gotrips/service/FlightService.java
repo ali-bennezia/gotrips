@@ -192,7 +192,7 @@ public class FlightService {
 	}
 	
 	@Transactional(rollbackFor = Exception.class)
-	public void addEvaluation(Long userId, Long flightId, EvaluationDTO dto) throws IdNotFoundException, OfferNotFoundException
+	public Evaluation addEvaluation(Long userId, Long flightId, EvaluationDTO dto) throws IdNotFoundException, OfferNotFoundException
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) this.uService.loadUserById(userId);
 		Optional<Flight> flightResult = this.fRepo.findById(flightId);
@@ -205,6 +205,7 @@ public class FlightService {
 			flight = this.fRepo.save(flight);
 			fRepo.save(flight);
 			updateFlightAverageEvaluation(flight.getId());
+			return eval;
 		}else {
 			throw new OfferNotFoundException("Couldn't find flight with id '" + flightId + "'.");
 		}
@@ -291,13 +292,13 @@ public class FlightService {
 		}
 	}
 	
-	public List<FlightReservation> getReservations(Long flightId, Integer page) throws IdNotFoundException
+	public List<FlightReservation> getReservations(Long userId, Integer page) throws IdNotFoundException
 	{	
-		if (this.fRepo.existsById(flightId)) {
+		if (this.uRepo.existsById(userId)) {
 			Pageable pageable = PageRequest.of(page, 10);
-			return this.fResRepo.findAllByFlightId(flightId, pageable);
+			return this.fResRepo.findAllByUserId(userId, pageable);
 		}else {
-			 throw new IdNotFoundException("Flight with given id '" + flightId + "' couldn't be found.");
+			 throw new IdNotFoundException("User with given id '" + userId + "' couldn't be found.");
 		}
 	}
 	

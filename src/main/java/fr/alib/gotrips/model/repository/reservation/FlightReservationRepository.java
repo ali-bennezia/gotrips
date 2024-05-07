@@ -10,5 +10,5 @@ import fr.alib.gotrips.model.entity.reservation.FlightReservation;
 
 @Repository
 public interface FlightReservationRepository extends JpaRepository<FlightReservation, Long> {
-	List<FlightReservation> findAllByFlightId(Long id, Pageable pageable);
+	List<FlightReservation> findAllByUserId(Long id, Pageable pageable);
 }

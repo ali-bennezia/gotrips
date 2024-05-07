@@ -174,6 +174,20 @@ public class UserService implements UserDetailsService {
 	}
 	
 	/**
+	 * Fetches payment data details.
+	 * @returns The details DTO.
+	 */
+	public CardDetailsDTO getFacturationData(Long facturationDataId) throws IdNotFoundException
+	{
+		Optional<FacturationData> fDataOptional = this.factRepo.findById(facturationDataId);
+		if (fDataOptional.isPresent()) {
+			return new CardDetailsDTO( fDataOptional.get(), encryptor );
+		}else {
+			throw new IdNotFoundException("Couldn't find facturation data with id '" + facturationDataId + "'.");
+		}
+	}
+	
+	/**
 	 * Fetches a user's payment data.
 	 * @returns A list of the user's payment data.
 	 */
