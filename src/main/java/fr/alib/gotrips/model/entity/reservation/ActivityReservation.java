@@ -2,6 +2,7 @@ package fr.alib.gotrips.model.entity.reservation;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.PaymentData;
@@ -35,6 +36,12 @@ public class ActivityReservation {
 	private Timestamp paymentTime;
 	@Embedded
 	private PaymentData paymentData;
+	@Column( precision = 3, scale = 0 )
+	private Integer spots;
+	@Temporal(TemporalType.DATE)
+	private Date beginDate;
+	@Temporal(TemporalType.DATE)
+	private Date endDate;
 	public Long getId() {
 		return id;
 	}
@@ -71,9 +78,28 @@ public class ActivityReservation {
 	public void setPaymentData(PaymentData paymentData) {
 		this.paymentData = paymentData;
 	}
+	
+	public Date getBeginDate() {
+		return beginDate;
+	}
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public Integer getSpots() {
+		return spots;
+	}
+	public void setSpots(Integer spots) {
+		this.spots = spots;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, id, paymentData, paymentTime, price, user);
+		return Objects.hash(activity, beginDate, endDate, id, paymentData, paymentTime, price, spots, user);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -84,29 +110,29 @@ public class ActivityReservation {
 		if (getClass() != obj.getClass())
 			return false;
 		ActivityReservation other = (ActivityReservation) obj;
-		return Objects.equals(activity, other.activity) && Objects.equals(id, other.id)
+		return Objects.equals(activity, other.activity) && Objects.equals(beginDate, other.beginDate)
+				&& Objects.equals(endDate, other.endDate) && Objects.equals(id, other.id)
 				&& Objects.equals(paymentData, other.paymentData) && Objects.equals(paymentTime, other.paymentTime)
-				&& Objects.equals(price, other.price) && Objects.equals(user, other.user);
+				&& Objects.equals(price, other.price) && Objects.equals(spots, other.spots)
+				&& Objects.equals(user, other.user);
 	}
-	public ActivityReservation(Long id, User user, Activity activity, BigDecimal price, Timestamp paymentTime,
-			PaymentData paymentData) {
+	public ActivityReservation(Long id, User user, Activity activity, BigDecimal price, Integer spots, Timestamp paymentTime,
+			PaymentData paymentData, Date beginDate, Date endDate) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.activity = activity;
 		this.price = price;
+		this.spots = spots;
 		this.paymentTime = paymentTime;
 		this.paymentData = paymentData;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
 	}
 	public ActivityReservation() {
 		super();
 	}
-	@Override
-	public String toString() {
-		return "ActivityReservation [id=" + id + ", user=" + user + ", activity=" + activity + ", price=" + price
-				+ ", paymentTime=" + paymentTime + ", paymentData=" + paymentData + "]";
-	}
-	
+
 	
 	
 }

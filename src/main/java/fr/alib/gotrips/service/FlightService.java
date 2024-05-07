@@ -26,7 +26,7 @@ import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.dto.inbound.PaymentDataDTO;
-import fr.alib.gotrips.model.dto.inbound.ReservationDTO;
+import fr.alib.gotrips.model.dto.inbound.FlightReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.CalendarPairUnitDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
@@ -66,11 +66,8 @@ public class FlightService {
 	@Autowired
 	private UserService uService;
 	
-	@Autowired
-	private TextEncryptor encryptor;
-	
 	private final String[] filterOptions = new String[] {
-			"qry", "page", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr", "dates"
+			"qry", "page", "ocntry", "dcntry", "miprc", "mxprc", "midate", "mxdate", "mieval", "mxeval", "srtby", "srtordr"
 	};
 	private final String[] sortingOptions = new String[] {
 			"price", "average_evaluation", "seats", "arrival_city", "arrival_country", "departure_city", "departure_country"
@@ -84,16 +81,29 @@ public class FlightService {
 	private final List<String> sortOpts = Arrays.asList(sortingOptions);
 	private final List<String> evaluationsFilterOpts = Arrays.asList(evaluationsFilterOptions);
 
+	public long getFlightOccupiedSeats(Long flightId)
+	{
+		return this.fResRepo.countByFlightId(flightId);
+	}
+	
 	public List<CalendarPairUnitDTO> getCalendarByDepartureDate(Date minDate, Date maxDate)
 	{
-		return this.fRepo.findAllByDepartureDateBetween(minDate, maxDate).stream().map(f -> {
+		return this.fRepo.findAllByDepartureDateBetween(minDate, maxDate).stream()
+				.filter(f -> {
+					return getFlightOccupiedSeats( f.getId() ) < f.getSeats();
+				})
+				.map(f -> {
 			return new CalendarPairUnitDTO(f.getDepartureDate().getTime(), true);
 		}).collect(Collectors.toList());
 	}
 	
 	public List<CalendarPairUnitDTO> getCalendarByLandingDate(Date minDate, Date maxDate)
 	{
-		return this.fRepo.findAllByLandingDateBetween(minDate, maxDate).stream().map(f -> {
+		return this.fRepo.findAllByLandingDateBetween(minDate, maxDate).stream()
+				.filter(f -> {
+					return getFlightOccupiedSeats( f.getId() ) < f.getSeats();
+				})
+				.map(f -> {
 			return new CalendarPairUnitDTO(f.getLandingDate().getTime(), true);
 		}).collect(Collectors.toList());
 	}
@@ -273,7 +283,7 @@ public class FlightService {
 	
 	// Reservations
 	
-	public FlightReservation createReservation(Long userId, Long flightId, ReservationDTO dto) throws IdNotFoundException
+	public FlightReservation createReservation(Long userId, Long flightId, FlightReservationDTO dto) throws IdNotFoundException
 	{	
 		Optional<User> userOptional = this.uRepo.findById(userId);
 		Optional<Flight> flightOptional = this.fRepo.findById(flightId);

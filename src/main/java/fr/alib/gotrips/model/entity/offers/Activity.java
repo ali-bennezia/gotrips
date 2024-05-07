@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.inbound.ActivityDTO;
 import fr.alib.gotrips.model.entity.Address;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.reservation.ActivityReservation;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -33,6 +35,10 @@ public class Activity {
 	@JoinColumn(name="activity_reservations_id", referencedColumnName = "id")
 	private List<ActivityReservation> activities = new ArrayList<ActivityReservation>();
 	
+	@OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+	@JoinColumn(name = "activity_evaluations_id", referencedColumnName = "id")
+	private List<Evaluation> evaluations = new ArrayList<Evaluation>();
+	
 	@Column( nullable = false, unique = true )
 	private String title;
 	@Column( nullable = false, unique = false )
@@ -45,6 +51,8 @@ public class Activity {
 	private Address address;
 	@Column( nullable = false )
 	private BigDecimal pricePerDay;
+	@Column( nullable = false )
+	private Integer spots;
 	public Long getId() {
 		return id;
 	}
@@ -75,6 +83,12 @@ public class Activity {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	public List<Evaluation> getEvaluations() {
+		return evaluations;
+	}
+	public void setEvaluations(List<Evaluation> evaluations) {
+		this.evaluations = evaluations;
+	}
 	public Address getAddress() {
 		return address;
 	}
@@ -94,10 +108,16 @@ public class Activity {
 		this.averageEvaluation = averageEvaluation;
 	}
 	
+	public Integer getSpots() {
+		return spots;
+	}
+	public void setSpots(Integer spots) {
+		this.spots = spots;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(activities, activityCompany, address, averageEvaluation, description, id, pricePerDay,
-				title);
+		return Objects.hash(activities, activityCompany, address, averageEvaluation, description, evaluations, id,
+				pricePerDay, spots, title);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -110,11 +130,20 @@ public class Activity {
 		Activity other = (Activity) obj;
 		return Objects.equals(activities, other.activities) && Objects.equals(activityCompany, other.activityCompany)
 				&& Objects.equals(address, other.address) && Objects.equals(averageEvaluation, other.averageEvaluation)
-				&& Objects.equals(description, other.description) && Objects.equals(id, other.id)
-				&& Objects.equals(pricePerDay, other.pricePerDay) && Objects.equals(title, other.title);
+				&& Objects.equals(description, other.description) && Objects.equals(evaluations, other.evaluations)
+				&& Objects.equals(id, other.id) && Objects.equals(pricePerDay, other.pricePerDay)
+				&& Objects.equals(spots, other.spots) && Objects.equals(title, other.title);
+	}
+	public void applyDTO(ActivityDTO dto)
+	{
+		this.title = dto.getTitle();
+		this.description = dto.getDescription();
+		this.address = new Address(dto.getAddress());
+		this.pricePerDay = new BigDecimal( dto.getPricePerDay() );
+		this.spots = dto.getSpots();
 	}
 	public Activity(Long id, ActivityCompany activityCompany, List<ActivityReservation> activities, String title,
-			String description, Address address, BigDecimal pricePerDay) {
+			String description, Address address, BigDecimal pricePerDay, Integer spots) {
 		super();
 		this.id = id;
 		this.activityCompany = activityCompany;
@@ -124,8 +153,13 @@ public class Activity {
 		this.address = address;
 		this.pricePerDay = pricePerDay;
 		this.averageEvaluation = new BigDecimal("0");
+		this.spots = spots;
 	}
-	
+	public Activity(ActivityDTO dto)
+	{
+		super();
+		this.applyDTO(dto);
+	}
 	public Activity() {
 		super();
 	}

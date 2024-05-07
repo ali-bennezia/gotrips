@@ -2,6 +2,8 @@ package fr.alib.gotrips.model.entity.reservation;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.PaymentData;
@@ -36,6 +38,10 @@ public class HotelReservation {
 	private Timestamp paymentTime;
 	@Embedded
 	private PaymentData paymentData;
+	@Temporal(TemporalType.DATE)
+	private Date beginDate;
+	@Temporal(TemporalType.DATE)
+	private Date endDate;
 	public Long getId() {
 		return id;
 	}
@@ -72,9 +78,21 @@ public class HotelReservation {
 	public void setPaymentData(PaymentData paymentData) {
 		this.paymentData = paymentData;
 	}
+	public Date getBeginDate() {
+		return beginDate;
+	}
+	public void setBeginDate(Date beginDate) {
+		this.beginDate = beginDate;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(hotel, id, paymentData, paymentTime, price, user);
+		return Objects.hash(beginDate, endDate, hotel, id, paymentData, paymentTime, price, user);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -85,12 +103,13 @@ public class HotelReservation {
 		if (getClass() != obj.getClass())
 			return false;
 		HotelReservation other = (HotelReservation) obj;
-		return Objects.equals(hotel, other.hotel) && Objects.equals(id, other.id)
+		return Objects.equals(beginDate, other.beginDate) && Objects.equals(endDate, other.endDate)
+				&& Objects.equals(hotel, other.hotel) && Objects.equals(id, other.id)
 				&& Objects.equals(paymentData, other.paymentData) && Objects.equals(paymentTime, other.paymentTime)
 				&& Objects.equals(price, other.price) && Objects.equals(user, other.user);
 	}
 	public HotelReservation(Long id, User user, Hotel hotel, BigDecimal price, Timestamp paymentTime,
-			PaymentData paymentData) {
+			PaymentData paymentData, Date beginDate, Date endDate) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -98,17 +117,20 @@ public class HotelReservation {
 		this.price = price;
 		this.paymentTime = paymentTime;
 		this.paymentData = paymentData;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+	}
+	public HotelReservation(User user, Hotel hotel, PaymentData pData, Date beginDate, Date endDate) {
+		super();
+		this.user = user;
+		this.hotel = hotel;
+		this.price = hotel.getPricePerNight();
+		this.paymentTime = Timestamp.from(Instant.now());
+		this.paymentData = pData;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
 	}
 	public HotelReservation() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
-	@Override
-	public String toString() {
-		return "HotelReservation [id=" + id + ", user=" + user + ", hotel=" + hotel + ", price=" + price
-				+ ", paymentTime=" + paymentTime + ", paymentData=" + paymentData + "]";
-	}
-	
-	
-	
 }

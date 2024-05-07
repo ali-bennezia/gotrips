@@ -8,6 +8,7 @@ import fr.alib.gotrips.model.entity.company.HotelCompany;
 
 public class CompanyDetailsDTO {
 	private Long id;
+	private Long userId;
 	private String name;
 	private String description;
 	public Long getId() {
@@ -15,6 +16,12 @@ public class CompanyDetailsDTO {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 	public String getName() {
 		return name;
@@ -28,9 +35,10 @@ public class CompanyDetailsDTO {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, id, name);
+		return Objects.hash(description, id, name, userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -42,11 +50,12 @@ public class CompanyDetailsDTO {
 			return false;
 		CompanyDetailsDTO other = (CompanyDetailsDTO) obj;
 		return Objects.equals(description, other.description) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name);
+				&& Objects.equals(name, other.name) && Objects.equals(userId, other.userId);
 	}
-	public CompanyDetailsDTO(Long id, String name, String description) {
+	public CompanyDetailsDTO(Long id, Long userId, String name, String description) {
 		super();
 		this.id = id;
+		this.userId = userId;
 		this.name = name;
 		this.description = description;
 	}
@@ -56,18 +65,21 @@ public class CompanyDetailsDTO {
 	public CompanyDetailsDTO(FlightCompany company) {
 		super();
 		this.id = company.getId();
+		this.userId = company.getUser().getId();
 		this.name = company.getName();
 		this.description = company.getDescription();
 	}
 	public CompanyDetailsDTO(HotelCompany company) {
 		super();
 		this.id = company.getId();
+		this.userId = company.getUser().getId();
 		this.name = company.getName();
 		this.description = company.getDescription();
 	}
 	public CompanyDetailsDTO(ActivityCompany company) {
 		super();
 		this.id = company.getId();
+		this.userId = company.getUser().getId();
 		this.name = company.getName();
 		this.description = company.getDescription();
 	}

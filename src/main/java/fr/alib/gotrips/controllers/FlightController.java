@@ -25,7 +25,7 @@ import fr.alib.gotrips.exception.OfferNotFoundException;
 import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
-import fr.alib.gotrips.model.dto.inbound.ReservationDTO;
+import fr.alib.gotrips.model.dto.inbound.FlightReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightReservationDetailsDTO;
@@ -140,7 +140,7 @@ public class FlightController {
 	@PostMapping("/{id}/reservations/create")
 	public ResponseEntity<?> createReservation(
 			@PathVariable("id") Long flightId, 
-			@Valid @RequestBody ReservationDTO dto,
+			@Valid @RequestBody FlightReservationDTO dto,
 			Principal principal
 			)
 	{

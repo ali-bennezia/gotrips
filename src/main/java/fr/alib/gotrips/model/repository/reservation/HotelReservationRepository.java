@@ -1,5 +1,6 @@
 package fr.alib.gotrips.model.repository.reservation;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -11,4 +12,5 @@ import fr.alib.gotrips.model.entity.reservation.HotelReservation;
 @Repository
 public interface HotelReservationRepository extends JpaRepository<HotelReservation, Long> {
 	List<HotelReservation> findAllByUserId(Long id, Pageable pageable);
+	long countByBeginDateLessThanEqualAndEndDateGreaterThanEqual(Date beginDate, Date endDate);
 }

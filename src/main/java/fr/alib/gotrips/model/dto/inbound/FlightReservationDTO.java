@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import jakarta.validation.constraints.NotNull;
 
-public class ReservationDTO {
+public class FlightReservationDTO {
 	@NotNull
 	private Integer cardId;
 
@@ -29,16 +29,16 @@ public class ReservationDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ReservationDTO other = (ReservationDTO) obj;
+		FlightReservationDTO other = (FlightReservationDTO) obj;
 		return Objects.equals(cardId, other.cardId);
 	}
 
-	public ReservationDTO(@NotNull Integer cardId) {
+	public FlightReservationDTO(@NotNull Integer cardId) {
 		super();
 		this.cardId = cardId;
 	}
 
-	public ReservationDTO() {
+	public FlightReservationDTO() {
 		super();
 	}
 }
