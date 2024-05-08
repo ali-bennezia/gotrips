@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
+import fr.alib.gotrips.utils.TimeUtils;
 
 public class FlightReservationDetailsDTO {
 	private Long id;
@@ -42,6 +43,8 @@ public class FlightReservationDetailsDTO {
 	public void setPaymentTime(Long paymentTime) {
 		this.paymentTime = paymentTime;
 	}
+
+
 	@Override
 	public int hashCode() {
 		return Objects.hash(flight, id, paymentTime, price, user);
@@ -59,8 +62,13 @@ public class FlightReservationDetailsDTO {
 				&& Objects.equals(paymentTime, other.paymentTime) && Objects.equals(price, other.price)
 				&& Objects.equals(user, other.user);
 	}
-	public FlightReservationDetailsDTO(Long id, UserDetailsDTO user, FlightDetailsDTO flight, Float price,
-			Timestamp paymentTime) {
+	public FlightReservationDetailsDTO(
+			Long id, 
+			UserDetailsDTO user, 
+			FlightDetailsDTO flight, 
+			Float price,
+			Timestamp paymentTime
+			) {
 		super();
 		this.id = id;
 		this.user = user;

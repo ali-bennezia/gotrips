@@ -9,6 +9,7 @@ import java.util.Objects;
 import fr.alib.gotrips.model.entity.PaymentData;
 import fr.alib.gotrips.model.entity.offers.Hotel;
 import fr.alib.gotrips.model.entity.user.User;
+import fr.alib.gotrips.utils.TimeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -42,6 +43,8 @@ public class HotelReservation {
 	private Date beginDate;
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
+	@Column(nullable = false)
+	private Integer days;
 	public Long getId() {
 		return id;
 	}
@@ -90,9 +93,15 @@ public class HotelReservation {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	public Integer getDays() {
+		return days;
+	}
+	public void setDays(Integer days) {
+		this.days = days;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(beginDate, endDate, hotel, id, paymentData, paymentTime, price, user);
+		return Objects.hash(beginDate, days, endDate, hotel, id, paymentData, paymentTime, price, user);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -103,13 +112,14 @@ public class HotelReservation {
 		if (getClass() != obj.getClass())
 			return false;
 		HotelReservation other = (HotelReservation) obj;
-		return Objects.equals(beginDate, other.beginDate) && Objects.equals(endDate, other.endDate)
-				&& Objects.equals(hotel, other.hotel) && Objects.equals(id, other.id)
-				&& Objects.equals(paymentData, other.paymentData) && Objects.equals(paymentTime, other.paymentTime)
-				&& Objects.equals(price, other.price) && Objects.equals(user, other.user);
+		return Objects.equals(beginDate, other.beginDate) && Objects.equals(days, other.days)
+				&& Objects.equals(endDate, other.endDate) && Objects.equals(hotel, other.hotel)
+				&& Objects.equals(id, other.id) && Objects.equals(paymentData, other.paymentData)
+				&& Objects.equals(paymentTime, other.paymentTime) && Objects.equals(price, other.price)
+				&& Objects.equals(user, other.user);
 	}
 	public HotelReservation(Long id, User user, Hotel hotel, BigDecimal price, Timestamp paymentTime,
-			PaymentData paymentData, Date beginDate, Date endDate) {
+			PaymentData paymentData, Date beginDate, Date endDate, Integer days) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -119,6 +129,7 @@ public class HotelReservation {
 		this.paymentData = paymentData;
 		this.beginDate = beginDate;
 		this.endDate = endDate;
+		this.days = days;
 	}
 	public HotelReservation(User user, Hotel hotel, PaymentData pData, Date beginDate, Date endDate) {
 		super();
@@ -129,6 +140,7 @@ public class HotelReservation {
 		this.paymentData = pData;
 		this.beginDate = beginDate;
 		this.endDate = endDate;
+		this.days = (int) TimeUtils.totalDaysWithinDates(beginDate, endDate);
 	}
 	public HotelReservation() {
 		super();

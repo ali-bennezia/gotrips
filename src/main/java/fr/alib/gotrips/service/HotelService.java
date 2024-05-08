@@ -72,10 +72,10 @@ public class HotelService {
 	private UserService uService;
 	
 	private final String[] filterOptions = new String[] {
-			"qry", "page", "cntry", "city", "miprc", "mxprc", "mieval", "mxeval", "begindate", "enddate", "srtby", "srtordr"
+			"qry", "page", "cntry", "city", "miprc", "mxprc", "mieval", "mxeval", "srtby", "srtordr"
 	};
 	private final String[] sortingOptions = new String[] {
-			"price_per_day", "average_evaluation", "spots", "city", "country", "title", "description"
+			"price_per_night", "average_evaluation", "rooms", "city", "country", "zip_code", "name", "description"
 	};
 	
 	private final String[] evaluationsFilterOptions = new String[] {

@@ -23,7 +23,7 @@ public interface ActivityRepository extends JpaRepository<Activity, Long> {
 			+ "( :mieval IS NULL OR f.average_evaluation >= :mieval ) AND "
 			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
 			+ "", nativeQuery = true)
-	Page<Flight> findFullTextSearchAll(
+	Page<Activity> findFullTextSearchAll(
 			@Param("text") String text, 
 			@Param("cntry") String country,
 			@Param("city") String city,

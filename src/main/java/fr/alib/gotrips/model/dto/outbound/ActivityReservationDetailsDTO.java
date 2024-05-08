@@ -5,13 +5,14 @@ import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.offers.Hotel;
+import fr.alib.gotrips.model.entity.reservation.ActivityReservation;
 import fr.alib.gotrips.model.entity.reservation.HotelReservation;
 import fr.alib.gotrips.utils.TimeUtils;
 
-public class HotelReservationDetailsDTO {
+public class ActivityReservationDetailsDTO {
 	private Long id;
 	private UserDetailsDTO user;
-	private HotelDetailsDTO hotel;
+	private ActivityDetailsDTO activity;
 	private Float price;
 	private Long paymentTime;
 	private Long beginTime;
@@ -30,11 +31,11 @@ public class HotelReservationDetailsDTO {
 	public void setUser(UserDetailsDTO user) {
 		this.user = user;
 	}
-	public HotelDetailsDTO getHotel() {
-		return hotel;
+	public ActivityDetailsDTO getActivity() {
+		return activity;
 	}
-	public void setHotel(HotelDetailsDTO hotel) {
-		this.hotel = hotel;
+	public void setActivity(ActivityDetailsDTO activity) {
+		this.activity = activity;
 	}
 	public Float getPrice() {
 		return price;
@@ -66,9 +67,10 @@ public class HotelReservationDetailsDTO {
 	public void setDays(Integer days) {
 		this.days = days;
 	}
+	
 	@Override
 	public int hashCode() {
-		return Objects.hash(beginTime, days, endTime, hotel, id, paymentTime, price, user);
+		return Objects.hash(activity, beginTime, days, endTime, id, paymentTime, price, user);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -78,36 +80,37 @@ public class HotelReservationDetailsDTO {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		HotelReservationDetailsDTO other = (HotelReservationDetailsDTO) obj;
-		return Objects.equals(beginTime, other.beginTime) && Objects.equals(days, other.days)
-				&& Objects.equals(endTime, other.endTime) && Objects.equals(hotel, other.hotel)
+		ActivityReservationDetailsDTO other = (ActivityReservationDetailsDTO) obj;
+		return Objects.equals(activity, other.activity) && Objects.equals(beginTime, other.beginTime)
+				&& Objects.equals(days, other.days) && Objects.equals(endTime, other.endTime)
 				&& Objects.equals(id, other.id) && Objects.equals(paymentTime, other.paymentTime)
 				&& Objects.equals(price, other.price) && Objects.equals(user, other.user);
 	}
-	public HotelReservationDetailsDTO(Long id, UserDetailsDTO user, HotelDetailsDTO hotel, Float price,
-			Long paymentTime, Long beginTime, Long endTime) {
+	
+	public ActivityReservationDetailsDTO(Long id, UserDetailsDTO user, ActivityDetailsDTO activity, Float price,
+			Long paymentTime, Long beginTime, Long endTime, Integer days) {
 		super();
 		this.id = id;
 		this.user = user;
-		this.hotel = hotel;
+		this.activity = activity;;
 		this.price = price;
 		this.paymentTime = paymentTime;
 		this.beginTime = beginTime;
 		this.endTime = endTime;
-		this.days = (int) TimeUtils.totalDaysWithinDates(new Date( beginTime ), new Date( endTime ));
+		this.days = days;
 	}
-	public HotelReservationDetailsDTO(HotelReservation res) {
+	public ActivityReservationDetailsDTO(ActivityReservation res) {
 		super();
 		this.id = res.getId();
-		this.user = new UserDetailsDTO( res.getHotel().getHotelCompany().getUser() );
-		this.hotel = new HotelDetailsDTO( res.getHotel() );
+		this.user = new UserDetailsDTO( res.getActivity().getActivityCompany().getUser() );
+		this.activity = new ActivityDetailsDTO( res.getActivity() );
 		this.paymentTime = res.getPaymentTime().getTime();
 		this.beginTime = res.getBeginDate().getTime();
 		this.endTime = res.getEndDate().getTime();
 		this.days = (int) TimeUtils.totalDaysWithinDates(res.getBeginDate(), res.getEndDate());
-		this.price = res.getHotel().getPricePerNight().floatValue() * days;
+		this.price = res.getActivity().getPricePerDay().floatValue() * days;
 	}
-	public HotelReservationDetailsDTO() {
+	public ActivityReservationDetailsDTO() {
 		super();
 	}
 	

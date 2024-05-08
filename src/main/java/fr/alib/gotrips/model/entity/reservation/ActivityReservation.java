@@ -2,12 +2,14 @@ package fr.alib.gotrips.model.entity.reservation;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.entity.PaymentData;
 import fr.alib.gotrips.model.entity.offers.Activity;
 import fr.alib.gotrips.model.entity.user.User;
+import fr.alib.gotrips.utils.TimeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -42,6 +44,8 @@ public class ActivityReservation {
 	private Date beginDate;
 	@Temporal(TemporalType.DATE)
 	private Date endDate;
+	@Column(nullable = false)
+	private Integer days;
 	public Long getId() {
 		return id;
 	}
@@ -97,9 +101,16 @@ public class ActivityReservation {
 	public void setSpots(Integer spots) {
 		this.spots = spots;
 	}
+	public Integer getDays() {
+		return days;
+	}
+	public void setDays(Integer days) {
+		this.days = days;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, beginDate, endDate, id, paymentData, paymentTime, price, spots, user);
+		return Objects.hash(activity, beginDate, days, endDate, id, paymentData, paymentTime, price, spots, user);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -111,13 +122,13 @@ public class ActivityReservation {
 			return false;
 		ActivityReservation other = (ActivityReservation) obj;
 		return Objects.equals(activity, other.activity) && Objects.equals(beginDate, other.beginDate)
-				&& Objects.equals(endDate, other.endDate) && Objects.equals(id, other.id)
-				&& Objects.equals(paymentData, other.paymentData) && Objects.equals(paymentTime, other.paymentTime)
-				&& Objects.equals(price, other.price) && Objects.equals(spots, other.spots)
-				&& Objects.equals(user, other.user);
+				&& Objects.equals(days, other.days) && Objects.equals(endDate, other.endDate)
+				&& Objects.equals(id, other.id) && Objects.equals(paymentData, other.paymentData)
+				&& Objects.equals(paymentTime, other.paymentTime) && Objects.equals(price, other.price)
+				&& Objects.equals(spots, other.spots) && Objects.equals(user, other.user);
 	}
 	public ActivityReservation(Long id, User user, Activity activity, BigDecimal price, Integer spots, Timestamp paymentTime,
-			PaymentData paymentData, Date beginDate, Date endDate) {
+			PaymentData paymentData, Date beginDate, Date endDate, Integer days) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -128,6 +139,19 @@ public class ActivityReservation {
 		this.paymentData = paymentData;
 		this.beginDate = beginDate;
 		this.endDate = endDate;
+		this.days = days;
+	}
+	public ActivityReservation(User user, Activity activity, PaymentData paymentData, Date beginDate, Date endDate) {
+		super();
+		this.user = user;
+		this.activity = activity;
+		this.spots = activity.getSpots();
+		this.paymentTime = Timestamp.from(Instant.now());
+		this.paymentData = paymentData;
+		this.beginDate = beginDate;
+		this.endDate = endDate;
+		this.days = (int) TimeUtils.totalDaysWithinDates(beginDate, endDate);
+		this.price = new BigDecimal( activity.getPricePerDay().floatValue() * (float)days );
 	}
 	public ActivityReservation() {
 		super();
