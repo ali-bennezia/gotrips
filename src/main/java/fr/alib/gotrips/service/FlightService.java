@@ -86,22 +86,30 @@ public class FlightService {
 		return this.fResRepo.countByFlightId(flightId);
 	}
 	
-	public List<CalendarPairUnitDTO> getCalendarByDepartureDate(Date minDate, Date maxDate)
+	public List<CalendarPairUnitDTO> getCalendarByDepartureDate(Date minDate, Date maxDate, Optional<Date> landingDate)
 	{
 		return this.fRepo.findAllByDepartureDateBetween(minDate, maxDate).stream()
 				.filter(f -> {
-					return getFlightOccupiedSeats( f.getId() ) < f.getSeats();
+					return getFlightOccupiedSeats( f.getId() ) < f.getSeats() 
+							&& ( 
+									landingDate.isPresent() && new Date( f.getLandingDate().getTime() ).equals(landingDate.get()) 
+									|| landingDate.isEmpty() 
+								);
 				})
 				.map(f -> {
 			return new CalendarPairUnitDTO(f.getDepartureDate().getTime(), true);
 		}).collect(Collectors.toList());
 	}
 	
-	public List<CalendarPairUnitDTO> getCalendarByLandingDate(Date minDate, Date maxDate)
+	public List<CalendarPairUnitDTO> getCalendarByLandingDate(Date minDate, Date maxDate, Optional<Date> departureDate)
 	{
 		return this.fRepo.findAllByLandingDateBetween(minDate, maxDate).stream()
 				.filter(f -> {
-					return getFlightOccupiedSeats( f.getId() ) < f.getSeats();
+					return getFlightOccupiedSeats( f.getId() ) < f.getSeats()
+							&& ( 
+									departureDate.isPresent() && new Date( f.getDepartureDate().getTime() ).equals(departureDate.get()) 
+									|| departureDate.isEmpty() 
+								);
 				})
 				.map(f -> {
 			return new CalendarPairUnitDTO(f.getLandingDate().getTime(), true);

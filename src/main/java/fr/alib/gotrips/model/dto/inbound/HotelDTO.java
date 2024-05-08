@@ -69,7 +69,6 @@ public class HotelDTO {
 		super();
 		this.name = name;
 		this.description = description;
-		this.company = company;
 		this.rooms = rooms;
 		this.address = address;
 		this.pricePerNight = pricePerNight;

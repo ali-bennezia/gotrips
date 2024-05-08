@@ -91,6 +91,14 @@ public class HotelService {
 		return this.hResRepo.countByBeginDateLessThanEqualAndEndDateGreaterThanEqual(date, date);
 	}
 	
+	public boolean isReservationAvailable(Long hotelId, Date beginDate, Date endDate)
+	{
+		List<CalendarPairUnitDTO> list = getCalendar(hotelId, beginDate, endDate);
+		return list.stream().allMatch(c -> {
+			return c.getFound().equals(true);
+		});
+	}
+	
 	public List<CalendarPairUnitDTO> getCalendar(Long hotelId, Date minDate, Date maxDate) throws IdNotFoundException
 	{
 		Optional<Hotel> hotelOptional = this.hRepo.findById(hotelId);

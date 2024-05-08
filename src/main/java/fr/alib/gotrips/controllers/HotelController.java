@@ -26,31 +26,40 @@ import fr.alib.gotrips.model.auth.CustomUserDetails;
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightDTO;
 import fr.alib.gotrips.model.dto.inbound.FlightReservationDTO;
+import fr.alib.gotrips.model.dto.inbound.HotelDTO;
+import fr.alib.gotrips.model.dto.inbound.PeriodReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightReservationDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.HotelDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.HotelReservationDetailsDTO;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.offers.Flight;
+import fr.alib.gotrips.model.entity.offers.Hotel;
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
+import fr.alib.gotrips.model.entity.reservation.HotelReservation;
 import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
+import fr.alib.gotrips.model.repository.HotelRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
+import fr.alib.gotrips.model.repository.reservation.HotelReservationRepository;
 import fr.alib.gotrips.service.FlightService;
+import fr.alib.gotrips.service.HotelService;
 import fr.alib.gotrips.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/flight")
-public class FlightController {
+@RequestMapping("/api/hotel")
+public class HotelController {
 
 	@Autowired
-	private FlightRepository fRepo;
+	private HotelRepository hRepo;
 	
 	@Autowired
-	private FlightReservationRepository fResRepo;
+	private HotelReservationRepository hResRepo;
 	
 	@Autowired
 	private FacturationDataRepository fDatRepo;
@@ -59,73 +68,60 @@ public class FlightController {
 	private EvaluationRepository eRepo;
 	
 	@Autowired
-	private FlightService fService;
+	private HotelService hService;
 	
 	@Autowired
 	private UserService uService;
 	
 	@GetMapping("/search")
-	public ResponseEntity<List<FlightDetailsDTO>> search(@RequestParam Map<String, String> params)
+	public ResponseEntity<List<HotelDetailsDTO>> search(@RequestParam Map<String, String> params)
 	{
 		try {
-			return ResponseEntity.ok().body(this.fService.getFlights(params));
+			return ResponseEntity.ok().body(this.hService.getHotels(params));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		}
 	}
-	
-	@GetMapping("/calendar/search/departure/{begindate}/{enddate}")
-	public ResponseEntity<?> calendarDeparture(
+
+	@GetMapping("/{id}/calendar/search/{begindate}/{enddate}")
+	public ResponseEntity<?> calendar(
+			@PathVariable("id") Long hotelId,
 			@PathVariable("begindate") Long beginTime,
-			@PathVariable("enddate") Long endTime,
-			@RequestParam Map<String, String> params
+			@PathVariable("enddate") Long endTime
 			)
 	{
 		Date beginDate = new Date(beginTime);
 		Date endDate = new Date(endTime);
-		Optional<Date> landingDate = params.get("landing") != null ? 
-				Optional.of( new Date( Long.valueOf( params.get("landing") ) ) ) : 
-				Optional.empty();
-		return ResponseEntity.ok( this.fService.getCalendarByDepartureDate(beginDate, endDate, landingDate) );
-	}
-	
-	@GetMapping("/calendar/search/landing/{begindate}/{enddate}")
-	public ResponseEntity<?> calendarLanding(
-			@PathVariable("begindate") Long beginTime,
-			@PathVariable("enddate") Long endTime,
-			@RequestParam Map<String, String> params
-			)
-	{
-		Date beginDate = new Date(beginTime);
-		Date endDate = new Date(endTime);
-		Optional<Date> departureDate = params.get("departure") != null ? 
-				Optional.of( new Date( Long.valueOf( params.get("departure") ) ) ) : 
-				Optional.empty();
-		return ResponseEntity.ok( this.fService.getCalendarByLandingDate(beginDate, endDate, departureDate) );
+		return ResponseEntity.ok( this.hService.getCalendar(hotelId, beginDate, endDate) );
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@Valid @RequestBody FlightDTO dto, Principal principal)
+	public ResponseEntity<?> create(@Valid @RequestBody HotelDTO dto, Principal principal)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
-		Flight flight = this.fService.createFlight(userDetails.getUser().getId(), dto);
-		return ResponseEntity.created(null).body(flight);
+		Hotel hotel = this.hService.createHotel(userDetails.getUser().getId(), dto);
+		return ResponseEntity.created(null).body(hotel);
 	}
 	
 	@GetMapping("/{id}/details")
 	public ResponseEntity<?> details(@PathVariable("id") Long id)
 	{
-		return ResponseEntity.ok().body( new FlightDetailsDTO( this.fService.getFlight(id) ) );
+		return ResponseEntity.ok().body( new HotelDetailsDTO( this.hService.getHotel(id) ) );
 	}
 	
 	@PutMapping("/{id}/edit")
-	public ResponseEntity<?> edit(@PathVariable("id") Long id, @Valid @RequestBody FlightDTO dto, Principal principal, HttpServletRequest request)
+	public ResponseEntity<?> edit(
+			@PathVariable("id") Long id, 
+			@Valid @RequestBody HotelDTO dto, 
+			Principal principal, 
+			HttpServletRequest request
+			)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
 		Long userId = userDetails.getUser().getId();
-		Flight flight = this.fService.getFlight(id);
-		if ( request.isUserInRole("ADMIN") || flight.getFlightCompany().getUser().getId().equals(userId)) {
-			return ResponseEntity.ok().body( new FlightDetailsDTO( this.fService.updateFlight(id, dto) ) );
+		Hotel hotel = this.hService.getHotel(id);
+		if ( request.isUserInRole("ADMIN") || hotel.getHotelCompany().getUser().getId().equals(userId)) {
+			return ResponseEntity.ok().body( new HotelDetailsDTO( this.hService.updateHotel(id, dto) ) );
 		}else {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
@@ -136,9 +132,9 @@ public class FlightController {
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
 		Long userId = userDetails.getUser().getId();
-		Flight flight = this.fService.getFlight(id);
-		if ( request.isUserInRole("ADMIN") || flight.getFlightCompany().getUser().getId().equals(userId)) {
-			this.fService.deleteFlight(id);
+		Hotel hotel = this.hService.getHotel(id);
+		if ( request.isUserInRole("ADMIN") || hotel.getHotelCompany().getUser().getId().equals(userId)) {
+			this.hService.deleteHotel(id);
 			return ResponseEntity.noContent().build();
 		}else {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -147,40 +143,53 @@ public class FlightController {
 	
 	@PostMapping("/{id}/reservations/create")
 	public ResponseEntity<?> createReservation(
-			@PathVariable("id") Long flightId, 
-			@Valid @RequestBody FlightReservationDTO dto,
+			@PathVariable("id") Long hotelId, 
+			@Valid @RequestBody PeriodReservationDTO dto,
 			Principal principal
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
-		
-		if (this.fRepo.existsById(flightId)) {
-			Optional<FacturationData> fData = this.fDatRepo.findById(dto.getCardId().longValue());
-			if (fData.isPresent() && fData.get().getUser().getId().equals(userDetails.getUser().getId())) {
-				this.fService.createReservation(userDetails.getUser().getId(), flightId, dto);
-				return ResponseEntity.ok().build();
+		try {
+			
+			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			
+			if (this.hRepo.existsById(hotelId)) {
+				Optional<FacturationData> fData = this.fDatRepo.findById(dto.getCardId().longValue());
+				if (fData.isPresent() && fData.get().getUser().getId().equals(userDetails.getUser().getId())) {
+					Date beginDate = new Date( dto.getBeginTime() );
+					Date endDate = new Date( dto.getEndTime() );
+					if (this.hService.isReservationAvailable(hotelId, beginDate, endDate)) {
+						this.hService.createReservation(userDetails.getUser().getId(), hotelId, dto);
+						return ResponseEntity.ok().build();
+					}else {
+						return ResponseEntity.status(HttpStatus.CONFLICT).build();
+					}
+				}else {
+					return ResponseEntity.notFound().build();
+				}
 			}else {
 				return ResponseEntity.notFound().build();
 			}
-		}else {
-			return ResponseEntity.notFound().build();
+			
+		} catch (Exception e) {
+			return ResponseEntity.internalServerError().build();
 		}
+
 	}
 	
 	@GetMapping("/{id}/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			@PathVariable("reservationId") Long reservationId,
 			Principal principal
 			)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
-		Optional<Flight> flightOptional = this.fRepo.findById(flightId);
-		Optional<FlightReservation> flightResOptional = this.fResRepo.findById(reservationId);
+		Optional<Hotel> hotelOptional = this.hRepo.findById(hotelId);
+		Optional<HotelReservation> hotelResOptional = this.hResRepo.findById(reservationId);
 		
-		if ( flightOptional.isPresent() && flightResOptional.isPresent() ) {
-			if ( flightResOptional.get().getUser().getId().equals(userDetails.getUser().getId()) ) {
-				return ResponseEntity.ok( new FlightReservationDetailsDTO( this.fService.getReservation(reservationId) ) );
+		if ( hotelOptional.isPresent() && hotelResOptional.isPresent() ) {
+			if ( hotelResOptional.get().getUser().getId().equals(userDetails.getUser().getId()) ) {
+				return ResponseEntity.ok( new HotelReservationDetailsDTO( this.hService.getReservation(reservationId) ) );
 			}else {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 			}
@@ -191,7 +200,7 @@ public class FlightController {
 	
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			Principal principal,
 			Map<String, String> params
 			)
@@ -200,11 +209,11 @@ public class FlightController {
 			CustomUserDetails userDetails = (CustomUserDetails) principal;
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
-			if ( this.fRepo.existsById(flightId) ) {
+			if ( this.hRepo.existsById(hotelId) ) {
 				return ResponseEntity.ok(
-						this.fService.getReservations(userDetails.getUser().getId(), page)
+						this.hService.getReservations(userDetails.getUser().getId(), page)
 							.stream().map(fRes->{
-								return new FlightReservationDetailsDTO(fRes);
+								return new HotelReservationDetailsDTO(fRes);
 							}).collect(Collectors.toList())
 				);
 			}else {
@@ -219,14 +228,14 @@ public class FlightController {
 	
 	@PostMapping("/{id}/evaluations/create")
 	public ResponseEntity<?> createEvaluation(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			@Valid @RequestBody EvaluationDTO dto,
 			Principal principal
 			)
 	{
 		try {
 			CustomUserDetails userDetails = (CustomUserDetails) principal;
-			Evaluation eval = this.fService.addEvaluation(userDetails.getUser().getId(), flightId, dto);
+			Evaluation eval = this.hService.addEvaluation(userDetails.getUser().getId(), hotelId, dto);
 			return ResponseEntity.created(null).body( new EvaluationDetailsDTO(eval) );
 		}catch (IdNotFoundException|OfferNotFoundException e) {
 			return ResponseEntity.notFound().build();
@@ -237,12 +246,12 @@ public class FlightController {
 	
 	@GetMapping("/{id}/evaluations/getAll")
 	public ResponseEntity<?> getAllEvaluations(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			Map<String, String> params
 			)
 	{
 		try {
-			return ResponseEntity.ok(this.fService.getEvaluations(flightId, params));
+			return ResponseEntity.ok(this.hService.getEvaluations(hotelId, params));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		} catch (Exception e) {
@@ -252,7 +261,7 @@ public class FlightController {
 	
 	@PutMapping("/{id}/evaluations/edit/{evaluationId}")
 	public ResponseEntity<?> editEvaluation(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
 			Principal principal,
@@ -265,7 +274,7 @@ public class FlightController {
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
 				{
-					return ResponseEntity.ok(this.fService.editEvaluation(evalId, dto));
+					return ResponseEntity.ok(this.hService.editEvaluation(evalId, dto));
 				}else {
 					return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 				}
@@ -279,7 +288,7 @@ public class FlightController {
 	
 	@DeleteMapping("/{id}/evaluations/delete/{evaluationId}")
 	public ResponseEntity<?> deleteEvaluation(
-			@PathVariable("id") Long flightId,
+			@PathVariable("id") Long hotelId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
 			Principal principal,
@@ -292,7 +301,7 @@ public class FlightController {
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
 				{
-					this.fService.removeEvaluation(evalId);
+					this.hService.removeEvaluation(evalId);
 					return ResponseEntity.noContent().build();
 				}else {
 					return ResponseEntity.status(HttpStatus.FORBIDDEN).build();

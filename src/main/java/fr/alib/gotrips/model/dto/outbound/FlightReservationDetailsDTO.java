@@ -1,5 +1,6 @@
 package fr.alib.gotrips.model.dto.outbound;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Objects;
 
@@ -59,7 +60,7 @@ public class FlightReservationDetailsDTO {
 				&& Objects.equals(user, other.user);
 	}
 	public FlightReservationDetailsDTO(Long id, UserDetailsDTO user, FlightDetailsDTO flight, Float price,
-			Date paymentTime) {
+			Timestamp paymentTime) {
 		super();
 		this.id = id;
 		this.user = user;
