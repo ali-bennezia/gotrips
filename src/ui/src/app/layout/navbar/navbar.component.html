@@ -1,39 +1,90 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">gotrips</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
-    <span class="navbar-toggler-icon"></span>
-  </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="nav justify-content-center nb-selection">
       <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a
+          class="nav-link"
+          [routerLink]="['/flights']"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
           <ng-icon name="ionAirplaneOutline"></ng-icon>
           Flights</a
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a
+          class="nav-link"
+          [routerLink]="['/hotels']"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
           <ng-icon name="ionBusinessOutline"></ng-icon>
           Hotels</a
         >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a
+          class="nav-link"
+          [routerLink]="['/activities']"
+          routerLinkActive="active"
+          ariaCurrentWhenActive="page"
+        >
           <ng-icon name="ionBaseballOutline"></ng-icon> Activities</a
         >
       </li>
     </ul>
   </div>
-  <button class="nb-account-menu">
-    <ng-icon name="ionPersonCircleOutline"></ng-icon>
-  </button>
+  <span>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarMobileMenu"
+      aria-controls="navbarMobileMenu"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="dropdown-center nb-account-menu-group">
+      <button
+        class="nb-account-menu d-none d-sm-none d-md-none d-lg-block"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <ng-icon name="ionPersonCircleOutline"></ng-icon>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Action</a></li>
+        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <li><a class="dropdown-item" href="#">Something else here</a></li>
+      </ul>
+    </div>
+  </span>
 </nav>
+<div
+  id="navbarMobileMenu"
+  class="collapse d-visible d-sm-visible d-md-visible d-lg-none"
+>
+  <a
+    [routerLink]="['/flights']"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    >Flights</a
+  >
+  <a
+    [routerLink]="['/hotels']"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    >Hotels</a
+  >
+  <a
+    [routerLink]="['/activities']"
+    routerLinkActive="active"
+    ariaCurrentWhenActive="page"
+    >Activities</a
+  >
+</div>

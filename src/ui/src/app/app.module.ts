@@ -2,11 +2,9 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 
 import { NgIconsModule } from '@ng-icons/core';
-import { bootstrapLuggageFill } from '@ng-icons/bootstrap-icons';
 import {
   ionPersonCircleOutline,
   ionAirplaneOutline,
@@ -21,12 +19,17 @@ import { HotelsPageComponent } from './pages/hotels-page/hotels-page.component';
 import { ActivitiesPageComponent } from './pages/activities-page/activities-page.component';
 
 @NgModule({
-  declarations: [AppComponent, NavbarComponent, NotFoundPageComponent, FlightsPageComponent, HotelsPageComponent, ActivitiesPageComponent],
+  declarations: [
+    AppComponent,
+    NavbarComponent,
+    NotFoundPageComponent,
+    FlightsPageComponent,
+    HotelsPageComponent,
+    ActivitiesPageComponent,
+  ],
   imports: [
     BrowserModule,
-    NgbModule,
     NgIconsModule.withIcons({
-      bootstrapLuggageFill,
       ionPersonCircleOutline,
       ionAirplaneOutline,
       ionBusinessOutline,
