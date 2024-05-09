@@ -1,0 +1,66 @@
+.navbar {
+  border-bottom: solid 1px rgba(0, 0, 0, 0.199);
+  position: sticky;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  color: rgb(94, 136, 94);
+  font-weight: 600;
+  margin-left: 10px;
+}
+
+.nb-selection {
+  position: absolute;
+  left: 0px;
+  width: 100vw;
+  font-family: system-ui;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.nav-link {
+  color: rgb(37, 37, 37);
+  opacity: 0.7;
+  transition: 100ms opacity ease-in;
+  min-width: 120px;
+  pointer-events: all;
+  user-select: none;
+}
+
+.nav-link:hover {
+  color: black;
+  opacity: 1;
+}
+
+ng-icon {
+  height: auto;
+}
+
+.nav-item ng-icon {
+  font-size: 26px;
+  position: absolute;
+  top: 0px;
+  margin-left: -30px;
+}
+
+.nb-account-menu {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 50%;
+  margin-right: 10px;
+  opacity: 0.8;
+  transition: 100ms opacity ease-in;
+}
+
+.nb-account-menu:hover {
+  background-color: rgb(228, 228, 228);
+  opacity: 1;
+}
+
+.nb-account-menu > ng-icon {
+  font-size: 36px;
+  line-height: 42px;
+  pointer-events: none;
+}
