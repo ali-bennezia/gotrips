@@ -4,6 +4,7 @@ import {
   QueryList,
   AfterViewInit,
   ElementRef,
+  OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { mustMatch } from 'src/app/forms/validators';
@@ -13,7 +14,7 @@ import { mustMatch } from 'src/app/forms/validators';
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css'],
 })
-export class RegisterPageComponent {
+export class RegisterPageComponent implements OnInit {
   currentPage: number = 1;
   get pageNames() {
     return [
@@ -36,6 +37,19 @@ export class RegisterPageComponent {
     let res = this.pageNames.indexOf(name);
     return res == -1 ? res : res + 2;
   }
+  getCompanyDTO(group: FormGroup) {
+    return {
+      name: group.get('name')?.value,
+      description: group.get('description')?.value,
+      address: {
+        street: group.get('address')?.get('street')?.value,
+        city: group.get('address')?.get('city')?.value,
+        zipCode: Number(group.get('address')?.get('zipCode')?.value),
+        country: group.get('address')?.get('country')?.value,
+      },
+    };
+  }
+
   group!: FormGroup;
   constructor(private builder: FormBuilder) {
     this.group = this.builder.group(
@@ -92,11 +106,55 @@ export class RegisterPageComponent {
         isFlightCompany: [false],
         isHotelCompany: [false],
         isActivityCompany: [false],
-        agreeTermsConditions: [false],
-        flightCompany: builder.group({}),
+        agreeTermsConditions: [false, [Validators.requiredTrue]],
+        flightCompany: builder.group({
+          name: ['', [Validators.required]],
+          description: ['', [Validators.required]],
+          address: builder.group({
+            street: ['', [Validators.required]],
+            city: ['', [Validators.required]],
+            zipCode: [0, [Validators.required]],
+            country: ['', [Validators.required]],
+          }),
+        }),
+        hotelCompany: builder.group({
+          name: ['', [Validators.required]],
+          description: ['', [Validators.required]],
+          address: builder.group({
+            street: ['', [Validators.required]],
+            city: ['', [Validators.required]],
+            zipCode: [0, [Validators.required]],
+            country: ['', [Validators.required]],
+          }),
+        }),
+        activityCompany: builder.group({
+          name: ['', [Validators.required]],
+          description: ['', [Validators.required]],
+          address: builder.group({
+            street: ['', [Validators.required]],
+            city: ['', [Validators.required]],
+            zipCode: [0, [Validators.required]],
+            country: ['', [Validators.required]],
+          }),
+        }),
       },
       { validators: [mustMatch('password', 'confirmPassword')] }
     );
+  }
+
+  updateCompanyForms() {
+    let fl: boolean = this.group?.get('isFlightCompany')?.value ?? false;
+    let hl: boolean = this.group?.get('isHotelCompany')?.value ?? false;
+    let at: boolean = this.group?.get('isActivityCompany')?.value ?? false;
+    this.toggleCompanyForm('flightCompany', fl);
+    this.toggleCompanyForm('hotelCompany', hl);
+    this.toggleCompanyForm('activityCompany', at);
+  }
+
+  toggleCompanyForm(name: string, val: boolean) {
+    console.log(val);
+    if (val == true) this.group.get(name)?.enable();
+    else this.group.get(name)?.disable();
   }
 
   nextPage() {
@@ -106,5 +164,9 @@ export class RegisterPageComponent {
   previousPage() {
     --this.currentPage;
     if (this.currentPage < 0) this.currentPage = 0;
+  }
+
+  ngOnInit(): void {
+    this.updateCompanyForms();
   }
 }

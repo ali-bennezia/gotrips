@@ -24,3 +24,7 @@ input.ng-touched.ng-invalid {
 
   transition: 140ms opacity ease-in;
 }
+
+.btn {
+  margin: 4px;
+}
