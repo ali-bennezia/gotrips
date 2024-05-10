@@ -7,7 +7,9 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 public class UserLoginDTO {
+	@NotEmpty
 	@Email
+	@Size(min = 3, max = 254)
 	private String email;
 	@NotEmpty
 	@Size(min = 8, max = 128)

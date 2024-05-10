@@ -1,0 +1,195 @@
+<form [formGroup]="group">
+  <span class="form-step" [attr.data-step-hide]="currentPage != 1">
+    <h3>Register an account</h3>
+    <div class="mb-3">
+      <label for="inputUsername" class="form-label">Username</label>
+      <input
+        type="text"
+        class="form-control"
+        id="inputUsername"
+        formControlName="username"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputEmail" class="form-label">Email address</label>
+      <input
+        type="email"
+        class="form-control"
+        id="inputEmail"
+        aria-describedby="emailHelp"
+        formControlName="email"
+      />
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="inputFirstName" class="form-label">First name</label>
+        <input type="text" class="form-control" formControlName="firstName" />
+      </div>
+      <div class="col">
+        <label for="inputLastName" class="form-label">Last name</label>
+        <input type="text" class="form-control" formControlName="lastName" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword1" class="form-label">Password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="inputPassword1"
+        formControlName="password"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="inputPassword2" class="form-label">Confirm password</label>
+      <input
+        type="password"
+        class="form-control"
+        id="inputPassword2"
+        formControlName="confirmPassword"
+      />
+    </div>
+    <div class="mb-3">
+      <label>You're also a</label>
+      <div class="form-check form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="inlineCheckbox1"
+          formControlName="isFlightCompany"
+        />
+        <label class="form-check-label" for="inlineCheckbox1"
+          >Flight company</label
+        >
+      </div>
+      <div class="form-check form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="inlineCheckbox2"
+          formControlName="isHotelCompany"
+        />
+        <label class="form-check-label" for="inlineCheckbox2"
+          >Hotel company</label
+        >
+      </div>
+      <div class="form-check form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="inlineCheckbox3"
+          formControlName="isActivityCompany"
+        />
+        <label class="form-check-label" for="inlineCheckbox2"
+          >Activities company</label
+        >
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <div class="form-check">
+        <input
+          class="form-check-input"
+          type="checkbox"
+          id="inputTermsConditions"
+          formControlName="agreeTermsConditions"
+        />
+        <label class="form-check-label" for="termsConditionsFieldsetCheck">
+          Agree to terms and conditions
+        </label>
+      </div>
+    </div>
+    <span *ngIf="group.invalid && group.touched">
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="group.get('confirmPassword')?.errors?.['mustMatch']"
+      >
+        Passwords must match.
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="group.get('email')?.touched && group.get('email')?.errors?.['email']"
+      >
+        Email must be valid.
+      </div>
+      <ng-container
+        *ngFor="
+          let input of [
+            ['username', 'Username'],
+            ['email', 'Email'],
+            ['firstName', 'First name'],
+            ['lastName', 'Last name'],
+            ['password', 'Password'],
+            ['confirmPassword', 'Password confirmation']
+          ]
+        "
+      >
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['required']"
+        >
+          {{ input[1] }} is required.
+        </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['minLength']"
+        >
+          {{ input[1] }} is too short.
+        </div>
+        <div
+          class="alert alert-danger"
+          role="alert"
+          *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['maxLength']"
+        >
+          {{ input[1] }} is too long.
+        </div>
+      </ng-container>
+    </span>
+
+    <p>{{ group.value | json }}</p>
+  </span>
+  <span
+    class="form-step"
+    [attr.data-step-hide]="currentPage != getPageIndex('flight')"
+  >
+    <h3>Flight company details</h3>
+  </span>
+  <span
+    class="form-step"
+    [attr.data-step-hide]="currentPage != getPageIndex('hotel')"
+  >
+    <h3>Hotel company details</h3>
+  </span>
+  <span
+    class="form-step"
+    [attr.data-step-hide]="currentPage != getPageIndex('activity')"
+  >
+    <h3>Activity company details</h3>
+  </span>
+
+  <button
+    class="btn btn-secondary"
+    *ngIf="this.currentPage > 1"
+    (click)="previousPage()"
+  >
+    Previous
+  </button>
+  <button
+    class="btn btn-secondary"
+    *ngIf="this.currentPage < this.pages"
+    (click)="nextPage()"
+  >
+    Next
+  </button>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="group.invalid"
+    *ngIf="this.currentPage == this.pages"
+  >
+    Submit
+  </button>
+</form>

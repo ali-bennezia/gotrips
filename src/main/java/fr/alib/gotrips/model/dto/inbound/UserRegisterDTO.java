@@ -11,11 +11,15 @@ public class UserRegisterDTO {
 	@NotEmpty
 	@Size(min = 6, max = 60)
 	private String username;
+	@NotEmpty
 	@Email
+	@Size(min = 3, max = 254)
 	private String email;
 	@NotEmpty
+	@Size(min = 2, max = 50)
 	private String firstName;
 	@NotEmpty
+	@Size(min = 2, max = 50)
 	private String lastName;
 	@NotEmpty
 	@Size(min = 8, max = 128)

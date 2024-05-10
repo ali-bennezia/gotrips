@@ -49,17 +49,37 @@
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="dropdown-center nb-account-menu-group">
+    <div
+      class="dropdown-center nb-account-menu-group d-none d-sm-none d-md-none d-lg-block"
+    >
       <button
-        class="nb-account-menu d-none d-sm-none d-md-none d-lg-block"
+        class="nb-account-menu"
         data-bs-toggle="dropdown"
         aria-expanded="false"
       >
         <ng-icon name="ionPersonCircleOutline"></ng-icon>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="#">Action</a></li>
-        <li><a class="dropdown-item" href="#">Another action</a></li>
+        <ng-container *ngIf="!authService.authenticated">
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/user', 'register']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+              >Register</a
+            >
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/user', 'signin']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+              >Sign In</a
+            >
+          </li>
+        </ng-container>
         <li><a class="dropdown-item" href="#">Something else here</a></li>
       </ul>
     </div>
@@ -87,4 +107,21 @@
     ariaCurrentWhenActive="page"
     >Activities</a
   >
+  <ng-container *ngIf="!authService.authenticated">
+    <a
+      [routerLink]="['/user', 'register']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      >Register</a
+    >
+    <a
+      [routerLink]="['/user', 'signin']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+      >Sign In</a
+    ></ng-container
+  >
+  <ng-container *ngIf="authService.authenticated">
+    <button>Sign Out</button>
+  </ng-container>
 </div>
