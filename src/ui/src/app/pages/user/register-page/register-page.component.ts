@@ -7,6 +7,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth.service';
 import { mustMatch } from 'src/app/forms/validators';
 
 @Component({
@@ -15,6 +17,7 @@ import { mustMatch } from 'src/app/forms/validators';
   styleUrls: ['./register-page.component.css'],
 })
 export class RegisterPageComponent implements OnInit {
+  errorDisplay: string = '';
   currentPage: number = 1;
   get pageNames() {
     return [
@@ -49,9 +52,34 @@ export class RegisterPageComponent implements OnInit {
       },
     };
   }
+  getRegisterDTO() {
+    return {
+      username: this.group.get('username')?.value ?? '',
+      email: this.group.get('email')?.value ?? '',
+      firstName: this.group.get('firstName')?.value ?? '',
+      lastName: this.group.get('lastName')?.value ?? '',
+      password: this.group.get('password')?.value ?? '',
+      flightCompany:
+        this.group?.get('isFlightCompany')?.value === true
+          ? this.getCompanyDTO(this.group.get('flightCompany')! as FormGroup)
+          : null,
+      hotelCompany:
+        this.group?.get('isHotelCompany')?.value === true
+          ? this.getCompanyDTO(this.group.get('hotelCompany')! as FormGroup)
+          : null,
+      activityCompany:
+        this.group?.get('isActivityCompany')?.value === true
+          ? this.getCompanyDTO(this.group.get('activityCompany')! as FormGroup)
+          : null,
+    };
+  }
 
   group!: FormGroup;
-  constructor(private builder: FormBuilder) {
+  constructor(
+    private builder: FormBuilder,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.group = this.builder.group(
       {
         username: [
@@ -152,7 +180,6 @@ export class RegisterPageComponent implements OnInit {
   }
 
   toggleCompanyForm(name: string, val: boolean) {
-    console.log(val);
     if (val == true) this.group.get(name)?.enable();
     else this.group.get(name)?.disable();
   }
@@ -168,5 +195,27 @@ export class RegisterPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.updateCompanyForms();
+  }
+
+  onSubmit(e: Event) {
+    this.authService.register(this.getRegisterDTO()).subscribe((result) => {
+      if (result.success) {
+        this.router.navigate(['/user', 'signin'], {
+          queryParams: { registered: true },
+        });
+      } else {
+        switch (result.statusCode) {
+          case 409:
+            this.errorDisplay = 'Invalid given user information.';
+            break;
+          case 0:
+            this.errorDisplay = 'Client-side error.';
+            break;
+          default:
+            this.errorDisplay = 'Internal server error.';
+            break;
+        }
+      }
+    });
   }
 }

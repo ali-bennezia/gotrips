@@ -1,11 +1,15 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AuthSession } from '../data/auth/auth-session';
 import { UserLoginDto } from '../data/auth/user-login-dto';
 import { UserRegisterDto } from '../data/auth/user-register-dto';
 
 import { Observable, of } from 'rxjs';
-import { switchMap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, map, tap } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { AuthOperationResult } from '../data/auth/auth-operation-result';
@@ -35,27 +39,24 @@ export class AuthService {
         },
       })
       .pipe(
-        switchMap((resp) => {
-          if (resp instanceof HttpErrorResponse) {
-            return of({
-              success: false,
-              statusCode: resp.status,
-              statusText: resp.statusText,
-            });
-          } else {
-            return of({
-              success: true,
-              statusCode: resp.status,
-              statusText: resp.statusText,
-            });
-          }
-        }),
-        catchError((resp) => {
+        catchError((resp: HttpErrorResponse) => {
           return of({
             success: false,
             statusCode: resp.status,
             statusText: resp.statusText,
           });
+        }),
+        switchMap((resp) => {
+          if (
+            resp instanceof HttpResponse &&
+            !(resp instanceof HttpErrorResponse)
+          ) {
+            return of({
+              success: true,
+              statusCode: resp.status,
+              statusText: resp.statusText,
+            });
+          } else return of(resp as AuthOperationResult);
         })
       );
   }
@@ -64,32 +65,30 @@ export class AuthService {
     return this.http
       .post(`${environment.backendUrl}/api/user/register`, dto, {
         observe: 'response',
+        responseType: 'text',
         headers: {
           'Content-Type': 'application/json',
         },
       })
       .pipe(
-        switchMap((resp) => {
-          if (resp instanceof HttpErrorResponse) {
-            return of({
-              success: false,
-              statusCode: resp.status,
-              statusText: resp.statusText,
-            });
-          } else {
-            return of({
-              success: true,
-              statusCode: resp.status,
-              statusText: resp.statusText,
-            });
-          }
-        }),
-        catchError((resp) => {
+        catchError((resp: HttpErrorResponse) => {
           return of({
             success: false,
             statusCode: resp.status,
             statusText: resp.statusText,
           });
+        }),
+        switchMap((resp) => {
+          if (
+            resp instanceof HttpResponse &&
+            !(resp instanceof HttpErrorResponse)
+          ) {
+            return of({
+              success: true,
+              statusCode: resp.status,
+              statusText: resp.statusText,
+            });
+          } else return of(resp as AuthOperationResult);
         })
       );
   }

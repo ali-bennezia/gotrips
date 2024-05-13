@@ -1,1 +1,74 @@
-<p>signin-page works!</p>
+<form [formGroup]="group" (ngSubmit)="onSubmit($event)" class="auth-form">
+  <h3>Sign In</h3>
+  <div class="mb-3">
+    <label for="inputEmail" class="form-label">Email address</label>
+    <input
+      type="email"
+      class="form-control"
+      id="inputEmail"
+      aria-describedby="emailHelp"
+      formControlName="email"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="inputPassword1" class="form-label">Password</label>
+    <input
+      type="password"
+      class="form-control"
+      id="inputPassword1"
+      formControlName="password"
+    />
+  </div>
+
+  <span *ngIf="group.invalid && group.touched">
+    <div
+      class="alert alert-danger"
+      role="alert"
+      *ngIf="group.get('email')?.touched && group.get('email')?.errors?.['email']"
+    >
+      Email must be valid.
+    </div>
+
+    <ng-container
+      *ngFor="
+        let input of [
+          ['email', 'Email'],
+          ['password', 'Password']
+        ]
+      "
+    >
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['required']"
+      >
+        {{ input[1] }} is required.
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['minLength']"
+      >
+        {{ input[1] }} is too short.
+      </div>
+      <div
+        class="alert alert-danger"
+        role="alert"
+        *ngIf="group.get(input[0])?.touched && group.get(input[0])?.errors?.['maxLength']"
+      >
+        {{ input[1] }} is too long.
+      </div>
+    </ng-container>
+  </span>
+
+  <button type="submit" class="btn btn-primary" [disabled]="group.invalid">
+    Submit
+  </button>
+  <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ this.errorDisplay }}
+  </p>
+  <p class="alert alert-success" *ngIf="this.successDisplay.trim() != ''">
+    {{ this.successDisplay }}
+  </p>
+</form>

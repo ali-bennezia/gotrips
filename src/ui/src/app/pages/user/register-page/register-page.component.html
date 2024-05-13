@@ -1,4 +1,4 @@
-<form [formGroup]="group">
+<form [formGroup]="group" (ngSubmit)="onSubmit($event)" class="auth-form">
   <span class="form-step" [attr.data-step-hide]="currentPage != 1">
     <h3>Register an account</h3>
     <div class="mb-3">
@@ -1471,4 +1471,7 @@
   >
     Submit
   </button>
+  <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ this.errorDisplay }}
+  </p>
 </form>

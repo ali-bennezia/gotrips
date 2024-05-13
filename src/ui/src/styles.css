@@ -6,3 +6,34 @@ body {
   overflow-x: hidden;
   font-family: "Roboto", sans-serif;
 }
+
+.auth-form {
+  max-width: 640px;
+  margin: 0 auto;
+  margin-top: 16px;
+}
+
+input.ng-touched.ng-invalid {
+  border-color: rgba(255, 50, 50, 0.384);
+  border-width: 2px;
+}
+
+.form-step[data-step-hide="false"] {
+  opacity: 1;
+  position: static;
+
+  transition: 140ms opacity ease-in;
+}
+
+.form-step[data-step-hide="true"] {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+  user-select: none;
+
+  transition: 140ms opacity ease-in;
+}
+
+.btn {
+  margin: 4px;
+}
