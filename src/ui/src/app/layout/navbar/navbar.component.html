@@ -37,6 +37,10 @@
       </li>
     </ul>
   </div>
+  <p class="nb-account-display" *ngIf="authService.authenticated">
+    {{ authService.session?.username }}
+  </p>
+
   <span>
     <button
       class="navbar-toggler"
@@ -80,7 +84,20 @@
             >
           </li>
         </ng-container>
-        <li><a class="dropdown-item" href="#">Something else here</a></li>
+        <ng-container *ngIf="authService.authenticated">
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/user', 'details']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+              >Profile</a
+            >
+          </li>
+          <li>
+            <button class="dropdown-item" (click)="onLogout()">Sign Out</button>
+          </li>
+        </ng-container>
       </ul>
     </div>
   </span>
@@ -112,16 +129,25 @@
       [routerLink]="['/user', 'register']"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
-      >Register</a
     >
+      Register
+    </a>
     <a
       [routerLink]="['/user', 'signin']"
       routerLinkActive="active"
       ariaCurrentWhenActive="page"
-      >Sign In</a
-    ></ng-container
-  >
+    >
+      Sign In
+    </a>
+  </ng-container>
   <ng-container *ngIf="authService.authenticated">
-    <button>Sign Out</button>
+    <a
+      [routerLink]="['/user', 'details']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Profile
+    </a>
+    <button (click)="onLogout()">Sign Out</button>
   </ng-container>
 </div>

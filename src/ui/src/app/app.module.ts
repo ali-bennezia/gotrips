@@ -21,6 +21,7 @@ import { ActivitiesPageComponent } from './pages/activities-page/activities-page
 import { RegisterPageComponent } from './pages/user/register-page/register-page.component';
 import { SigninPageComponent } from './pages/user/signin-page/signin-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserDetailsPageComponent } from './pages/user/user-details-page/user-details-page.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ActivitiesPageComponent,
     RegisterPageComponent,
     SigninPageComponent,
+    UserDetailsPageComponent,
   ],
   imports: [
     BrowserModule,

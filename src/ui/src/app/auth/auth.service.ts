@@ -9,7 +9,7 @@ import { UserLoginDto } from '../data/auth/user-login-dto';
 import { UserRegisterDto } from '../data/auth/user-register-dto';
 
 import { Observable, of } from 'rxjs';
-import { switchMap, catchError, map, tap } from 'rxjs/operators';
+import { switchMap, catchError, map, tap, last } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
 import { AuthOperationResult } from '../data/auth/auth-operation-result';
@@ -30,6 +30,50 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
+  public fetchLastSavedSession() {
+    if (localStorage.getItem('session') != null) {
+      let lastSession: AuthSession = JSON.parse(
+        localStorage.getItem('session')!
+      ) as AuthSession;
+      this.http
+        .get(`${environment.backendUrl}/api/user/authentify`, {
+          observe: 'response',
+          headers: {
+            Authorization: `Bearer ${lastSession.token}`,
+          },
+        })
+        .subscribe({
+          next: () => {
+            this._session = lastSession;
+          },
+          error: () => {
+            this.logout();
+          },
+        });
+    }
+  }
+
+  public saveCurrentSession() {
+    if (this._session != null) {
+      localStorage.setItem('session', JSON.stringify(this._session));
+    } else {
+      localStorage.removeItem('session');
+    }
+  }
+
+  public initializeService() {
+    this.fetchLastSavedSession();
+  }
+
+  public terminateService() {
+    this.saveCurrentSession();
+  }
+
+  public logout() {
+    this._session = null;
+    localStorage.removeItem('session');
+  }
+
   public login(dto: UserLoginDto): Observable<AuthOperationResult> {
     return this.http
       .post(`${environment.backendUrl}/api/user/signin`, dto, {
@@ -40,6 +84,7 @@ export class AuthService {
       })
       .pipe(
         catchError((resp: HttpErrorResponse) => {
+          this.logout();
           return of({
             success: false,
             statusCode: resp.status,
@@ -51,6 +96,14 @@ export class AuthService {
             resp instanceof HttpResponse &&
             !(resp instanceof HttpErrorResponse)
           ) {
+            this._session = {
+              token: (resp.body! as any).jwtToken,
+              username: (resp.body! as any).username,
+              id: (resp.body! as any).id,
+              email: (resp.body! as any).email,
+              roles: (resp.body! as any).roles,
+            };
+            this.saveCurrentSession();
             return of({
               success: true,
               statusCode: resp.status,

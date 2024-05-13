@@ -14,6 +14,7 @@ public class UserDetailsDTO {
 	private Long id;
 	private String username;
 	private List<String> roles;
+	private Long joinedAtTime;
 	
 	public Long getId() {
 		return id;
@@ -33,8 +34,13 @@ public class UserDetailsDTO {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-
-	public UserDetailsDTO(Long id, String username, List<String> roles) {
+	public Long getJoinedAtTime() {
+		return joinedAtTime;
+	}
+	public void setJoinedAtTime(Long joinedAtTime) {
+		this.joinedAtTime = joinedAtTime;
+	}
+	public UserDetailsDTO(Long id, String username, List<String> roles, Long joinedAtTime) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -45,19 +51,21 @@ public class UserDetailsDTO {
 		this.id = user.getId();
 		this.username = user.getUsername();
 		this.roles = Arrays.asList( user.getRoles().split(", ") );
+		this.joinedAtTime = user.getCreatedAt().getTime();
 	}
 	public UserDetailsDTO(CustomUserDetails userDetails) {
 		super();
 		this.id = userDetails.getUser().getId();
 		this.username = userDetails.getUser().getUsername();
 		this.roles = Arrays.asList( userDetails.getUser().getRoles().split(", ") );
+		this.joinedAtTime = userDetails.getUser().getCreatedAt().getTime();
 	}
 	public UserDetailsDTO() {
 		super();
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, roles, username);
+		return Objects.hash(id, joinedAtTime, roles, username);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -68,14 +76,12 @@ public class UserDetailsDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDetailsDTO other = (UserDetailsDTO) obj;
-		return Objects.equals(id, other.id) && Objects.equals(roles, other.roles)
-				&& Objects.equals(username, other.username);
+		return Objects.equals(id, other.id) && Objects.equals(joinedAtTime, other.joinedAtTime)
+				&& Objects.equals(roles, other.roles) && Objects.equals(username, other.username);
 	}
 	@Override
 	public String toString() {
-		return "UserDetailsDTO [id=" + id + ", username=" + username + ", roles=" + roles + "]";
+		return "UserDetailsDTO [id=" + id + ", username=" + username + ", roles=" + roles + ", joinedAtTime="
+				+ joinedAtTime + "]";
 	}
-	
-	
-	
 }

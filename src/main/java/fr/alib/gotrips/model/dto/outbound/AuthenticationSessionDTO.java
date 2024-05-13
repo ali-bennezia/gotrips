@@ -7,6 +7,7 @@ public class AuthenticationSessionDTO {
 
 	private String jwtToken;
 	private String username;
+	private String id;
 	private String email;
 	private List<String> roles;
 	
@@ -22,6 +23,12 @@ public class AuthenticationSessionDTO {
 	public void setUsername(String username) {
 		this.username = username;
 	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getEmail() {
 		return email;
 	}
@@ -36,7 +43,7 @@ public class AuthenticationSessionDTO {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, jwtToken, roles, username);
+		return Objects.hash(email, id, jwtToken, roles, username);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -47,13 +54,15 @@ public class AuthenticationSessionDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		AuthenticationSessionDTO other = (AuthenticationSessionDTO) obj;
-		return Objects.equals(email, other.email) && Objects.equals(jwtToken, other.jwtToken)
-				&& Objects.equals(roles, other.roles) && Objects.equals(username, other.username);
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id)
+				&& Objects.equals(jwtToken, other.jwtToken) && Objects.equals(roles, other.roles)
+				&& Objects.equals(username, other.username);
 	}
-	public AuthenticationSessionDTO(String jwtToken, String username, String email, List<String> roles) {
+	public AuthenticationSessionDTO(String jwtToken, String username, String id, String email, List<String> roles) {
 		super();
 		this.jwtToken = jwtToken;
 		this.username = username;
+		this.id = id;
 		this.email = email;
 		this.roles = roles;
 	}

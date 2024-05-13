@@ -1,11 +1,14 @@
 package fr.alib.gotrips.controllers;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,6 +51,28 @@ public class UserController {
 	
 	@Autowired
 	private JWTUtils jwtUtils;
+	
+	@GetMapping("/authentify")
+	public ResponseEntity<?> authentify(
+			HttpServletRequest request
+			)
+	{
+		String token = request.getHeader("Authorization");
+		if (token != null && !token.isBlank()) {
+			token = token.replace("Bearer ", "");
+			String username = jwtUtils.extractUsername(token);
+			if (username != null) {
+				try {
+					UserDetails usr = this.uService.loadUserByUsername(username);
+					if (usr.isEnabled() && usr.isCredentialsNonExpired() && usr.isAccountNonLocked() && usr.isAccountNonExpired()) {
+						return ResponseEntity.ok().build();
+					}
+				} catch (UsernameNotFoundException ex) {
+				}
+			}
+		}	
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+	}
 	
 	@PostMapping("/signin")
 	public ResponseEntity<AuthenticationSessionDTO> signin(@Valid @RequestBody UserLoginDTO dto) {
