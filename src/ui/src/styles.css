@@ -37,3 +37,36 @@ input.ng-touched.ng-invalid {
 .btn {
   margin: 4px;
 }
+
+.page-cont {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.tab-btn {
+  display: inline;
+  margin: 2px;
+  padding: 4px;
+  font-size: 20px;
+  padding-left: 36px;
+  padding-right: 36px;
+  background-color: rgb(243, 243, 243);
+  border-bottom: rgb(201, 201, 201) 2px solid;
+}
+
+.tab-btn:hover {
+  background-color: rgb(238, 238, 238);
+  border-bottom: rgb(43, 43, 43) 2px solid;
+  cursor: pointer;
+}
+
+.tabs {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.tab-btn p {
+  display: inline;
+  text-align: center;
+  vertical-align: middle;
+}

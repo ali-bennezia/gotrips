@@ -31,3 +31,15 @@ export const isAnonymousCanActivateFn: CanActivateFn = (
   let authService: AuthService = inject(AuthService);
   return !authService.authenticated;
 };
+
+export const isAuthenticatedOrFurnishesIdQueryParam: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+):
+  | Observable<boolean | UrlTree>
+  | Promise<boolean | UrlTree>
+  | boolean
+  | UrlTree => {
+  let authService: AuthService = inject(AuthService);
+  return authService.authenticated || route.queryParamMap.has('id');
+};

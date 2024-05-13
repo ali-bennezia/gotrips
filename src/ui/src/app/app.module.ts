@@ -22,6 +22,8 @@ import { RegisterPageComponent } from './pages/user/register-page/register-page.
 import { SigninPageComponent } from './pages/user/signin-page/signin-page.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDetailsPageComponent } from './pages/user/user-details-page/user-details-page.component';
+import { ModalComponent } from './utils/modal/modal.component';
+import { ModalBtnComponent } from './utils/modal-btn/modal-btn.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { UserDetailsPageComponent } from './pages/user/user-details-page/user-de
     RegisterPageComponent,
     SigninPageComponent,
     UserDetailsPageComponent,
+    ModalComponent,
+    ModalBtnComponent,
   ],
   imports: [
     BrowserModule,

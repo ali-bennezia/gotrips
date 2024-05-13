@@ -28,7 +28,13 @@ export class AuthService {
     return this._session != null;
   }
 
-  constructor(private http: HttpClient) {}
+  get admin() {
+    return (this._session?.roles ?? []).includes('ROLE_ADMIN');
+  }
+
+  constructor(private http: HttpClient) {
+    this.initializeService();
+  }
 
   public fetchLastSavedSession() {
     if (localStorage.getItem('session') != null) {

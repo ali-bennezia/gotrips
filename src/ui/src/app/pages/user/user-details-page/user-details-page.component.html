@@ -1,1 +1,40 @@
-<p>user-details-page works!</p>
+<div class="page-cont">
+  <h3 class="display-6">Profile</h3>
+  <div class="tabs">
+    <div class="tab-btn" (click)="setTab(0)">
+      <p>About</p>
+    </div>
+    <div class="tab-btn" (click)="setTab(1)">
+      <p>Companies</p>
+    </div>
+  </div>
+  <span *ngIf="currentTab == 0">
+    <dl *ngIf="userDisplay != null">
+      <dt>Username</dt>
+      <dd>{{ userDisplay!.username }}</dd>
+      <dt>Roles</dt>
+      <dd>{{ userDisplay!.roles | titlecase }}</dd>
+      <dt>Join date</dt>
+      <dd>{{ userDisplay!.joinedAtDate | date }}</dd>
+    </dl>
+    <app-modal-btn
+      label="Permanently delete account"
+      modalIdentifier="deleteAccountModal"
+      btnClass="btn btn-danger"
+    ></app-modal-btn>
+  </span>
+  <span *ngIf="currentTab == 1">
+    <p>Companies page test</p>
+  </span>
+  <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </p>
+</div>
+<app-modal
+  title="Confirm deletion"
+  content="Are you sure you wish to permanently delete your account ?"
+  button1Label="Cancel"
+  button2Label="Delete"
+  modalIdentifier="deleteAccountModal"
+  [onConfirmCallback]="onConfirmDeleteAccount"
+></app-modal>
