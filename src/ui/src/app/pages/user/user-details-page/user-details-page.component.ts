@@ -30,7 +30,7 @@ export class UserDetailsPageComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    public authService: AuthService,
     private router: Router
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {

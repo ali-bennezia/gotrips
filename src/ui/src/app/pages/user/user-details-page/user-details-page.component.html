@@ -17,15 +17,23 @@
       <dt>Join date</dt>
       <dd>{{ userDisplay!.joinedAtDate | date }}</dd>
     </dl>
-    <app-modal-btn
-      label="Permanently delete account"
-      modalIdentifier="deleteAccountModal"
-      btnClass="btn btn-danger"
-    ></app-modal-btn>
+    <span
+      *ngIf="
+        this.authService.admin ||
+        '' + this.userId == (this.authService.session?.id ?? '')
+      "
+    >
+      <app-modal-btn
+        label="Permanently delete account"
+        modalIdentifier="deleteAccountModal"
+        btnClass="btn btn-danger"
+      ></app-modal-btn>
+    </span>
   </span>
   <span *ngIf="currentTab == 1">
     <p>Companies page test</p>
   </span>
+
   <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
     {{ errorDisplay }}
   </p>

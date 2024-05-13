@@ -81,7 +81,11 @@ public class UserService implements UserDetailsService {
 	public AuthenticationSessionDTO login(UserLoginDTO dto, PasswordEncoder pwdEncoder)
 	{
 		Optional<User> usr = this.userRepo.findUserByUsernameOrEmail(null, dto.getEmail());
-		return (usr.isPresent() && pwdEncoder.matches(dto.getPassword(), usr.get().getPassword())) ? 
+		return (
+				usr.isPresent() 
+				&& pwdEncoder.matches(dto.getPassword(), usr.get().getPassword()) 
+				&& usr.get().isEnabled()
+				) ? 
 				new AuthenticationSessionDTO(
 						this.jwtUtils.generateToken(usr.get().getUsername()),
 						usr.get().getUsername(),
