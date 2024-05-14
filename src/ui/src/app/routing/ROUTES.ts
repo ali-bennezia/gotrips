@@ -7,9 +7,11 @@ import { RegisterPageComponent } from '../pages/user/register-page/register-page
 import { SigninPageComponent } from '../pages/user/signin-page/signin-page.component';
 import {
   isAnonymousCanActivateFn,
-  isAuthenticatedOrFurnishesIdQueryParam,
+  isAuthenticatedCanActivateFn,
+  isAuthenticatedOrFurnishesIdQueryParamCanActivateFn,
 } from './router-guards';
 import { UserDetailsPageComponent } from '../pages/user/user-details-page/user-details-page.component';
+import { CardAddPageComponent } from '../pages/user/card/card-add-page/card-add-page.component';
 
 const ROUTES: Routes = [
   {
@@ -37,7 +39,12 @@ const ROUTES: Routes = [
   {
     path: 'user/details',
     component: UserDetailsPageComponent,
-    canActivate: [isAuthenticatedOrFurnishesIdQueryParam],
+    canActivate: [isAuthenticatedOrFurnishesIdQueryParamCanActivateFn],
+  },
+  {
+    path: 'user/card/add',
+    component: CardAddPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
   },
   {
     path: '**',

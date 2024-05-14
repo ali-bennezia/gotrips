@@ -5,9 +5,9 @@
 }
 
 .navbar-brand {
-  font-size: 26px;
+  font-size: 30px;
   color: rgb(94, 136, 94);
-  font-weight: 800;
+  font-weight: 600;
   margin-left: 10px;
   letter-spacing: -2px;
 }
@@ -56,10 +56,17 @@ ng-icon {
   vertical-align: middle;
   margin: 0px;
   margin-right: 10px;
-  font-weight: bold;
+  font-weight: 400;
   font-family: "Roboto", sans-serif;
   font-size: 18px;
-  color: rgb(31, 31, 31);
+  color: rgb(88, 88, 88);
+
+  background-color: rgb(233, 233, 233);
+  border-radius: 12px;
+  padding: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  user-select: none;
 }
 
 .nb-account-menu-group {

@@ -1,5 +1,5 @@
 <div class="page-cont">
-  <h3 class="display-6">Profile</h3>
+  <h3 class="display-7">Profile</h3>
   <div class="tabs">
     <div class="tab-btn" (click)="setTab(0)">
       <p>About</p>
@@ -7,7 +7,7 @@
     <div class="tab-btn" (click)="setTab(1)">
       <p>Companies</p>
     </div>
-    <div class="tab-btn" (click)="setTab(2)">
+    <div class="tab-btn" (click)="setTab(2)" *ngIf="isOwnProfile()">
       <p>Payment</p>
     </div>
   </div>
@@ -20,12 +20,7 @@
       <dt>Join date</dt>
       <dd>{{ userDisplay!.joinedAtDate | date }}</dd>
     </dl>
-    <span
-      *ngIf="
-        this.authService.admin ||
-        '' + this.userId == (this.authService.session?.id ?? '')
-      "
-    >
+    <span *ngIf="isOwnProfileOrAdmin()">
       <app-modal-btn
         label="Permanently delete account"
         modalIdentifier="deleteAccountModal"
@@ -42,7 +37,23 @@
       [company]="c"
     ></app-company-details-min>
   </span>
-  <span *ngIf="currentTab == 2"> <p>Payment info</p></span>
+  <span *ngIf="currentTab == 2 && isOwnProfile()">
+    <p *ngIf="loadingCards; else loadingCardsElse" class="greyed-out">
+      Loading payment information ...
+    </p>
+    <ng-template #loadingCardsElse>
+      <p *ngIf="cardDetails.length == 0" class="greyed-out">
+        No registered credit card found.
+      </p>
+      <app-card-details
+        [card]="c"
+        *ngFor="let c of cardDetails"
+      ></app-card-details>
+    </ng-template>
+    <a [routerLink]="['/user/card/add']"
+      ><button class="btn btn-add">Add a credit card</button></a
+    >
+  </span>
 
   <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
     {{ errorDisplay }}

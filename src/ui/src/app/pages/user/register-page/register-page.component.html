@@ -1,6 +1,6 @@
 <form [formGroup]="group" (ngSubmit)="onSubmit($event)" class="auth-form">
   <span class="form-step" [attr.data-step-hide]="currentPage != 1">
-    <h3>Register an account</h3>
+    <h3 class="display-6">Register an account</h3>
     <div class="mb-3">
       <label for="inputUsername" class="form-label">Username</label>
       <input
@@ -164,7 +164,7 @@
     [attr.data-step-hide]="currentPage != getPageIndex('flight')"
     formGroupName="flightCompany"
   >
-    <h3>Flight company details</h3>
+    <h3 class="display-7">Flight company details</h3>
     <div class="mb-3">
       <label for="inputFlightName" class="form-label">Name</label>
       <input
@@ -184,7 +184,7 @@
       />
     </div>
     <span formGroupName="address">
-      <h4>Address</h4>
+      <h4 class="display-7">Address</h4>
       <div class="mb-3">
         <label for="inputFlightStreet" class="form-label">Street</label>
         <input
@@ -593,7 +593,7 @@
     [attr.data-step-hide]="currentPage != getPageIndex('hotel')"
     formGroupName="hotelCompany"
   >
-    <h3>Hotel company details</h3>
+    <h3 class="display-7">Hotel company details</h3>
     <div class="mb-3">
       <label for="inputHotelName" class="form-label">Name</label>
       <input
@@ -613,7 +613,7 @@
       />
     </div>
     <span formGroupName="address">
-      <h4>Address</h4>
+      <h4 class="display-7">Address</h4>
       <div class="mb-3">
         <label for="inputHotelStreet" class="form-label">Street</label>
         <input
@@ -1022,7 +1022,7 @@
     [attr.data-step-hide]="currentPage != getPageIndex('activity')"
     formGroupName="activityCompany"
   >
-    <h3>Activity company details</h3>
+    <h3 class="display-7">Activity company details</h3>
     <div class="mb-3">
       <label for="inputActivityName" class="form-label">Name</label>
       <input
@@ -1044,7 +1044,7 @@
       />
     </div>
     <span formGroupName="address">
-      <h4>Address</h4>
+      <h4 class="display-7">Address</h4>
       <div class="mb-3">
         <label for="inputActivityStreet" class="form-label">Street</label>
         <input

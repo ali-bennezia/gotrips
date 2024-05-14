@@ -25,6 +25,8 @@ import { UserDetailsPageComponent } from './pages/user/user-details-page/user-de
 import { ModalComponent } from './utils/modal/modal.component';
 import { ModalBtnComponent } from './utils/modal-btn/modal-btn.component';
 import { CompanyDetailsMinComponent } from './pages/user/user-details-page/company-details-min/company-details-min.component';
+import { CardDetailsComponent } from './pages/user/user-details-page/card-details/card-details.component';
+import { CardAddPageComponent } from './pages/user/card/card-add-page/card-add-page.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +42,8 @@ import { CompanyDetailsMinComponent } from './pages/user/user-details-page/compa
     ModalComponent,
     ModalBtnComponent,
     CompanyDetailsMinComponent,
+    CardDetailsComponent,
+    CardAddPageComponent,
   ],
   imports: [
     BrowserModule,

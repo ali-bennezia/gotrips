@@ -12,6 +12,7 @@ public class PaymentDataDTO {
 	private String creditCardNumber;
 	@NotEmpty
 	private String creditCardCode;
+	private Long expirationTime;
 	private AddressDTO address;
 	public String getCreditCardName() {
 		return creditCardName;
@@ -37,9 +38,15 @@ public class PaymentDataDTO {
 	public void setAddress(AddressDTO address) {
 		this.address = address;
 	}
+	public Long getExpirationTime() {
+		return expirationTime;
+	}
+	public void setExpirationTime(Long expirationTime) {
+		this.expirationTime = expirationTime;
+	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, creditCardCode, creditCardName, creditCardNumber);
+		return Objects.hash(address, creditCardCode, creditCardName, creditCardNumber, expirationTime);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -52,17 +59,19 @@ public class PaymentDataDTO {
 		PaymentDataDTO other = (PaymentDataDTO) obj;
 		return Objects.equals(address, other.address) && Objects.equals(creditCardCode, other.creditCardCode)
 				&& Objects.equals(creditCardName, other.creditCardName)
-				&& Objects.equals(creditCardNumber, other.creditCardNumber);
+				&& Objects.equals(creditCardNumber, other.creditCardNumber)
+				&& Objects.equals(expirationTime, other.expirationTime);
 	}
-	public PaymentDataDTO(String creditCardName, String creditCardNumber, String creditCardCode, AddressDTO address) {
+	public PaymentDataDTO(@NotEmpty String creditCardName, @NotEmpty String creditCardNumber,
+			@NotEmpty String creditCardCode, @NotEmpty Long expirationTime, AddressDTO address) {
 		super();
 		this.creditCardName = creditCardName;
 		this.creditCardNumber = creditCardNumber;
 		this.creditCardCode = creditCardCode;
+		this.expirationTime = expirationTime;
 		this.address = address;
 	}
 	public PaymentDataDTO() {
 		super();
 	}
-	
 }

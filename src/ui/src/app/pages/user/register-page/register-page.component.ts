@@ -141,7 +141,7 @@ export class RegisterPageComponent implements OnInit {
           address: builder.group({
             street: ['', [Validators.required]],
             city: ['', [Validators.required]],
-            zipCode: [0, [Validators.required]],
+            zipCode: ['', [Validators.required]],
             country: ['', [Validators.required]],
           }),
         }),
@@ -151,7 +151,7 @@ export class RegisterPageComponent implements OnInit {
           address: builder.group({
             street: ['', [Validators.required]],
             city: ['', [Validators.required]],
-            zipCode: [0, [Validators.required]],
+            zipCode: ['', [Validators.required]],
             country: ['', [Validators.required]],
           }),
         }),
@@ -161,7 +161,7 @@ export class RegisterPageComponent implements OnInit {
           address: builder.group({
             street: ['', [Validators.required]],
             city: ['', [Validators.required]],
-            zipCode: [0, [Validators.required]],
+            zipCode: ['', [Validators.required]],
             country: ['', [Validators.required]],
           }),
         }),
