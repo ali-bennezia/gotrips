@@ -7,6 +7,9 @@
     <div class="tab-btn" (click)="setTab(1)">
       <p>Companies</p>
     </div>
+    <div class="tab-btn" (click)="setTab(2)">
+      <p>Payment</p>
+    </div>
   </div>
   <span *ngIf="currentTab == 0">
     <dl *ngIf="userDisplay != null">
@@ -31,8 +34,15 @@
     </span>
   </span>
   <span *ngIf="currentTab == 1">
-    <p>Companies page test</p>
+    <p *ngIf="userDisplay?.companies?.length == 0" class="greyed-out">
+      No companies found.
+    </p>
+    <app-company-details-min
+      *ngFor="let c of userDisplay?.companies"
+      [company]="c"
+    ></app-company-details-min>
   </span>
+  <span *ngIf="currentTab == 2"> <p>Payment info</p></span>
 
   <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
     {{ errorDisplay }}

@@ -24,6 +24,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDetailsPageComponent } from './pages/user/user-details-page/user-details-page.component';
 import { ModalComponent } from './utils/modal/modal.component';
 import { ModalBtnComponent } from './utils/modal-btn/modal-btn.component';
+import { CompanyDetailsMinComponent } from './pages/user/user-details-page/company-details-min/company-details-min.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { ModalBtnComponent } from './utils/modal-btn/modal-btn.component';
     UserDetailsPageComponent,
     ModalComponent,
     ModalBtnComponent,
+    CompanyDetailsMinComponent,
   ],
   imports: [
     BrowserModule,

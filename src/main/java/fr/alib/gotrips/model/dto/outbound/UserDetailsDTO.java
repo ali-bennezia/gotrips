@@ -15,6 +15,9 @@ public class UserDetailsDTO {
 	private String username;
 	private List<String> roles;
 	private Long joinedAtTime;
+	private CompanyDetailsDTO flightCompany;
+	private CompanyDetailsDTO hotelCompany;
+	private CompanyDetailsDTO activityCompany;
 	
 	public Long getId() {
 		return id;
@@ -40,11 +43,34 @@ public class UserDetailsDTO {
 	public void setJoinedAtTime(Long joinedAtTime) {
 		this.joinedAtTime = joinedAtTime;
 	}
-	public UserDetailsDTO(Long id, String username, List<String> roles, Long joinedAtTime) {
+	public CompanyDetailsDTO getFlightCompany() {
+		return flightCompany;
+	}
+	public void setFlightCompany(CompanyDetailsDTO flightCompany) {
+		this.flightCompany = flightCompany;
+	}
+	public CompanyDetailsDTO getHotelCompany() {
+		return hotelCompany;
+	}
+	public void setHotelCompany(CompanyDetailsDTO hotelCompany) {
+		this.hotelCompany = hotelCompany;
+	}
+	public CompanyDetailsDTO getActivityCompany() {
+		return activityCompany;
+	}
+	public void setActivityCompany(CompanyDetailsDTO activityCompany) {
+		this.activityCompany = activityCompany;
+	}
+	public UserDetailsDTO(Long id, String username, List<String> roles, Long joinedAtTime,
+			CompanyDetailsDTO flightCompany, CompanyDetailsDTO hotelCompany, CompanyDetailsDTO activityCompany) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.roles = roles;
+		this.joinedAtTime = joinedAtTime;
+		this.flightCompany = flightCompany;
+		this.hotelCompany = hotelCompany;
+		this.activityCompany = activityCompany;
 	}
 	public UserDetailsDTO(User user) {
 		super();
@@ -52,6 +78,9 @@ public class UserDetailsDTO {
 		this.username = user.getUsername();
 		this.roles = Arrays.asList( user.getRoles().split(", ") );
 		this.joinedAtTime = user.getCreatedAt().getTime();
+		this.flightCompany = user.getFlightCompany() != null ? new CompanyDetailsDTO( user.getFlightCompany() ) : null;
+		this.hotelCompany = user.getHotelCompany() != null ? new CompanyDetailsDTO( user.getHotelCompany() ) : null;
+		this.activityCompany = user.getActivityCompany() != null ? new CompanyDetailsDTO( user.getActivityCompany() ) : null;
 	}
 	public UserDetailsDTO(CustomUserDetails userDetails) {
 		super();
@@ -59,13 +88,16 @@ public class UserDetailsDTO {
 		this.username = userDetails.getUser().getUsername();
 		this.roles = Arrays.asList( userDetails.getUser().getRoles().split(", ") );
 		this.joinedAtTime = userDetails.getUser().getCreatedAt().getTime();
+		this.flightCompany = userDetails.getUser().getFlightCompany() != null ? new CompanyDetailsDTO( userDetails.getUser().getFlightCompany() ) : null;
+		this.hotelCompany = userDetails.getUser().getFlightCompany() != null ? new CompanyDetailsDTO( userDetails.getUser().getHotelCompany() ) : null;
+		this.activityCompany = userDetails.getUser().getFlightCompany() != null ? new CompanyDetailsDTO( userDetails.getUser().getActivityCompany() ) : null;
 	}
 	public UserDetailsDTO() {
 		super();
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, joinedAtTime, roles, username);
+		return Objects.hash(activityCompany, flightCompany, hotelCompany, id, joinedAtTime, roles, username);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -76,12 +108,20 @@ public class UserDetailsDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		UserDetailsDTO other = (UserDetailsDTO) obj;
-		return Objects.equals(id, other.id) && Objects.equals(joinedAtTime, other.joinedAtTime)
-				&& Objects.equals(roles, other.roles) && Objects.equals(username, other.username);
+		return Objects.equals(activityCompany, other.activityCompany)
+				&& Objects.equals(flightCompany, other.flightCompany)
+				&& Objects.equals(hotelCompany, other.hotelCompany) && Objects.equals(id, other.id)
+				&& Objects.equals(joinedAtTime, other.joinedAtTime) && Objects.equals(roles, other.roles)
+				&& Objects.equals(username, other.username);
 	}
 	@Override
 	public String toString() {
 		return "UserDetailsDTO [id=" + id + ", username=" + username + ", roles=" + roles + ", joinedAtTime="
-				+ joinedAtTime + "]";
+				+ joinedAtTime + ", flightCompany=" + flightCompany + ", hotelCompany=" + hotelCompany
+				+ ", activityCompany=" + activityCompany + ", getId()=" + getId() + ", getUsername()=" + getUsername()
+				+ ", getRoles()=" + getRoles() + ", getJoinedAtTime()=" + getJoinedAtTime() + ", getFlightCompany()="
+				+ getFlightCompany() + ", getHotelCompany()=" + getHotelCompany() + ", getActivityCompany()="
+				+ getActivityCompany() + ", hashCode()=" + hashCode() + ", getClass()=" + getClass() + ", toString()="
+				+ super.toString() + "]";
 	}
 }

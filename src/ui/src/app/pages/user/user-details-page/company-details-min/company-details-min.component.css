@@ -1,0 +1,16 @@
+.company-details-min-cont {
+  background-color: rgb(247, 247, 247);
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+.company-details-min-cont:hover {
+  background-color: rgb(233, 233, 233);
+  cursor: pointer;
+}

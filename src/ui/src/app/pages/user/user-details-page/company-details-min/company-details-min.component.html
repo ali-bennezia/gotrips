@@ -1,0 +1,10 @@
+<a
+  [routerLink]="['/company', 'details']"
+  [queryParams]="{ id: company.id }"
+  ariaCurrentWhenActive="page"
+>
+  <div class="company-details-min-cont">
+    <h5>{{ company.name }}</h5>
+    <p>{{ company.description }}</p>
+  </div>
+</a>

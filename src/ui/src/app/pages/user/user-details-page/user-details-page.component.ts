@@ -4,7 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 
 import { UserDetailsDto } from 'src/app/data/user/user-details-dto';
-import { UserUiDetailsDto } from 'src/app/data/user/user-ui-details-dto';
+import {
+  UserUiDetailsDto,
+  getUserUiDetailsDto,
+} from 'src/app/data/user/user-ui-details-dto';
 
 import { environment } from 'src/environments/environment';
 
@@ -44,19 +47,7 @@ export class UserDetailsPageComponent implements OnInit {
         )
         .pipe(
           tap((data: UserDetailsDto) => {
-            this.userDisplay = {
-              id: data.id,
-              username: data.username,
-              roles: data.roles
-                .map((r) =>
-                  r
-                    .replaceAll('ROLE_', '')
-                    .toLocaleLowerCase()
-                    .replace('_', ' ')
-                )
-                .join(', '),
-              joinedAtDate: new Date(data.joinedAtTime),
-            };
+            this.userDisplay = getUserUiDetailsDto(data);
           })
         );
       this.user$.subscribe();

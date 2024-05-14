@@ -1450,15 +1450,19 @@
   </span>
 
   <button
+    type="button"
     class="btn btn-secondary"
     *ngIf="this.currentPage > 1"
+    [disabled]="!(this.currentPage > 1)"
     (click)="previousPage()"
   >
     Previous
   </button>
   <button
+    type="button"
     class="btn btn-secondary"
     *ngIf="this.currentPage < this.pages"
+    [disabled]="!(this.currentPage < this.pages)"
     (click)="nextPage()"
   >
     Next
@@ -1466,7 +1470,7 @@
   <button
     type="submit"
     class="btn btn-primary"
-    [disabled]="group.invalid"
+    [disabled]="group.invalid || !(this.currentPage == this.pages)"
     *ngIf="this.currentPage == this.pages"
   >
     Submit

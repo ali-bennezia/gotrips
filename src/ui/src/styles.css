@@ -70,3 +70,8 @@ input.ng-touched.ng-invalid {
   text-align: center;
   vertical-align: middle;
 }
+
+.greyed-out {
+  color: grey;
+  font-style: italic;
+}
