@@ -33,8 +33,8 @@
       No companies found.
     </p>
     <app-company-details-min
-      *ngFor="let c of userDisplay?.companies"
       [company]="c"
+      *ngFor="let c of userDisplay?.companies"
     ></app-company-details-min>
   </span>
   <span *ngIf="currentTab == 2 && isOwnProfile()">
@@ -59,11 +59,3 @@
     {{ errorDisplay }}
   </p>
 </div>
-<app-modal
-  title="Confirm deletion"
-  content="Are you sure you wish to permanently delete your account ?"
-  button1Label="Cancel"
-  button2Label="Delete"
-  modalIdentifier="deleteAccountModal"
-  [onConfirmCallback]="onConfirmDeleteAccount"
-></app-modal>

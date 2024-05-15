@@ -116,6 +116,17 @@ public class FlightService {
 		}).collect(Collectors.toList());
 	}
 	
+	public List<FlightDetailsDTO> getCompanyFlights(Long companyId) throws IllegalArgumentException, IdNotFoundException
+	{
+		if (companyId == null) throw new IllegalArgumentException("Given id is null.");
+		return this.fRepo.findAllByFlightCompanyId(companyId)
+				.stream()
+				.map(f -> {
+					return new FlightDetailsDTO(f);
+				})
+				.collect(Collectors.toList());
+	}
+	
 	public List<FlightDetailsDTO> getFlights(Map<String, String> params) throws IllegalArgumentException
 	{
 		for (String key : params.keySet()) {

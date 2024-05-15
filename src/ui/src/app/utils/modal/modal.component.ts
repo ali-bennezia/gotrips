@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { InteractionService } from 'src/app/services/interaction.service';
 
 @Component({
   selector: 'app-modal',
@@ -17,10 +18,9 @@ export class ModalComponent {
   @Input()
   modalIdentifier!: string;
 
-  @Input()
-  onConfirmCallback!: (e: Event) => void;
+  constructor(private interactionService: InteractionService) {}
 
   triggerCallback = (e: Event) => {
-    this.onConfirmCallback(e);
+    this.interactionService.onConfirmAccountDeleteSource.next(e);
   };
 }

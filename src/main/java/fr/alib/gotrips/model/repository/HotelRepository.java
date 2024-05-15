@@ -1,5 +1,7 @@
 package fr.alib.gotrips.model.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.offers.Hotel;
 
 
@@ -33,6 +36,8 @@ public interface HotelRepository extends JpaRepository<Hotel, Long> {
 			@Param("mxeval") Float maxEval,
 			Pageable pageeable
 	);
+	
+	List<Hotel> findAllByHotelCompanyId(Long hotelCompanyId);
 	
 	@Query("select avg(e.note) from Evaluation e WHERE e.hotel.id = :id")
 	Double findAverageNoteById(@Param("id") Long id);

@@ -28,6 +28,7 @@ import fr.alib.gotrips.model.dto.inbound.ActivityDTO;
 import fr.alib.gotrips.model.dto.inbound.PeriodReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.CalendarPairUnitDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.HotelDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.ActivityDetailsDTO;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
@@ -119,7 +120,18 @@ public class ActivityService {
 		return list;
 	}
 	
-	public List<ActivityDetailsDTO> getActivitys(Map<String, String> params) throws IllegalArgumentException
+	public List<ActivityDetailsDTO> getCompanyActivities(Long companyId) throws IllegalArgumentException, IdNotFoundException
+	{
+		if (companyId == null) throw new IllegalArgumentException("Given id is null.");
+		return this.aRepo.findAllByActivityCompanyId(companyId)
+				.stream()
+				.map(f -> {
+					return new ActivityDetailsDTO(f);
+				})
+				.collect(Collectors.toList());
+	}
+	
+	public List<ActivityDetailsDTO> getActivities(Map<String, String> params) throws IllegalArgumentException
 	{
 		for (String key : params.keySet()) {
 			if (!filterOpts.contains(key)) {

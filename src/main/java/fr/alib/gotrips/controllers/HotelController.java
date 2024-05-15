@@ -27,8 +27,11 @@ import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
 import fr.alib.gotrips.model.dto.inbound.HotelDTO;
 import fr.alib.gotrips.model.dto.inbound.PeriodReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.HotelDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.HotelReservationDetailsDTO;
+import fr.alib.gotrips.model.entity.company.FlightCompany;
+import fr.alib.gotrips.model.entity.company.HotelCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.offers.Hotel;
 import fr.alib.gotrips.model.entity.reservation.HotelReservation;
@@ -36,6 +39,8 @@ import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.HotelRepository;
+import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
+import fr.alib.gotrips.model.repository.company.HotelCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.HotelReservationRepository;
 import fr.alib.gotrips.service.HotelService;
 import fr.alib.gotrips.service.UserService;
@@ -51,6 +56,9 @@ public class HotelController {
 	
 	@Autowired
 	private HotelReservationRepository hResRepo;
+	
+	@Autowired
+	private HotelCompanyRepository hComp;
 	
 	@Autowired
 	private FacturationDataRepository fDatRepo;
@@ -301,5 +309,27 @@ public class HotelController {
 			return ResponseEntity.internalServerError().build();
 		}
 	}
+	
+	@GetMapping("/company/{companyId}/hotels/getAll")
+	public ResponseEntity<List<HotelDetailsDTO>> getCompanyHotels(
+			@PathVariable("companyId") Long companyId,
+			HttpServletRequest request,
+			Principal principal
+			)
+	{
+		try {
+			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			Optional<HotelCompany> company = this.hComp.findById(companyId);
+			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
+			if (isOwner || request.isUserInRole("ADMIN")) {
+				return ResponseEntity.ok().body(this.hService.getCompanyHotels(companyId));
+			}else {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
+		}
+	}
+	
 	
 }

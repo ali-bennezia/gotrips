@@ -29,6 +29,9 @@ import fr.alib.gotrips.model.dto.inbound.PeriodReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.ActivityDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.ActivityReservationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.HotelDetailsDTO;
+import fr.alib.gotrips.model.entity.company.ActivityCompany;
+import fr.alib.gotrips.model.entity.company.HotelCompany;
 import fr.alib.gotrips.model.entity.offers.Activity;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.reservation.ActivityReservation;
@@ -36,6 +39,8 @@ import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.repository.ActivityRepository;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FacturationDataRepository;
+import fr.alib.gotrips.model.repository.company.ActivityCompanyRepository;
+import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.ActivityReservationRepository;
 import fr.alib.gotrips.service.ActivityService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -52,19 +57,22 @@ public class ActivityController {
 	private ActivityReservationRepository aResRepo;
 	
 	@Autowired
+	private ActivityCompanyRepository aComp;
+	
+	@Autowired
 	private FacturationDataRepository fDatRepo;
 	
 	@Autowired
 	private EvaluationRepository eRepo;
 	
 	@Autowired
-	private ActivityService hService;
+	private ActivityService aService;
 	
 	@GetMapping("/search")
 	public ResponseEntity<List<ActivityDetailsDTO>> search(@RequestParam Map<String, String> params)
 	{
 		try {
-			return ResponseEntity.ok().body(this.hService.getActivitys(params));
+			return ResponseEntity.ok().body(this.aService.getActivities(params));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -79,21 +87,21 @@ public class ActivityController {
 	{
 		Date beginDate = new Date(beginTime);
 		Date endDate = new Date(endTime);
-		return ResponseEntity.ok( this.hService.getCalendar(activityId, beginDate, endDate) );
+		return ResponseEntity.ok( this.aService.getCalendar(activityId, beginDate, endDate) );
 	}
 	
 	@PostMapping("/create")
 	public ResponseEntity<?> create(@Valid @RequestBody ActivityDTO dto, Principal principal)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
-		Activity activity = this.hService.createActivity(userDetails.getUser().getId(), dto);
+		Activity activity = this.aService.createActivity(userDetails.getUser().getId(), dto);
 		return ResponseEntity.created(null).body(activity);
 	}
 	
 	@GetMapping("/{id}/details")
 	public ResponseEntity<?> details(@PathVariable("id") Long id)
 	{
-		return ResponseEntity.ok().body( new ActivityDetailsDTO( this.hService.getActivity(id) ) );
+		return ResponseEntity.ok().body( new ActivityDetailsDTO( this.aService.getActivity(id) ) );
 	}
 	
 	@PutMapping("/{id}/edit")
@@ -106,9 +114,9 @@ public class ActivityController {
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
 		Long userId = userDetails.getUser().getId();
-		Activity activity = this.hService.getActivity(id);
+		Activity activity = this.aService.getActivity(id);
 		if ( request.isUserInRole("ADMIN") || activity.getActivityCompany().getUser().getId().equals(userId)) {
-			return ResponseEntity.ok().body( new ActivityDetailsDTO( this.hService.updateActivity(id, dto) ) );
+			return ResponseEntity.ok().body( new ActivityDetailsDTO( this.aService.updateActivity(id, dto) ) );
 		}else {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 		}
@@ -119,9 +127,9 @@ public class ActivityController {
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) principal;
 		Long userId = userDetails.getUser().getId();
-		Activity activity = this.hService.getActivity(id);
+		Activity activity = this.aService.getActivity(id);
 		if ( request.isUserInRole("ADMIN") || activity.getActivityCompany().getUser().getId().equals(userId)) {
-			this.hService.deleteActivity(id);
+			this.aService.deleteActivity(id);
 			return ResponseEntity.noContent().build();
 		}else {
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -144,8 +152,8 @@ public class ActivityController {
 				if (fData.isPresent() && fData.get().getUser().getId().equals(userDetails.getUser().getId())) {
 					Date beginDate = new Date( dto.getBeginTime() );
 					Date endDate = new Date( dto.getEndTime() );
-					if (this.hService.isReservationAvailable(activityId, beginDate, endDate)) {
-						this.hService.createReservation(userDetails.getUser().getId(), activityId, dto);
+					if (this.aService.isReservationAvailable(activityId, beginDate, endDate)) {
+						this.aService.createReservation(userDetails.getUser().getId(), activityId, dto);
 						return ResponseEntity.ok().build();
 					}else {
 						return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -176,7 +184,7 @@ public class ActivityController {
 		
 		if ( activityOptional.isPresent() && activityResOptional.isPresent() ) {
 			if ( activityResOptional.get().getUser().getId().equals(userDetails.getUser().getId()) ) {
-				return ResponseEntity.ok( new ActivityReservationDetailsDTO( this.hService.getReservation(reservationId) ) );
+				return ResponseEntity.ok( new ActivityReservationDetailsDTO( this.aService.getReservation(reservationId) ) );
 			}else {
 				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 			}
@@ -198,7 +206,7 @@ public class ActivityController {
 			
 			if ( this.aRepo.existsById(activityId) ) {
 				return ResponseEntity.ok(
-						this.hService.getReservations(userDetails.getUser().getId(), page)
+						this.aService.getReservations(userDetails.getUser().getId(), page)
 							.stream().map(fRes->{
 								return new ActivityReservationDetailsDTO(fRes);
 							}).collect(Collectors.toList())
@@ -222,7 +230,7 @@ public class ActivityController {
 	{
 		try {
 			CustomUserDetails userDetails = (CustomUserDetails) principal;
-			Evaluation eval = this.hService.addEvaluation(userDetails.getUser().getId(), activityId, dto);
+			Evaluation eval = this.aService.addEvaluation(userDetails.getUser().getId(), activityId, dto);
 			return ResponseEntity.created(null).body( new EvaluationDetailsDTO(eval) );
 		}catch (IdNotFoundException|OfferNotFoundException e) {
 			return ResponseEntity.notFound().build();
@@ -238,7 +246,7 @@ public class ActivityController {
 			)
 	{
 		try {
-			return ResponseEntity.ok(this.hService.getEvaluations(activityId, params));
+			return ResponseEntity.ok(this.aService.getEvaluations(activityId, params));
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		} catch (Exception e) {
@@ -261,7 +269,7 @@ public class ActivityController {
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
 				{
-					return ResponseEntity.ok(this.hService.editEvaluation(evalId, dto));
+					return ResponseEntity.ok(this.aService.editEvaluation(evalId, dto));
 				}else {
 					return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 				}
@@ -288,7 +296,7 @@ public class ActivityController {
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
 				{
-					this.hService.removeEvaluation(evalId);
+					this.aService.removeEvaluation(evalId);
 					return ResponseEntity.noContent().build();
 				}else {
 					return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -298,6 +306,27 @@ public class ActivityController {
 			}
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
+		}
+	}
+	
+	@GetMapping("/company/{companyId}/activities/getAll")
+	public ResponseEntity<List<ActivityDetailsDTO>> getCompanyActivities(
+			@PathVariable("companyId") Long companyId,
+			HttpServletRequest request,
+			Principal principal
+			)
+	{
+		try {
+			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			Optional<ActivityCompany> company = this.aComp.findById(companyId);
+			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
+			if (isOwner || request.isUserInRole("ADMIN")) {
+				return ResponseEntity.ok().body(this.aService.getCompanyActivities(companyId));
+			}else {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
 		}
 	}
 	

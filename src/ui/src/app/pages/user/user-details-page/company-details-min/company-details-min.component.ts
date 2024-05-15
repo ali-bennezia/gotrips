@@ -9,4 +9,15 @@ import { CompanyUiDetailsDto } from 'src/app/data/user/company-ui-details-dto';
 export class CompanyDetailsMinComponent {
   @Input()
   company!: CompanyUiDetailsDto;
+
+  typeString() {
+    switch (this.company.type) {
+      case 1:
+        return 'hotels';
+      case 2:
+        return 'activities';
+      default:
+        return 'flights';
+    }
+  }
 }

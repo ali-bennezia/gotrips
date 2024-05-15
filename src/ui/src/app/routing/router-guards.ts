@@ -44,3 +44,19 @@ export const isAuthenticatedOrFurnishesIdQueryParamCanActivateFn: CanActivateFn 
     let authService: AuthService = inject(AuthService);
     return authService.authenticated || route.queryParamMap.has('id');
   };
+
+export const hasRoleCanActivateFnFactory: (role: string) => CanActivateFn = (
+  role: string
+) => {
+  return (
+    route: ActivatedRouteSnapshot,
+    state: RouterStateSnapshot
+  ):
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree => {
+    let authService: AuthService = inject(AuthService);
+    return authService.authenticated && authService.hasRole(role);
+  };
+};

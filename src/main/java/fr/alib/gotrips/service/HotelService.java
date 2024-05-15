@@ -127,6 +127,17 @@ public class HotelService {
 		return list;
 	}
 	
+	public List<HotelDetailsDTO> getCompanyHotels(Long companyId) throws IllegalArgumentException, IdNotFoundException
+	{
+		if (companyId == null) throw new IllegalArgumentException("Given id is null.");
+		return this.hRepo.findAllByHotelCompanyId(companyId)
+				.stream()
+				.map(f -> {
+					return new HotelDetailsDTO(f);
+				})
+				.collect(Collectors.toList());
+	}
+	
 	public List<HotelDetailsDTO> getHotels(Map<String, String> params) throws IllegalArgumentException
 	{
 		for (String key : params.keySet()) {

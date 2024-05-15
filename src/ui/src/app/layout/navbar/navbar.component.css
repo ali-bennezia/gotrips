@@ -2,7 +2,7 @@ nav.navbar {
   border-bottom: solid 1px rgba(0, 0, 0, 0.199);
   position: fixed;
   width: 100vw;
-  z-index: 100;
+  z-index: 1;
   height: 72px;
   /*background: none rgb(255, 255, 255);*/
 

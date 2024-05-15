@@ -44,6 +44,7 @@ public interface FlightRepository extends JpaRepository<Flight, Long> {
 	
 	List<Flight> findAllByDepartureDateBetween(Date minDate, Date maxDate);
 	List<Flight> findAllByLandingDateBetween(Date minDate, Date maxDate);
+	List<Flight> findAllByFlightCompanyId(Long flightCompanyId);
 	
 	@Query("select avg(e.note) from Evaluation e WHERE e.flight.id = :id")
 	Double findAverageNoteById(@Param("id") Long id);

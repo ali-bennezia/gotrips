@@ -1,0 +1,38 @@
+<div class="center-title d-none d-sm-none d-md-none d-lg-block">
+  <h3 class="display-3">Travel the world with us.</h3>
+  <h6 class="display-6">Search for flights all across the world</h6>
+</div>
+<form class="search-form">
+  <div class="row">
+    <div class="col">
+      <label for="formControlDeparture" class="form-label">From</label>
+      <input type="text" class="form-control" id="formControlDeparture" />
+    </div>
+    <div class="col">
+      <label for="formControlArrival" class="form-label">To</label>
+      <input type="text" class="form-control" id="formControlArrival" />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <label for="formControlDeparture" class="form-label"
+        >Departure date</label
+      >
+      <input type="month" class="form-control" id="formControlDeparture" />
+    </div>
+    <div class="col">
+      <label for="formControlArrival" class="form-label">Arrival date</label>
+      <input type="month" class="form-control" id="formControlArrival" />
+    </div>
+  </div>
+
+  <input
+    class="form-control"
+    type="search"
+    placeholder="Queries ..."
+    aria-label="Search"
+  />
+  <button class="my-2 my-sm-0" type="submit">
+    <ng-icon name="ionSearchOutline"></ng-icon> Search
+  </button>
+</form>

@@ -21,6 +21,7 @@ import fr.alib.gotrips.model.dto.inbound.UserLoginDTO;
 import fr.alib.gotrips.model.dto.inbound.UserRegisterDTO;
 import fr.alib.gotrips.model.dto.outbound.AuthenticationSessionDTO;
 import fr.alib.gotrips.model.dto.outbound.CardDetailsDTO;
+import fr.alib.gotrips.model.dto.outbound.CompanyDetailsDTO;
 import fr.alib.gotrips.model.entity.PaymentData;
 import fr.alib.gotrips.model.entity.company.ActivityCompany;
 import fr.alib.gotrips.model.entity.company.FlightCompany;
@@ -91,7 +92,10 @@ public class UserService implements UserDetailsService {
 						usr.get().getUsername(),
 						usr.get().getId().toString(),
 						usr.get().getEmail(),
-						Arrays.asList(usr.get().getRoles().split(", "))
+						Arrays.asList(usr.get().getRoles().split(", ")),
+						usr.get().getFlightCompany() != null ? new CompanyDetailsDTO(usr.get().getFlightCompany()) : null,
+						usr.get().getHotelCompany() != null ? new CompanyDetailsDTO(usr.get().getHotelCompany()) : null,	
+						usr.get().getActivityCompany() != null ? new CompanyDetailsDTO(usr.get().getActivityCompany()) : null
 				) : null;
 	}
 	

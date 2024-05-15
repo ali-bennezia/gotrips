@@ -10,6 +10,9 @@ public class AuthenticationSessionDTO {
 	private String id;
 	private String email;
 	private List<String> roles;
+	private CompanyDetailsDTO flightCompany;
+	private CompanyDetailsDTO hotelCompany;
+	private CompanyDetailsDTO activityCompany;
 	
 	public String getJwtToken() {
 		return jwtToken;
@@ -41,33 +44,37 @@ public class AuthenticationSessionDTO {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(email, id, jwtToken, roles, username);
+	public CompanyDetailsDTO getFlightCompany() {
+		return flightCompany;
 	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AuthenticationSessionDTO other = (AuthenticationSessionDTO) obj;
-		return Objects.equals(email, other.email) && Objects.equals(id, other.id)
-				&& Objects.equals(jwtToken, other.jwtToken) && Objects.equals(roles, other.roles)
-				&& Objects.equals(username, other.username);
+	public void setFlightCompany(CompanyDetailsDTO flightCompany) {
+		this.flightCompany = flightCompany;
 	}
-	public AuthenticationSessionDTO(String jwtToken, String username, String id, String email, List<String> roles) {
+	public CompanyDetailsDTO getHotelCompany() {
+		return hotelCompany;
+	}
+	public void setHotelCompany(CompanyDetailsDTO hotelCompany) {
+		this.hotelCompany = hotelCompany;
+	}
+	public CompanyDetailsDTO getActivityCompany() {
+		return activityCompany;
+	}
+	public void setActivityCompany(CompanyDetailsDTO activityCompany) {
+		this.activityCompany = activityCompany;
+	}
+	public AuthenticationSessionDTO(String jwtToken, String username, String id, String email, List<String> roles,
+			CompanyDetailsDTO flightCompany, CompanyDetailsDTO hotelCompany, CompanyDetailsDTO activityCompany) {
 		super();
 		this.jwtToken = jwtToken;
 		this.username = username;
 		this.id = id;
 		this.email = email;
 		this.roles = roles;
+		this.flightCompany = flightCompany;
+		this.hotelCompany = hotelCompany;
+		this.activityCompany = activityCompany;
 	}
 	public AuthenticationSessionDTO() {
 		super();
 	}
-	
 }

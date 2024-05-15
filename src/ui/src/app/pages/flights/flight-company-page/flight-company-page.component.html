@@ -1,0 +1,16 @@
+<div class="page-cont">
+  <h3 class="display-7">Flight company data</h3>
+
+  <dl>
+    <dt>Owner identifier</dt>
+    <dd>{{ company.userId }}</dd>
+    <dt>Name</dt>
+    <dd>{{ company.name }}</dd>
+    <dt>Description</dt>
+    <dd>{{ company.description }}</dd>
+  </dl>
+
+  <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </p>
+</div>

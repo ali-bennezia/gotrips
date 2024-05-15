@@ -29,6 +29,7 @@ import fr.alib.gotrips.model.dto.inbound.FlightReservationDTO;
 import fr.alib.gotrips.model.dto.outbound.EvaluationDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightDetailsDTO;
 import fr.alib.gotrips.model.dto.outbound.FlightReservationDetailsDTO;
+import fr.alib.gotrips.model.entity.company.FlightCompany;
 import fr.alib.gotrips.model.entity.offers.Evaluation;
 import fr.alib.gotrips.model.entity.offers.Flight;
 import fr.alib.gotrips.model.entity.reservation.FlightReservation;
@@ -36,6 +37,7 @@ import fr.alib.gotrips.model.entity.user.FacturationData;
 import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
+import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
 import fr.alib.gotrips.service.FlightService;
 import fr.alib.gotrips.service.UserService;
@@ -51,6 +53,9 @@ public class FlightController {
 	
 	@Autowired
 	private FlightReservationRepository fResRepo;
+	
+	@Autowired
+	private FlightCompanyRepository fComp;
 	
 	@Autowired
 	private FacturationDataRepository fDatRepo;
@@ -302,6 +307,27 @@ public class FlightController {
 			}
 		} catch (Exception e) {
 			return ResponseEntity.internalServerError().build();
+		}
+	}
+	
+	@GetMapping("/company/{companyId}/flights/getAll")
+	public ResponseEntity<List<FlightDetailsDTO>> getCompanyFlights(
+			@PathVariable("companyId") Long companyId,
+			HttpServletRequest request,
+			Principal principal
+			)
+	{
+		try {
+			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			Optional<FlightCompany> company = this.fComp.findById(companyId);
+			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
+			if (isOwner || request.isUserInRole("ADMIN")) {
+				return ResponseEntity.ok().body(this.fService.getCompanyFlights(companyId));
+			}else {
+				return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+			}
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.badRequest().build();
 		}
 	}
 	

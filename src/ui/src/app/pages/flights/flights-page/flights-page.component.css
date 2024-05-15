@@ -1,0 +1,6 @@
+.center-title {
+  margin-top: 32px;
+}
+.center-title * {
+  text-align: center;
+}

@@ -1,6 +1,6 @@
 .page {
-  margin-top: 72px;
-  z-index: 0;
+  position: relative;
+  top: 72px;
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;

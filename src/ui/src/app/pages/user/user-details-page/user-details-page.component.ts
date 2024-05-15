@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -14,13 +14,14 @@ import { environment } from 'src/environments/environment';
 import { Observable, Subscription, of } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { CardDetailsDto } from 'src/app/data/user/card-details-dto';
+import { InteractionService } from 'src/app/services/interaction.service';
 
 @Component({
   selector: 'app-user-details-page',
   templateUrl: './user-details-page.component.html',
   styleUrls: ['./user-details-page.component.css'],
 })
-export class UserDetailsPageComponent implements OnInit {
+export class UserDetailsPageComponent implements OnInit, OnDestroy {
   currentTab: number = -1;
 
   setTab(i: number) {
@@ -100,7 +101,8 @@ export class UserDetailsPageComponent implements OnInit {
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
     public authService: AuthService,
-    private router: Router
+    private router: Router,
+    private interactionService: InteractionService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.userId = Number(params.get('id') ?? '-1');
@@ -125,7 +127,18 @@ export class UserDetailsPageComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  onConfirmDeleteAccountSubscription!: Subscription;
+
+  ngOnInit(): void {
+    this.onConfirmDeleteAccountSubscription =
+      this.interactionService.onConfirmAccountDelete$.subscribe((e: Event) => {
+        this.onConfirmDeleteAccount(e);
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.onConfirmDeleteAccountSubscription.unsubscribe();
+  }
 
   onConfirmDeleteAccount = (e: Event) => {
     this.http

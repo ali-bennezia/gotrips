@@ -29,7 +29,11 @@ export class AuthService {
   }
 
   get admin() {
-    return (this._session?.roles ?? []).includes('ROLE_ADMIN');
+    return this.hasRole('ROLE_ADMIN');
+  }
+
+  hasRole(role: string) {
+    return (this._session?.roles ?? []).includes(role);
   }
 
   constructor(private http: HttpClient) {
@@ -108,6 +112,9 @@ export class AuthService {
               id: (resp.body! as any).id,
               email: (resp.body! as any).email,
               roles: (resp.body! as any).roles,
+              flightCompany: (resp.body! as any).flightCompany,
+              hotelCompany: (resp.body! as any).hotelCompany,
+              activityCompany: (resp.body! as any).activityCompany,
             };
             this.saveCurrentSession();
             return of({
