@@ -7,5 +7,15 @@
       {{ card.address.street }}
     </p>
   </div>
-  <p>test</p>
+  <span class="card-details-menu">
+    <button class="btn btn-menu" (click)="onClickDelete($event)">
+      {{ confirmDeletion ? "Confirm deletion ?" : "Delete" }}
+    </button>
+    <a [routerLink]="['/user', 'card', 'form']" [queryParams]="{ id: card.id }"
+      ><button class="btn btn-menu">Edit</button></a
+    >
+  </span>
+  <div class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ this.errorDisplay }}
+  </div>
 </div>

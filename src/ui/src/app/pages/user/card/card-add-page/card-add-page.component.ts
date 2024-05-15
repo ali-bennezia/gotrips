@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { environment } from 'src/environments/environment';
 
@@ -10,11 +11,13 @@ import { environment } from 'src/environments/environment';
   templateUrl: './card-add-page.component.html',
   styleUrls: ['./card-add-page.component.css'],
 })
-export class CardAddPageComponent {
+export class CardAddPageComponent implements OnInit, OnDestroy {
+  private paramsSubscription: Subscription | null = null;
   errorDisplay: string = '';
   successDisplay: string = '';
   group!: FormGroup;
   loading: boolean = false;
+  cardId: number | null = null;
 
   handleError(code: number) {
     switch (code) {
@@ -25,36 +28,63 @@ export class CardAddPageComponent {
   }
 
   onSubmit(e: Event) {
-    this.http
-      .post(
-        `${environment.backendUrl}/api/user/${this.authService.session?.id}/card/add`,
-        this.getDto(),
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.authService.session?.token}`,
+    if (this.cardId == null) {
+      this.http
+        .post(
+          `${environment.backendUrl}/api/user/${this.authService.session?.id}/card/add`,
+          this.getDto(),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${this.authService.session?.token}`,
+            },
+            observe: 'response',
+          }
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/user', 'details'], {
+              queryParams: { tab: 2 },
+            });
           },
-          observe: 'response',
-        }
-      )
-      .subscribe({
-        next: () => {
-          this.router.navigate(['/user', 'details'], {
-            queryParams: { tab: 2 },
-          });
-        },
-        error: (err) => {
-          console.log(err);
-          this.handleError(err.status);
-        },
-      });
+          error: (err) => {
+            console.log(err);
+            this.handleError(err.status);
+          },
+        });
+    } else {
+      this.http
+        .put(
+          `${environment.backendUrl}/api/user/${this.authService.session?.id}/card/${this.cardId}/edit`,
+          this.getDto(),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${this.authService.session?.token}`,
+            },
+            observe: 'response',
+          }
+        )
+        .subscribe({
+          next: () => {
+            this.router.navigate(['/user', 'details'], {
+              queryParams: { tab: 2 },
+            });
+          },
+          error: (err) => {
+            console.log(err);
+            this.handleError(err.status);
+          },
+        });
+    }
   }
 
   constructor(
     builder: FormBuilder,
     private http: HttpClient,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.group = builder.group({
       cardHolder: ['', [Validators.required]],
@@ -88,5 +118,19 @@ export class CardAddPageComponent {
         country: this.group.get('address')?.get('country')?.value,
       },
     };
+  }
+
+  ngOnInit(): void {
+    this.paramsSubscription = this.activatedRoute.queryParamMap.subscribe(
+      (params) => {
+        if (params.has('id')) {
+          this.cardId = Number(params.get('id'));
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramsSubscription != null) this.paramsSubscription.unsubscribe();
   }
 }

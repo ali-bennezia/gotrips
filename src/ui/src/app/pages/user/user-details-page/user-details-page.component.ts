@@ -44,6 +44,10 @@ export class UserDetailsPageComponent implements OnInit {
   cardDetailsSubscription: Subscription | null = null;
   loadingCards: boolean = false;
 
+  removeCardDetails(id: number) {
+    this.cardDetails = this.cardDetails.filter((c) => c.id != id);
+  }
+
   onTabClosed(i: number) {
     switch (i) {
       case 2:
@@ -117,12 +121,11 @@ export class UserDetailsPageComponent implements OnInit {
       this.user$.subscribe();
 
       if (loadTab >= 0) this.setTab(loadTab);
+      else this.setTab(0);
     });
   }
 
-  ngOnInit(): void {
-    this.setTab(0);
-  }
+  ngOnInit(): void {}
 
   onConfirmDeleteAccount = (e: Event) => {
     this.http

@@ -7,6 +7,12 @@ body {
   font-family: "Roboto", sans-serif;
 }
 
+body {
+  background-image: url("/assets/images/tropics1.jpeg");
+  background-size: cover;
+  background-attachment: fixed;
+}
+
 .auth-form {
   max-width: 640px;
   margin: 0 auto;
@@ -77,17 +83,27 @@ input.ng-touched.ng-invalid {
 }
 
 .btn-add {
-  background-color: rgb(29, 230, 29);
-  border: dotted 4px rgb(25, 177, 25);
+  background-color: rgb(240, 240, 240);
+  border: dotted 2px rgb(32, 32, 32);
 
-  color: white;
+  color: rgb(54, 54, 54);
 }
 
 .btn-add:hover {
-  background-color: rgb(40, 194, 40);
-  border: dotted 4px rgb(39, 146, 39);
+  background-color: rgb(221, 221, 221);
+  border: dotted 2px rgb(46, 46, 46);
 
-  color: white;
+  color: rgb(61, 61, 61);
+}
+
+.btn-menu {
+  background-color: rgb(240, 240, 240);
+  border: solid 1px grey;
+}
+
+.btn-menu:hover {
+  border: solid 1px grey;
+  outline: solid 4px rgb(201, 201, 201);
 }
 
 .display-7 {

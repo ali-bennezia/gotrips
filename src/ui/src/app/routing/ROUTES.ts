@@ -42,7 +42,7 @@ const ROUTES: Routes = [
     canActivate: [isAuthenticatedOrFurnishesIdQueryParamCanActivateFn],
   },
   {
-    path: 'user/card/add',
+    path: 'user/card/form',
     component: CardAddPageComponent,
     canActivate: [isAuthenticatedCanActivateFn],
   },

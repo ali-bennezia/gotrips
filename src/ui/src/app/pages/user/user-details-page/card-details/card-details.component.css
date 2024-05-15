@@ -9,7 +9,7 @@
 
 .card-details-min-cont:hover {
   background-color: rgb(230, 230, 230);
-  cursor: pointer;
+  user-select: none;
 }
 
 .card-details-min-cont > .card-details-info {
@@ -17,4 +17,23 @@
 
 .card-details-min-cont > .card-details-info > p {
   margin: 0px;
+}
+
+.card-details-min-cont > .card-details-menu {
+  opacity: 0;
+  height: 0px;
+
+  transition: 200ms opacity ease-in;
+  position: absolute;
+
+  user-select: none;
+  pointer-events: none;
+}
+
+.card-details-min-cont:hover > .card-details-menu {
+  position: static;
+  opacity: 1;
+  height: auto;
+
+  pointer-events: all;
 }

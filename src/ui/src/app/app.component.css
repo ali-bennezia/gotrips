@@ -1,5 +1,12 @@
 .page {
+  margin-top: 72px;
+  z-index: 0;
   width: 100vw;
   min-height: 100vh;
   overflow-x: hidden;
+
+  background-color: rgba(0, 0, 0, 0.123);
+  backdrop-filter: blur(16px);
+
+  color: white;
 }
