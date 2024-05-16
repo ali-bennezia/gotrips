@@ -1,12 +1,8 @@
 package fr.alib.gotrips.model.dto.outbound;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.Objects;
 
-import fr.alib.gotrips.model.entity.offers.Hotel;
 import fr.alib.gotrips.model.entity.reservation.ActivityReservation;
-import fr.alib.gotrips.model.entity.reservation.HotelReservation;
 import fr.alib.gotrips.utils.TimeUtils;
 
 public class ActivityReservationDetailsDTO {

@@ -16,6 +16,10 @@ import { CardAddPageComponent } from '../pages/user/card/card-add-page/card-add-
 import { FlightCompanyPageComponent } from '../pages/flights/flight-company-page/flight-company-page.component';
 import { HotelCompanyPageComponent } from '../pages/hotels/hotel-company-page/hotel-company-page.component';
 import { ActivityCompanyPageComponent } from '../pages/activities/activity-company-page/activity-company-page.component';
+import { FlightListPageComponent } from '../pages/flights/crud/flight-list-page/flight-list-page.component';
+import { FlightAddPageComponent } from '../pages/flights/crud/flight-add-page/flight-add-page.component';
+import { HotelListPageComponent } from '../pages/hotels/crud/hotel-list-page/hotel-list-page.component';
+import { HotelAddPageComponent } from '../pages/hotels/crud/hotel-add-page/hotel-add-page.component';
 
 const ROUTES: Routes = [
   {
@@ -29,6 +33,16 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
   },
   {
+    path: 'flights/manage',
+    component: FlightListPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
+  },
+  {
+    path: 'flights/add',
+    component: FlightAddPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
+  },
+  {
     path: 'hotels',
     component: HotelsPageComponent,
     pathMatch: 'full',
@@ -39,6 +53,16 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
   },
   {
+    path: 'hotels/manage',
+    component: HotelListPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
+  },
+  {
+    path: 'hotels/add',
+    component: HotelAddPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
+  },
+  {
     path: 'activities',
     component: ActivitiesPageComponent,
     pathMatch: 'full',
@@ -46,6 +70,16 @@ const ROUTES: Routes = [
   {
     path: 'activity/company/details',
     component: ActivityCompanyPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
+  },
+  {
+    path: 'activities/manage',
+    component: HotelListPageComponent,
+    canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
+  },
+  {
+    path: 'activities/add',
+    component: HotelAddPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
   },
   {

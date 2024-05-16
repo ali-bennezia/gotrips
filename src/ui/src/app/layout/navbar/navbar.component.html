@@ -84,6 +84,42 @@
             >
           </li>
         </ng-container>
+        <ng-container *ngIf="authService.hasRole('ROLE_FLIGHT_COMPANY')">
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/flights', 'company', 'details']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+            >
+              Manage flight company
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="authService.hasRole('ROLE_HOTEL_COMPANY')">
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/hotels', 'company', 'details']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+            >
+              Manage hotel company
+            </a>
+          </li>
+        </ng-container>
+        <ng-container *ngIf="authService.hasRole('ROLE_ACTIVITY_COMPANY')">
+          <li>
+            <a
+              class="dropdown-item"
+              [routerLink]="['/activities', 'company', 'details']"
+              routerLinkActive="active"
+              ariaCurrentWhenActive="page"
+            >
+              Manage activity company
+            </a>
+          </li>
+        </ng-container>
         <ng-container *ngIf="authService.authenticated">
           <li>
             <a
@@ -138,6 +174,33 @@
       ariaCurrentWhenActive="page"
     >
       Sign In
+    </a>
+  </ng-container>
+  <ng-container *ngIf="authService.hasRole('ROLE_FLIGHT_COMPANY')">
+    <a
+      [routerLink]="['/flights', 'company', 'details']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Manage flight company
+    </a>
+  </ng-container>
+  <ng-container *ngIf="authService.hasRole('ROLE_HOTEL_COMPANY')">
+    <a
+      [routerLink]="['/hotels', 'company', 'details']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Manage hotel company
+    </a>
+  </ng-container>
+  <ng-container *ngIf="authService.hasRole('ROLE_ACTIVITY_COMPANY')">
+    <a
+      [routerLink]="['/activities', 'company', 'details']"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Manage activity company
     </a>
   </ng-container>
   <ng-container *ngIf="authService.authenticated">

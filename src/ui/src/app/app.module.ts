@@ -32,6 +32,12 @@ import { FlightsSearchPageComponent } from './pages/flights/flights-search-page/
 import { FlightCompanyPageComponent } from './pages/flights/flight-company-page/flight-company-page.component';
 import { HotelCompanyPageComponent } from './pages/hotels/hotel-company-page/hotel-company-page.component';
 import { ActivityCompanyPageComponent } from './pages/activities/activity-company-page/activity-company-page.component';
+import { FlightListPageComponent } from './pages/flights/crud/flight-list-page/flight-list-page.component';
+import { FlightAddPageComponent } from './pages/flights/crud/flight-add-page/flight-add-page.component';
+import { HotelAddPageComponent } from './pages/hotels/crud/hotel-add-page/hotel-add-page.component';
+import { HotelListPageComponent } from './pages/hotels/crud/hotel-list-page/hotel-list-page.component';
+import { ActivityListPageComponent } from './pages/activities/crud/activity-list-page/activity-list-page.component';
+import { ActivityAddPageComponent } from './pages/activities/crud/activity-add-page/activity-add-page.component';
 
 @NgModule({
   declarations: [
@@ -53,6 +59,12 @@ import { ActivityCompanyPageComponent } from './pages/activities/activity-compan
     FlightCompanyPageComponent,
     HotelCompanyPageComponent,
     ActivityCompanyPageComponent,
+    FlightListPageComponent,
+    FlightAddPageComponent,
+    HotelAddPageComponent,
+    HotelListPageComponent,
+    ActivityListPageComponent,
+    ActivityAddPageComponent,
   ],
   imports: [
     BrowserModule,

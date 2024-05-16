@@ -10,6 +10,18 @@
     <dd>{{ company.description }}</dd>
   </dl>
 
+  <div>
+    <a [routerLink]="['/flights', 'manage']">
+      <button class="btn btn-menu">Manage flights</button>
+    </a>
+    <a
+      [routerLink]="['/user', 'details']"
+      [queryParams]="{ id: company.userId }"
+    >
+      <button class="btn btn-menu">Owner details</button>
+    </a>
+  </div>
+
   <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
     {{ errorDisplay }}
   </p>
