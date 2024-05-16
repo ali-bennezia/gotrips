@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -92,11 +93,11 @@ public class HotelController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@Valid @RequestBody HotelDTO dto, Principal principal)
+	public ResponseEntity<HotelDetailsDTO> create(@Valid @RequestBody HotelDTO dto)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Hotel hotel = this.hService.createHotel(userDetails.getUser().getId(), dto);
-		return ResponseEntity.created(null).body(hotel);
+		return ResponseEntity.created(null).body(new HotelDetailsDTO(hotel));
 	}
 	
 	@GetMapping("/{id}/details")
@@ -109,11 +110,10 @@ public class HotelController {
 	public ResponseEntity<?> edit(
 			@PathVariable("id") Long id, 
 			@Valid @RequestBody HotelDTO dto, 
-			Principal principal, 
 			HttpServletRequest request
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Hotel hotel = this.hService.getHotel(id);
 		if ( request.isUserInRole("ADMIN") || hotel.getHotelCompany().getUser().getId().equals(userId)) {
@@ -124,9 +124,9 @@ public class HotelController {
 	}
 	
 	@DeleteMapping("/{id}/delete")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id, Principal principal, HttpServletRequest request)
+	public ResponseEntity<?> delete(@PathVariable("id") Long id, HttpServletRequest request)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Hotel hotel = this.hService.getHotel(id);
 		if ( request.isUserInRole("ADMIN") || hotel.getHotelCompany().getUser().getId().equals(userId)) {
@@ -140,13 +140,12 @@ public class HotelController {
 	@PostMapping("/{id}/reservations/create")
 	public ResponseEntity<?> createReservation(
 			@PathVariable("id") Long hotelId, 
-			@Valid @RequestBody PeriodReservationDTO dto,
-			Principal principal
+			@Valid @RequestBody PeriodReservationDTO dto
 			)
 	{
 		try {
 			
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
 			if (this.hRepo.existsById(hotelId)) {
 				Optional<FacturationData> fData = this.fDatRepo.findById(dto.getCardId().longValue());
@@ -175,11 +174,10 @@ public class HotelController {
 	@GetMapping("/{id}/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
 			@PathVariable("id") Long hotelId,
-			@PathVariable("reservationId") Long reservationId,
-			Principal principal
+			@PathVariable("reservationId") Long reservationId
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Hotel> hotelOptional = this.hRepo.findById(hotelId);
 		Optional<HotelReservation> hotelResOptional = this.hResRepo.findById(reservationId);
 		
@@ -197,12 +195,11 @@ public class HotelController {
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
 			@PathVariable("id") Long hotelId,
-			Principal principal,
 			Map<String, String> params
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
 			if ( this.hRepo.existsById(hotelId) ) {
@@ -225,12 +222,11 @@ public class HotelController {
 	@PostMapping("/{id}/evaluations/create")
 	public ResponseEntity<?> createEvaluation(
 			@PathVariable("id") Long hotelId,
-			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal
+			@Valid @RequestBody EvaluationDTO dto
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Evaluation eval = this.hService.addEvaluation(userDetails.getUser().getId(), hotelId, dto);
 			return ResponseEntity.created(null).body( new EvaluationDetailsDTO(eval) );
 		}catch (IdNotFoundException|OfferNotFoundException e) {
@@ -260,12 +256,11 @@ public class HotelController {
 			@PathVariable("id") Long hotelId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -287,12 +282,11 @@ public class HotelController {
 			@PathVariable("id") Long hotelId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -313,12 +307,11 @@ public class HotelController {
 	@GetMapping("/company/{companyId}/hotels/getAll")
 	public ResponseEntity<List<HotelDetailsDTO>> getCompanyHotels(
 			@PathVariable("companyId") Long companyId,
-			HttpServletRequest request,
-			Principal principal
+			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<HotelCompany> company = this.hComp.findById(companyId);
 			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
 			if (isOwner || request.isUserInRole("ADMIN")) {

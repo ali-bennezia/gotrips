@@ -38,6 +38,9 @@ import { HotelAddPageComponent } from './pages/hotels/crud/hotel-add-page/hotel-
 import { HotelListPageComponent } from './pages/hotels/crud/hotel-list-page/hotel-list-page.component';
 import { ActivityListPageComponent } from './pages/activities/crud/activity-list-page/activity-list-page.component';
 import { ActivityAddPageComponent } from './pages/activities/crud/activity-add-page/activity-add-page.component';
+import { ActivityDetailsPageComponent } from './pages/activities/crud/activity-details-page/activity-details-page.component';
+import { HotelDetailsPageComponent } from './pages/hotels/crud/hotel-details-page/hotel-details-page.component';
+import { FlightDetailsPageComponent } from './pages/flights/crud/flight-details-page/flight-details-page.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +68,9 @@ import { ActivityAddPageComponent } from './pages/activities/crud/activity-add-p
     HotelListPageComponent,
     ActivityListPageComponent,
     ActivityAddPageComponent,
+    ActivityDetailsPageComponent,
+    HotelDetailsPageComponent,
+    FlightDetailsPageComponent,
   ],
   imports: [
     BrowserModule,

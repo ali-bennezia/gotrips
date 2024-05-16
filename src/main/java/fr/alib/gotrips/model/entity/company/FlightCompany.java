@@ -34,7 +34,7 @@ public class FlightCompany {
 	@Column(nullable = true, unique = false)
 	private String description;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "flight_company_flight_id", referencedColumnName = "id")
 	private List<Flight> flights = new ArrayList<Flight>();
 	@Embedded
 	private Address address;

@@ -68,22 +68,22 @@ public class SecurityConfig {
 					"/api/activity/*/evaluations/edit/*", 
 					"/api/activity/*/evaluations/delete/*"
 					)
-			.hasAnyRole("USER", "ADMIN")
+			.hasAnyRole("USER")
 			.requestMatchers(
 					"/api/flight/create", 
 					"/api/flight/*/edit", 
 					"/api/flight/*/delete")
-			.hasAnyRole("ADMIN, FLIGHT_COMPANY")
+			.hasAnyRole("ADMIN", "FLIGHT_COMPANY")
 			.requestMatchers(
 					"/api/hotel/create", 
 					"/api/hotel/*/edit", 
 					"/api/hotel/*/delete")
-			.hasAnyRole("ADMIN, HOTEL_COMPANY")
+			.hasAnyRole("ADMIN", "HOTEL_COMPANY")
 			.requestMatchers(
 					"/api/activity/create", 
 					"/api/activity/*/edit", 
 					"/api/activity/*/delete")
-			.hasAnyRole("ADMIN, ACTIVITY_COMPANY")
+			.hasAnyRole("ADMIN", "ACTIVITY_COMPANY")
 			.anyRequest().permitAll()
 		);
 		

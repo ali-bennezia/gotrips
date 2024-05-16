@@ -1,6 +1,5 @@
 package fr.alib.gotrips.controllers;
 
-import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -110,23 +110,23 @@ public class FlightController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@Valid @RequestBody FlightDTO dto, Principal principal)
+	public ResponseEntity<FlightDetailsDTO> create(@Valid @RequestBody FlightDTO dto)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Flight flight = this.fService.createFlight(userDetails.getUser().getId(), dto);
-		return ResponseEntity.created(null).body(flight);
+		return ResponseEntity.created(null).body(new FlightDetailsDTO(flight));
 	}
 	
 	@GetMapping("/{id}/details")
-	public ResponseEntity<?> details(@PathVariable("id") Long id)
+	public ResponseEntity<FlightDetailsDTO> details(@PathVariable("id") Long id)
 	{
 		return ResponseEntity.ok().body( new FlightDetailsDTO( this.fService.getFlight(id) ) );
 	}
 	
 	@PutMapping("/{id}/edit")
-	public ResponseEntity<?> edit(@PathVariable("id") Long id, @Valid @RequestBody FlightDTO dto, Principal principal, HttpServletRequest request)
+	public ResponseEntity<?> edit(@PathVariable("id") Long id, @Valid @RequestBody FlightDTO dto, HttpServletRequest request)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Flight flight = this.fService.getFlight(id);
 		if ( request.isUserInRole("ADMIN") || flight.getFlightCompany().getUser().getId().equals(userId)) {
@@ -137,9 +137,9 @@ public class FlightController {
 	}
 	
 	@DeleteMapping("/{id}/delete")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id, Principal principal, HttpServletRequest request)
+	public ResponseEntity<?> delete(@PathVariable("id") Long id, HttpServletRequest request)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Flight flight = this.fService.getFlight(id);
 		if ( request.isUserInRole("ADMIN") || flight.getFlightCompany().getUser().getId().equals(userId)) {
@@ -153,11 +153,10 @@ public class FlightController {
 	@PostMapping("/{id}/reservations/create")
 	public ResponseEntity<?> createReservation(
 			@PathVariable("id") Long flightId, 
-			@Valid @RequestBody FlightReservationDTO dto,
-			Principal principal
+			@Valid @RequestBody FlightReservationDTO dto
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		
 		if (this.fRepo.existsById(flightId)) {
 			Optional<FacturationData> fData = this.fDatRepo.findById(dto.getCardId().longValue());
@@ -175,11 +174,10 @@ public class FlightController {
 	@GetMapping("/{id}/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
 			@PathVariable("id") Long flightId,
-			@PathVariable("reservationId") Long reservationId,
-			Principal principal
+			@PathVariable("reservationId") Long reservationId
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Flight> flightOptional = this.fRepo.findById(flightId);
 		Optional<FlightReservation> flightResOptional = this.fResRepo.findById(reservationId);
 		
@@ -197,12 +195,11 @@ public class FlightController {
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
 			@PathVariable("id") Long flightId,
-			Principal principal,
 			Map<String, String> params
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
 			if ( this.fRepo.existsById(flightId) ) {
@@ -225,12 +222,11 @@ public class FlightController {
 	@PostMapping("/{id}/evaluations/create")
 	public ResponseEntity<?> createEvaluation(
 			@PathVariable("id") Long flightId,
-			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal
+			@Valid @RequestBody EvaluationDTO dto
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Evaluation eval = this.fService.addEvaluation(userDetails.getUser().getId(), flightId, dto);
 			return ResponseEntity.created(null).body( new EvaluationDetailsDTO(eval) );
 		}catch (IdNotFoundException|OfferNotFoundException e) {
@@ -260,12 +256,11 @@ public class FlightController {
 			@PathVariable("id") Long flightId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -287,12 +282,11 @@ public class FlightController {
 			@PathVariable("id") Long flightId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -313,12 +307,11 @@ public class FlightController {
 	@GetMapping("/company/{companyId}/flights/getAll")
 	public ResponseEntity<List<FlightDetailsDTO>> getCompanyFlights(
 			@PathVariable("companyId") Long companyId,
-			HttpServletRequest request,
-			Principal principal
+			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<FlightCompany> company = this.fComp.findById(companyId);
 			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
 			if (isOwner || request.isUserInRole("ADMIN")) {
@@ -328,6 +321,9 @@ public class FlightController {
 			}
 		} catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
+		} catch (Exception e){
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().build();
 		}
 	}
 	

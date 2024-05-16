@@ -41,6 +41,7 @@ import fr.alib.gotrips.model.repository.EvaluationRepository;
 import fr.alib.gotrips.model.repository.FacturationDataRepository;
 import fr.alib.gotrips.model.repository.FlightRepository;
 import fr.alib.gotrips.model.repository.UserRepository;
+import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
 import io.jsonwebtoken.lang.Arrays;
 
@@ -56,6 +57,9 @@ public class FlightService {
 	
 	@Autowired
 	private FlightReservationRepository fResRepo;
+	
+	@Autowired
+	private FlightCompanyRepository fCompRepo;
 	
 	@Autowired
 	private FacturationDataRepository facRepo;
@@ -184,7 +188,8 @@ public class FlightService {
 		if (company == null) throw new CompanyNotFoundException("Couldn't find company for user id '" + userId + "'.");
 		Flight flight = new Flight(dto);
 		flight.setFlightCompany(company);
-		flight = this.fRepo.save(flight);
+		company.getFlights().add(flight);
+		company = this.fCompRepo.save(company);
 		return flight;
 	}
 	

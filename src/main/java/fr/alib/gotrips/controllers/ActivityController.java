@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -91,15 +92,15 @@ public class ActivityController {
 	}
 	
 	@PostMapping("/create")
-	public ResponseEntity<?> create(@Valid @RequestBody ActivityDTO dto, Principal principal)
+	public ResponseEntity<ActivityDetailsDTO> create(@Valid @RequestBody ActivityDTO dto)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Activity activity = this.aService.createActivity(userDetails.getUser().getId(), dto);
-		return ResponseEntity.created(null).body(activity);
+		return ResponseEntity.created(null).body(new ActivityDetailsDTO(activity));
 	}
 	
 	@GetMapping("/{id}/details")
-	public ResponseEntity<?> details(@PathVariable("id") Long id)
+	public ResponseEntity<ActivityDetailsDTO> details(@PathVariable("id") Long id)
 	{
 		return ResponseEntity.ok().body( new ActivityDetailsDTO( this.aService.getActivity(id) ) );
 	}
@@ -108,11 +109,10 @@ public class ActivityController {
 	public ResponseEntity<?> edit(
 			@PathVariable("id") Long id, 
 			@Valid @RequestBody ActivityDTO dto, 
-			Principal principal, 
 			HttpServletRequest request
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Activity activity = this.aService.getActivity(id);
 		if ( request.isUserInRole("ADMIN") || activity.getActivityCompany().getUser().getId().equals(userId)) {
@@ -123,9 +123,9 @@ public class ActivityController {
 	}
 	
 	@DeleteMapping("/{id}/delete")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id, Principal principal, HttpServletRequest request)
+	public ResponseEntity<?> delete(@PathVariable("id") Long id, HttpServletRequest request)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Long userId = userDetails.getUser().getId();
 		Activity activity = this.aService.getActivity(id);
 		if ( request.isUserInRole("ADMIN") || activity.getActivityCompany().getUser().getId().equals(userId)) {
@@ -139,13 +139,12 @@ public class ActivityController {
 	@PostMapping("/{id}/reservations/create")
 	public ResponseEntity<?> createReservation(
 			@PathVariable("id") Long activityId, 
-			@Valid @RequestBody PeriodReservationDTO dto,
-			Principal principal
+			@Valid @RequestBody PeriodReservationDTO dto
 			)
 	{
 		try {
 			
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			
 			if (this.aRepo.existsById(activityId)) {
 				Optional<FacturationData> fData = this.fDatRepo.findById(dto.getCardId().longValue());
@@ -174,11 +173,10 @@ public class ActivityController {
 	@GetMapping("/{id}/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
 			@PathVariable("id") Long activityId,
-			@PathVariable("reservationId") Long reservationId,
-			Principal principal
+			@PathVariable("reservationId") Long reservationId
 			)
 	{
-		CustomUserDetails userDetails = (CustomUserDetails) principal;
+		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Optional<Activity> activityOptional = this.aRepo.findById(activityId);
 		Optional<ActivityReservation> activityResOptional = this.aResRepo.findById(reservationId);
 		
@@ -196,12 +194,11 @@ public class ActivityController {
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
 			@PathVariable("id") Long activityId,
-			Principal principal,
 			Map<String, String> params
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
 			if ( this.aRepo.existsById(activityId) ) {
@@ -224,12 +221,11 @@ public class ActivityController {
 	@PostMapping("/{id}/evaluations/create")
 	public ResponseEntity<?> createEvaluation(
 			@PathVariable("id") Long activityId,
-			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal
+			@Valid @RequestBody EvaluationDTO dto
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Evaluation eval = this.aService.addEvaluation(userDetails.getUser().getId(), activityId, dto);
 			return ResponseEntity.created(null).body( new EvaluationDetailsDTO(eval) );
 		}catch (IdNotFoundException|OfferNotFoundException e) {
@@ -259,12 +255,11 @@ public class ActivityController {
 			@PathVariable("id") Long activityId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -286,12 +281,11 @@ public class ActivityController {
 			@PathVariable("id") Long activityId,
 			@PathVariable("evaluationId") Long evalId,
 			@Valid @RequestBody EvaluationDTO dto,
-			Principal principal,
 			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<Evaluation> evalOptional = this.eRepo.findById(evalId);
 			if (evalOptional.isPresent()) {
 				if (request.isUserInRole("ADMIN") || evalOptional.get().getUser().getId().equals(userDetails.getUser().getId()))
@@ -312,12 +306,11 @@ public class ActivityController {
 	@GetMapping("/company/{companyId}/activities/getAll")
 	public ResponseEntity<List<ActivityDetailsDTO>> getCompanyActivities(
 			@PathVariable("companyId") Long companyId,
-			HttpServletRequest request,
-			Principal principal
+			HttpServletRequest request
 			)
 	{
 		try {
-			CustomUserDetails userDetails = (CustomUserDetails) principal;
+			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Optional<ActivityCompany> company = this.aComp.findById(companyId);
 			boolean isOwner = company.isPresent() && company.get().getUser().getId().equals(userDetails.getUser().getId());
 			if (isOwner || request.isUserInRole("ADMIN")) {

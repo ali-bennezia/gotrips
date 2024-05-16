@@ -1,31 +1,33 @@
 package fr.alib.gotrips.model.dto.inbound;
 
-import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.dto.duplex.AddressDTO;
+import jakarta.validation.constraints.NotEmpty;
 
 public class FlightDTO {
-	private Date departureDate;
-	private Date landingDate;
+	private Long departureTime;
+	private Long landingTime;
 	private AddressDTO departureAddress;
 	private AddressDTO arrivalAddress;
+	@NotEmpty
 	private String departureAirport;
+	@NotEmpty
 	private String arrivalAirport;
 	private float price;
 	private int seats;
 	
-	public Date getDepartureDate() {
-		return departureDate;
+	public Long getDepartureTime() {
+		return departureTime;
 	}
-	public void setDepartureDate(Date departureDate) {
-		this.departureDate = departureDate;
+	public void setDepartureTime(Long departureTime) {
+		this.departureTime = departureTime;
 	}
-	public Date getLandingDate() {
-		return landingDate;
+	public Long getLandingTime() {
+		return landingTime;
 	}
-	public void setLandingDate(Date landingDate) {
-		this.landingDate = landingDate;
+	public void setLandingTime(Long landingTime) {
+		this.landingTime = landingTime;
 	}
 	public AddressDTO getDepartureAddress() {
 		return departureAddress;
@@ -66,8 +68,8 @@ public class FlightDTO {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(arrivalAddress, arrivalAirport, departureAddress, departureAirport, departureDate,
-				landingDate, price, seats);
+		return Objects.hash(arrivalAddress, arrivalAirport, departureAddress, departureAirport, departureTime,
+				landingTime, price, seats);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -82,14 +84,14 @@ public class FlightDTO {
 				&& Objects.equals(arrivalAirport, other.arrivalAirport)
 				&& Objects.equals(departureAddress, other.departureAddress)
 				&& Objects.equals(departureAirport, other.departureAirport)
-				&& Objects.equals(departureDate, other.departureDate) && Objects.equals(landingDate, other.landingDate)
+				&& Objects.equals(departureTime, other.departureTime) && Objects.equals(landingTime, other.landingTime)
 				&& Float.floatToIntBits(price) == Float.floatToIntBits(other.price) && seats == other.seats;
 	}
-	public FlightDTO(Date departureDate, Date landingDate, AddressDTO departureAddress, AddressDTO arrivalAddress,
+	public FlightDTO(Long departureTime, Long landingTime, AddressDTO departureAddress, AddressDTO arrivalAddress,
 			String departureAirport, String arrivalAirport, float price, int seats) {
 		super();
-		this.departureDate = departureDate;
-		this.landingDate = landingDate;
+		this.departureTime = departureTime;
+		this.landingTime = landingTime;
 		this.departureAddress = departureAddress;
 		this.arrivalAddress = arrivalAddress;
 		this.departureAirport = departureAirport;
@@ -99,7 +101,6 @@ public class FlightDTO {
 	}
 	public FlightDTO() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 }

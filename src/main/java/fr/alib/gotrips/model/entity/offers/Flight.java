@@ -188,8 +188,8 @@ public class Flight {
 				&& Objects.equals(seats, other.seats);
 	}
 	public void applyDTO(FlightDTO dto) {
-		this.departureDate = new Timestamp( dto.getDepartureDate().getTime() );
-		this.landingDate = new Timestamp( dto.getLandingDate().getTime() );
+		this.departureDate = new Timestamp( dto.getDepartureTime() );
+		this.landingDate = new Timestamp( dto.getLandingTime() );
 		this.departureAddress = new Address( dto.getDepartureAddress() );
 		this.arrivalAddress = new Address( dto.getArrivalAddress() );
 		this.departureAirport = dto.getDepartureAirport();

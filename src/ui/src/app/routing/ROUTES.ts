@@ -20,6 +20,9 @@ import { FlightListPageComponent } from '../pages/flights/crud/flight-list-page/
 import { FlightAddPageComponent } from '../pages/flights/crud/flight-add-page/flight-add-page.component';
 import { HotelListPageComponent } from '../pages/hotels/crud/hotel-list-page/hotel-list-page.component';
 import { HotelAddPageComponent } from '../pages/hotels/crud/hotel-add-page/hotel-add-page.component';
+import { FlightDetailsPageComponent } from '../pages/flights/crud/flight-details-page/flight-details-page.component';
+import { ActivityDetailsPageComponent } from '../pages/activities/crud/activity-details-page/activity-details-page.component';
+import { HotelDetailsPageComponent } from '../pages/hotels/crud/hotel-details-page/hotel-details-page.component';
 
 const ROUTES: Routes = [
   {
@@ -38,9 +41,13 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
   },
   {
-    path: 'flights/add',
+    path: 'flights/form',
     component: FlightAddPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
+  },
+  {
+    path: 'flights/details',
+    component: FlightDetailsPageComponent,
   },
   {
     path: 'hotels',
@@ -58,9 +65,13 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
   },
   {
-    path: 'hotels/add',
+    path: 'hotels/form',
     component: HotelAddPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
+  },
+  {
+    path: 'hotels/details',
+    component: HotelDetailsPageComponent,
   },
   {
     path: 'activities',
@@ -78,9 +89,13 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
   },
   {
-    path: 'activities/add',
+    path: 'activities/form',
     component: HotelAddPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
+  },
+  {
+    path: 'activities/details',
+    component: ActivityDetailsPageComponent,
   },
   {
     path: 'user/register',
