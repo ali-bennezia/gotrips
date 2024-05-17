@@ -1,0 +1,10 @@
+<div class="eval-stars">
+  <ng-icon
+    (mouseover)="onMouseOver(n + 1, $event)"
+    (mouseleave)="onMouseLeave(n + 1, $event)"
+    (click)="onClick(n + 1, $event)"
+    name="ionStar"
+    *ngFor="let n of noteArray"
+    [ngClass]="{ 'grey-star': n + 1 > this.displayedNote }"
+  ></ng-icon>
+</div>

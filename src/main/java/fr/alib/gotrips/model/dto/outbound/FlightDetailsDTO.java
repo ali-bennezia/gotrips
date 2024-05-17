@@ -13,6 +13,7 @@ public class FlightDetailsDTO {
 	private Date landingDate;
 	private String departureAirport;
 	private String arrivalAirport;
+	float price;
 	public Long getId() {
 		return id;
 	}
@@ -55,10 +56,16 @@ public class FlightDetailsDTO {
 	public void setArrivalAirport(String arrivalAirport) {
 		this.arrivalAirport = arrivalAirport;
 	}
+	public float getPrice() {
+		return price;
+	}
+	public void setPrice(float price) {
+		this.price = price;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(arrivalAirport, averageEvaluation, company, departureAirport, departureDate, id,
-				landingDate);
+				landingDate, price);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -73,10 +80,11 @@ public class FlightDetailsDTO {
 				&& Float.floatToIntBits(averageEvaluation) == Float.floatToIntBits(other.averageEvaluation)
 				&& Objects.equals(company, other.company) && Objects.equals(departureAirport, other.departureAirport)
 				&& Objects.equals(departureDate, other.departureDate) && Objects.equals(id, other.id)
-				&& Objects.equals(landingDate, other.landingDate);
+				&& Objects.equals(landingDate, other.landingDate)
+				&& Float.floatToIntBits(price) == Float.floatToIntBits(other.price);
 	}
 	public FlightDetailsDTO(Long id, CompanyDetailsDTO company, float averageEvaluation, Date departureDate,
-			Date landingDate, String departureAirport, String arrivalAirport) {
+			Date landingDate, String departureAirport, String arrivalAirport, float price) {
 		super();
 		this.id = id;
 		this.company = company;
@@ -85,6 +93,7 @@ public class FlightDetailsDTO {
 		this.landingDate = landingDate;
 		this.departureAirport = departureAirport;
 		this.arrivalAirport = arrivalAirport;
+		this.price = price;
 	}
 	public FlightDetailsDTO() {
 		super();
@@ -98,6 +107,7 @@ public class FlightDetailsDTO {
 		this.landingDate = flight.getLandingDate();
 		this.departureAirport = flight.getDepartureAirport();
 		this.arrivalAirport = flight.getArrivalAirport();
+		this.price = flight.getPrice().floatValue();
 	}
 	
 }

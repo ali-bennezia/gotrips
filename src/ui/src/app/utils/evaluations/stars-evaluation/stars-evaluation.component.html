@@ -1,0 +1,7 @@
+<div class="eval-stars">
+  <ng-icon
+    name="ionStar"
+    *ngFor="let n of noteArray"
+    [ngClass]="{ 'grey-star': n + 1 > this.note }"
+  ></ng-icon>
+</div>

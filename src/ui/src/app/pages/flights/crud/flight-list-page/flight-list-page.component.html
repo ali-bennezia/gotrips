@@ -1,4 +1,4 @@
-<div class="page-cont" style="max-width: 1000px">
+<div class="page-cont" style="max-width: 1100px">
   <h6 class="display-6">Manage flights</h6>
   <table class="table">
     <thead>
@@ -9,6 +9,7 @@
         <th scope="col">Departure date</th>
         <th scope="col">Landing date</th>
         <th scope="col">Company</th>
+        <th scope="col">Price</th>
         <th scope="col">Actions</th>
       </tr>
     </thead>
@@ -20,11 +21,9 @@
         <td>{{ data.departureDate | date }}</td>
         <td>{{ data.landingDate | date }}</td>
         <td>{{ data.company.name }}</td>
+        <td>{{ data.price }}</td>
         <td>
-          <a
-            [routerLink]="['/flights', 'details']"
-            [queryParams]="{ id: data.id }"
-          >
+          <a [routerLink]="['/flights', 'details', data.id]">
             <button class="btn btn-menu" [disabled]="isRowLoading(data.id)">
               Details
             </button>
@@ -49,5 +48,8 @@
     <a [routerLink]="['/flights', 'form']">
       <button class="btn btn-menu">Register a flight</button>
     </a>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
   </div>
 </div>

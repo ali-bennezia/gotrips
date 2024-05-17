@@ -8,4 +8,5 @@ export interface FlightDetailsDto {
   landingDate: Date;
   departureAirport: string;
   arrivalAirport: string;
+  price: number;
 }

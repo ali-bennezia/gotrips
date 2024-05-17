@@ -116,13 +116,17 @@ export class FlightAddPageComponent {
         });
     } else {
       this.http
-        .put(`${environment.backendUrl}/api/flight/edit`, this.getDto(), {
-          headers: {
-            Authorization: `Bearer ${this.authService.session?.token}`,
-            'Content-Type': 'application/json',
-          },
-          observe: 'response',
-        })
+        .put(
+          `${environment.backendUrl}/api/flight/${this.id}/edit`,
+          this.getDto(),
+          {
+            headers: {
+              Authorization: `Bearer ${this.authService.session?.token}`,
+              'Content-Type': 'application/json',
+            },
+            observe: 'response',
+          }
+        )
         .pipe(
           tap((_) => {
             this.loading = false;

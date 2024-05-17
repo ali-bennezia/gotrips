@@ -9,9 +9,11 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   ionPersonCircleOutline,
   ionAirplaneOutline,
+  ionAirplane,
   ionBusinessOutline,
   ionBaseballOutline,
   ionSearchOutline,
+  ionStar,
 } from '@ng-icons/ionicons';
 import { RouterModule } from '@angular/router';
 import ROUTES from './routing/ROUTES';
@@ -41,6 +43,9 @@ import { ActivityAddPageComponent } from './pages/activities/crud/activity-add-p
 import { ActivityDetailsPageComponent } from './pages/activities/crud/activity-details-page/activity-details-page.component';
 import { HotelDetailsPageComponent } from './pages/hotels/crud/hotel-details-page/hotel-details-page.component';
 import { FlightDetailsPageComponent } from './pages/flights/crud/flight-details-page/flight-details-page.component';
+import { StarsEvaluationComponent } from './utils/evaluations/stars-evaluation/stars-evaluation.component';
+import { StarsEvaluationInputComponent } from './utils/evaluations/stars-evaluation-input/stars-evaluation-input.component';
+import { EvaluationInputComponent } from './utils/evaluations/evaluation-input/evaluation-input.component';
 
 @NgModule({
   declarations: [
@@ -71,12 +76,17 @@ import { FlightDetailsPageComponent } from './pages/flights/crud/flight-details-
     ActivityDetailsPageComponent,
     HotelDetailsPageComponent,
     FlightDetailsPageComponent,
+    StarsEvaluationComponent,
+    StarsEvaluationInputComponent,
+    EvaluationInputComponent,
   ],
   imports: [
     BrowserModule,
     NgIconsModule.withIcons({
+      ionStar,
       ionPersonCircleOutline,
       ionAirplaneOutline,
+      ionAirplane,
       ionBusinessOutline,
       ionBaseballOutline,
       ionSearchOutline,

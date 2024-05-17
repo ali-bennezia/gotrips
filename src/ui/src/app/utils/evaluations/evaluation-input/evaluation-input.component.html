@@ -1,0 +1,33 @@
+<div class="page-cont">
+  <form [formGroup]="group" (ngSubmit)="onSubmit($event)">
+    <div class="form-group">
+      <h6>Write an evaluation</h6>
+      <label for="formControlTitle">Title</label>
+      <input
+        type="text"
+        class="form-control"
+        id="formControlTitle"
+        formControlName="title"
+      />
+    </div>
+    <div class="form-group">
+      <label for="formControlContent">Content</label>
+      <textarea
+        class="form-control"
+        id="formControlContent"
+        rows="3"
+        formControlName="content"
+      ></textarea>
+    </div>
+    <app-stars-evaluation-input
+      (noteChanged)="this.note = $event"
+    ></app-stars-evaluation-input>
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="loading || group.invalid"
+    >
+      Publish
+    </button>
+  </form>
+</div>

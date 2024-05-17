@@ -12,7 +12,7 @@ public class EvaluationDTO {
 	@NotEmpty
 	private String content;
 	@Min(0)
-	@Max(10)
+	@Max(5)
 	private Integer note;
 	
 	public String getTitle() {

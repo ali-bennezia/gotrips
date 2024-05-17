@@ -169,3 +169,13 @@ input.ng-touched.ng-invalid {
   border: solid 1px rgba(0, 0, 0, 0.123);
   border-radius: 8px;
 }
+
+.eval-stars > ng-icon[name="ionStar"] {
+  height: 100%;
+  font-size: 24px;
+  color: rgb(209, 178, 0);
+}
+
+.eval-stars > ng-icon[name="ionStar"].grey-star {
+  color: grey;
+}

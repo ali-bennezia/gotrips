@@ -46,7 +46,7 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_FLIGHT_COMPANY')],
   },
   {
-    path: 'flights/details',
+    path: 'flights/details/:id',
     component: FlightDetailsPageComponent,
   },
   {
@@ -70,7 +70,7 @@ const ROUTES: Routes = [
     canActivate: [hasRoleCanActivateFnFactory('ROLE_HOTEL_COMPANY')],
   },
   {
-    path: 'hotels/details',
+    path: 'hotels/details/:id',
     component: HotelDetailsPageComponent,
   },
   {

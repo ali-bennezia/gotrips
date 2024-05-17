@@ -1,0 +1,3 @@
+.eval-stars > ng-icon[name="ionStar"]:hover {
+  cursor: pointer;
+}

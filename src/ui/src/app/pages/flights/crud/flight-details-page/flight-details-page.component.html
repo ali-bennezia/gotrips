@@ -1,1 +1,44 @@
-<p>flight-details-page works!</p>
+<div class="row">
+  <div class="col">
+    <p>test</p>
+    <app-evaluation-input></app-evaluation-input>
+  </div>
+  <div class="col page-cont">
+    <h6 class="display-6">Flight details</h6>
+    <span *ngIf="data != null; else ngElse">
+      <div class="row">
+        <div class="col div-left">
+          <h5>From</h5>
+          <p>{{ data.departureAirport }}</p>
+          <p>{{ data.departureDate | date }}</p>
+          <p>{{ data.departureDate | date : "shortTime" }}</p>
+        </div>
+        <div class="col div-middle"><ng-icon name="ionAirplane"></ng-icon></div>
+        <div class="col div-right">
+          <h5>To</h5>
+          <p>{{ data.arrivalAirport }}</p>
+          <p>{{ data.landingDate | date }}</p>
+          <p>{{ data.landingDate | date : "shortTime" }}</p>
+        </div>
+      </div>
+      <hr />
+      <a
+        [routerLink]="['/flights', 'company', 'details']"
+        [queryParams]="{ id: data.id }"
+      >
+        <p class="company-name">{{ data.company.name }}</p>
+      </a>
+      <app-stars-evaluation
+        [note]="roundedAverageEval()"
+      ></app-stars-evaluation>
+      <p>Average evaluation: {{ data.averageEvaluation }}</p>
+      <div>
+        <button class="btn btn-primary">Proceed to payment</button>
+      </div>
+    </span>
+    <ng-template #ngElse>
+      <p class="greyed-out">Loading details ...</p>
+    </ng-template>
+  </div>
+  <div class="col"><p>test</p></div>
+</div>
