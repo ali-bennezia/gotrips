@@ -1,9 +1,11 @@
 <div class="row">
   <div class="col">
-    <p>test</p>
-    <app-evaluation-input></app-evaluation-input>
+    <app-evaluation-input
+      [targetId]="data?.id!"
+      (onSentEvaluation)="handleSentEvaluation($event)"
+    ></app-evaluation-input>
   </div>
-  <div class="col page-cont">
+  <div class="col page-cont" style="height: 100%">
     <h6 class="display-6">Flight details</h6>
     <span *ngIf="data != null; else ngElse">
       <div class="row">
@@ -40,5 +42,17 @@
       <p class="greyed-out">Loading details ...</p>
     </ng-template>
   </div>
-  <div class="col"><p>test</p></div>
+  <div class="col">
+    <div class="page-cont evals-list-cont">
+      <h6>Evaluations</h6>
+      <div class="evals-list-cont-scroll">
+        <app-evaluation-list
+          offerType="flight"
+          *ngIf="data != null; else ngElseEvaluationList"
+          [offerId]="data.id"
+        ></app-evaluation-list>
+        <ng-template #ngElseEvaluationList></ng-template>
+      </div>
+    </div>
+  </div>
 </div>

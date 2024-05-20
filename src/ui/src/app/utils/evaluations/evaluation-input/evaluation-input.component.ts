@@ -1,11 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, Input } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/auth/auth.service';
 import { EvaluationDto } from 'src/app/data/user/evaluation-dto';
 import { environment } from 'src/environments/environment';
 
 import { tap } from 'rxjs/operators';
+import { StarsEvaluationInputComponent } from '../stars-evaluation-input/stars-evaluation-input.component';
 
 @Component({
   selector: 'app-evaluation-input',
@@ -19,6 +26,14 @@ export class EvaluationInputComponent {
   group!: FormGroup;
   loading: boolean = false;
   errorDisplay: string = '';
+  @ViewChild('starsEvalInput', {
+    read: StarsEvaluationInputComponent,
+    static: true,
+  })
+  starsEvalInput!: StarsEvaluationInputComponent;
+  @Output()
+  onSentEvaluation: EventEmitter<EvaluationDto> =
+    new EventEmitter<EvaluationDto>();
 
   constructor(
     builder: FormBuilder,
@@ -40,10 +55,11 @@ export class EvaluationInputComponent {
   }
 
   onSubmit = (e: Event) => {
+    let dto: EvaluationDto = this.getDto();
     this.http
       .post(
-        `${environment.backendUrl}/api/flight/${this.targetId}/reservations/create`,
-        this.getDto(),
+        `${environment.backendUrl}/api/flight/${this.targetId}/evaluations/create`,
+        dto,
         {
           headers: {
             Authorization: `Bearer ${this.authService.session?.token}`,
@@ -61,6 +77,9 @@ export class EvaluationInputComponent {
         next: () => {
           this.errorDisplay = '';
           this.group.reset();
+          this.starsEvalInput.setNote(0);
+          this.starsEvalInput.displayedNote = 0;
+          this.onSentEvaluation.emit(dto);
         },
         error: (err) => {
           switch (err.status) {

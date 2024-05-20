@@ -46,6 +46,8 @@ import { FlightDetailsPageComponent } from './pages/flights/crud/flight-details-
 import { StarsEvaluationComponent } from './utils/evaluations/stars-evaluation/stars-evaluation.component';
 import { StarsEvaluationInputComponent } from './utils/evaluations/stars-evaluation-input/stars-evaluation-input.component';
 import { EvaluationInputComponent } from './utils/evaluations/evaluation-input/evaluation-input.component';
+import { EvaluationListComponent } from './utils/evaluations/evaluation-list/evaluation-list.component';
+import { EvaluationDisplayComponent } from './utils/evaluations/evaluation-display/evaluation-display.component';
 
 @NgModule({
   declarations: [
@@ -79,6 +81,8 @@ import { EvaluationInputComponent } from './utils/evaluations/evaluation-input/e
     StarsEvaluationComponent,
     StarsEvaluationInputComponent,
     EvaluationInputComponent,
+    EvaluationListComponent,
+    EvaluationDisplayComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,6 +8,7 @@ import { environment } from 'src/environments/environment';
 
 import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { EvaluationDto } from 'src/app/data/user/evaluation-dto';
 
 @Component({
   selector: 'app-flight-details-page',
@@ -19,6 +20,12 @@ export class FlightDetailsPageComponent implements OnDestroy {
   data: FlightDetailsDto | null = null;
   dataSubscription: Subscription | null = null;
   errorDisplay: string = '';
+
+  handleSentEvaluation = (dto: EvaluationDto) => {
+    if (this.data != null) {
+      this.fetchData(this.data.id);
+    }
+  };
 
   constructor(
     private http: HttpClient,

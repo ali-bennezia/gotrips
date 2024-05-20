@@ -1,5 +1,7 @@
 package fr.alib.gotrips.model.entity.offers;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.Objects;
 
 import fr.alib.gotrips.model.dto.inbound.EvaluationDTO;
@@ -12,6 +14,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table( name = "EVALUATION" )
@@ -37,6 +41,9 @@ public class Evaluation {
 	@Column(nullable = false, precision = 1, scale = 0)
 	private Integer note;
 
+	@Temporal(TemporalType.DATE)
+	private Date createdAt;
+	
 	public Long getId() {
 		return id;
 	}
@@ -100,10 +107,18 @@ public class Evaluation {
 	public void setNote(Integer note) {
 		this.note = note;
 	}
+	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(activity, content, flight, hotel, id, note, title, user);
+		return Objects.hash(activity, content, createdAt, flight, hotel, id, note, title, user);
 	}
 
 	@Override
@@ -116,19 +131,21 @@ public class Evaluation {
 			return false;
 		Evaluation other = (Evaluation) obj;
 		return Objects.equals(activity, other.activity) && Objects.equals(content, other.content)
-				&& Objects.equals(flight, other.flight) && Objects.equals(hotel, other.hotel)
-				&& Objects.equals(id, other.id) && Objects.equals(note, other.note)
-				&& Objects.equals(title, other.title) && Objects.equals(user, other.user);
+				&& Objects.equals(createdAt, other.createdAt) && Objects.equals(flight, other.flight)
+				&& Objects.equals(hotel, other.hotel) && Objects.equals(id, other.id)
+				&& Objects.equals(note, other.note) && Objects.equals(title, other.title)
+				&& Objects.equals(user, other.user);
 	}
 
 	public void applyDTO(EvaluationDTO dto) {
 		this.title = dto.getTitle();
 		this.content = dto.getContent();
 		this.note = dto.getNote();
+		this.createdAt = Date.from(Instant.now());
 	}
 	
 	public Evaluation(Long id, User user, String title, String content, Flight flight, Hotel hotel, Activity activity,
-			Integer note) {
+			Integer note, Date createdAt) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -138,6 +155,7 @@ public class Evaluation {
 		this.hotel = hotel;
 		this.activity = activity;
 		this.note = note;
+		this.createdAt = createdAt;
 	}
 	
 	public Evaluation(EvaluationDTO dto) {
