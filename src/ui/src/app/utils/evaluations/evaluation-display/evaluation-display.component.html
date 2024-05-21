@@ -45,7 +45,9 @@
 
   <div
     class="eval-menu"
-    *ngIf="'' + evaluation.author.id === authService.session?.id"
+    *ngIf="
+      '' + evaluation.author.id === authService.session?.id || authService.admin
+    "
   >
     <button
       class="btn btn-danger"
