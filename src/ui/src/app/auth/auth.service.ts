@@ -8,7 +8,7 @@ import { AuthSession } from '../data/auth/auth-session';
 import { UserLoginDto } from '../data/auth/user-login-dto';
 import { UserRegisterDto } from '../data/auth/user-register-dto';
 
-import { Observable, of } from 'rxjs';
+import { Observable, Subject, of } from 'rxjs';
 import { switchMap, catchError, map, tap, last } from 'rxjs/operators';
 
 import { environment } from 'src/environments/environment';
@@ -18,6 +18,10 @@ import { AuthOperationResult } from '../data/auth/auth-operation-result';
   providedIn: 'root',
 })
 export class AuthService {
+  onAuthenticatedSource: Subject<AuthSession> = new Subject();
+  onAuthenticated$: Observable<AuthSession> =
+    this.onAuthenticatedSource.asObservable();
+
   private _session: AuthSession | null = null;
 
   get session() {
@@ -55,6 +59,7 @@ export class AuthService {
         .subscribe({
           next: () => {
             this._session = lastSession;
+            this.onAuthenticatedSource.next(this._session);
           },
           error: () => {
             this.logout();
@@ -117,6 +122,7 @@ export class AuthService {
               activityCompany: (resp.body! as any).activityCompany,
             };
             this.saveCurrentSession();
+            this.onAuthenticatedSource.next(this._session);
             return of({
               success: true,
               statusCode: resp.status,

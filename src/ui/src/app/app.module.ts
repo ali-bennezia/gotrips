@@ -49,6 +49,8 @@ import { EvaluationInputComponent } from './utils/evaluations/evaluation-input/e
 import { EvaluationListComponent } from './utils/evaluations/evaluation-list/evaluation-list.component';
 import { EvaluationDisplayComponent } from './utils/evaluations/evaluation-display/evaluation-display.component';
 import { PaginationControlsComponent } from './utils/pagination-controls/pagination-controls.component';
+import { InteractiveListGroupComponent } from './utils/interactive-list-group/interactive-list-group.component';
+import { ReservationPayPageComponent } from './pages/reservations/reservation-pay-page/reservation-pay-page.component';
 
 @NgModule({
   declarations: [
@@ -85,6 +87,8 @@ import { PaginationControlsComponent } from './utils/pagination-controls/paginat
     EvaluationListComponent,
     EvaluationDisplayComponent,
     PaginationControlsComponent,
+    InteractiveListGroupComponent,
+    ReservationPayPageComponent,
   ],
   imports: [
     BrowserModule,

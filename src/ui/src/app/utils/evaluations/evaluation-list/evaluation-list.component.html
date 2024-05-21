@@ -4,7 +4,15 @@
     <app-evaluation-display
       *ngFor="let e of data; let i = index"
       [evaluation]="e"
-      [placement]="i == 0 ? 'first' : i == data.length - 1 ? 'last' : 'middle'"
+      [placement]="
+        i == 0
+          ? data.length == 1
+            ? 'firstlast'
+            : 'first'
+          : i == data.length - 1
+          ? 'last'
+          : 'middle'
+      "
       [offerId]="offerId"
       [offerType]="offerType"
     ></app-evaluation-display>

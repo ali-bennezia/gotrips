@@ -34,8 +34,27 @@
         [note]="roundedAverageEval()"
       ></app-stars-evaluation>
       <p>Average evaluation: {{ data.averageEvaluation }}</p>
+      <app-interactive-list-group
+        *ngIf="userPaymentList.length > 0; else noPaymentMeansBlock"
+        hideLabel="Hide payment means"
+        showLabel="Show payment means"
+        [list]="userPaymentList"
+      ></app-interactive-list-group>
+      <ng-template #noPaymentMeansBlock
+        ><p class="greyed-out">No payments means found.</p>
+        <a [routerLink]="['/user', 'details']" [queryParams]="{ tab: 2 }"
+          ><button class="btn btn-menu">Manage payment information</button></a
+        >
+      </ng-template>
+
       <div>
-        <button class="btn btn-primary">Proceed to payment</button>
+        <h2 style="float: right">${{ data.price }}</h2>
+        <button
+          class="btn btn-primary"
+          [disabled]="userPaymentList.length <= 0"
+        >
+          Proceed to payment
+        </button>
       </div>
     </span>
     <ng-template #ngElse>

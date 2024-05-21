@@ -1,0 +1,21 @@
+<button class="btn btn-menu" (click)="onClickButton($event)">
+  {{ show ? hideLabel : showLabel }}
+</button>
+<div class="list-group" *ngIf="show">
+  <button
+    class="list-group-item list-group-item-action flex-column align-items-start"
+    *ngFor="let d of list; let i = index"
+    (click)="onSelect($event, d.value, i)"
+    [ngClass]="{ 'list-group-item-active': i == selectionIndex }"
+  >
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{ d.title }}</h5>
+    </div>
+    <p class="mb-1" *ngIf="d.content.length >= 1">
+      {{ d.content[0] }}
+    </p>
+    <p class="mb-1" *ngIf="d.content.length >= 2">
+      {{ d.content[1] }}
+    </p>
+  </button>
+</div>

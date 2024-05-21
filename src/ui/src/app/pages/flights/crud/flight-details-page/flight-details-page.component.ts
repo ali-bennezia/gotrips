@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
@@ -10,13 +10,16 @@ import { tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { EvaluationDto } from 'src/app/data/user/evaluation-dto';
 import { EvaluationListComponent } from 'src/app/utils/evaluations/evaluation-list/evaluation-list.component';
+import { CardDetailsDto } from 'src/app/data/user/card-details-dto';
+import { UserService } from 'src/app/services/user.service';
+import { ListGroupItem } from 'src/app/utils/interactive-list-group/interactive-list-group.component';
 
 @Component({
   selector: 'app-flight-details-page',
   templateUrl: './flight-details-page.component.html',
   styleUrls: ['./flight-details-page.component.css'],
 })
-export class FlightDetailsPageComponent implements OnDestroy {
+export class FlightDetailsPageComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   data: FlightDetailsDto | null = null;
   dataSubscription: Subscription | null = null;
@@ -24,6 +27,21 @@ export class FlightDetailsPageComponent implements OnDestroy {
 
   @ViewChild('evaluationList', { read: EvaluationListComponent, static: false })
   evaluationList!: EvaluationListComponent;
+
+  userPaymentMethods: CardDetailsDto[] = [];
+  userPaymentList: ListGroupItem[] = [];
+  getUserPaymentMethodListItems: () => ListGroupItem[] = () => {
+    return this.userPaymentMethods.map((d) => {
+      return {
+        title: d.name,
+        content: [
+          `${d.partialCardNumber}`,
+          `${d.address.street} ${d.address.zipCode}, ${d.address.city}`,
+        ],
+        value: d.id,
+      };
+    });
+  };
 
   handleSentEvaluation = (dto: EvaluationDto) => {
     if (this.data != null) {
@@ -37,12 +55,14 @@ export class FlightDetailsPageComponent implements OnDestroy {
   constructor(
     private http: HttpClient,
     private authService: AuthService,
-    activatedRoute: ActivatedRoute
+    activatedRoute: ActivatedRoute,
+    private userService: UserService
   ) {
     activatedRoute.paramMap.subscribe((params) => {
       let id = Number(params.get('id') ?? '-1');
       if (id >= 0) {
         this.fetchData(id);
+        this.fetchUserPaymentMethods();
       } else {
         this.data = null;
       }
@@ -93,7 +113,33 @@ export class FlightDetailsPageComponent implements OnDestroy {
       });
   }
 
+  userPaymentMethodsSubscription: Subscription | null = null;
+  authenticationSubscription: Subscription | null = null;
+  fetchUserPaymentMethods() {
+    if (this.userPaymentMethodsSubscription)
+      this.userPaymentMethodsSubscription.unsubscribe();
+    if (this.authenticationSubscription)
+      this.authenticationSubscription.unsubscribe();
+    this.userPaymentMethodsSubscription = this.userService
+      .getUserPaymentMethodsAsync()
+      .subscribe((data) => {
+        this.userPaymentMethods = data;
+        this.userPaymentList = this.getUserPaymentMethodListItems();
+      });
+  }
+
+  ngOnInit(): void {
+    this.authenticationSubscription =
+      this.authService.onAuthenticated$.subscribe((sess) => {
+        this.fetchUserPaymentMethods();
+      });
+  }
+
   ngOnDestroy(): void {
+    if (this.userPaymentMethodsSubscription)
+      this.userPaymentMethodsSubscription.unsubscribe();
+    if (this.authenticationSubscription)
+      this.authenticationSubscription.unsubscribe();
     this.cleanup();
   }
 }
