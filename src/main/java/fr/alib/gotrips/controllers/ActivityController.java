@@ -280,7 +280,6 @@ public class ActivityController {
 	public ResponseEntity<?> deleteEvaluation(
 			@PathVariable("id") Long activityId,
 			@PathVariable("evaluationId") Long evalId,
-			@Valid @RequestBody EvaluationDTO dto,
 			HttpServletRequest request
 			)
 	{

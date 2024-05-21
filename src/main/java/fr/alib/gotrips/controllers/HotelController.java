@@ -281,7 +281,6 @@ public class HotelController {
 	public ResponseEntity<?> deleteEvaluation(
 			@PathVariable("id") Long hotelId,
 			@PathVariable("evaluationId") Long evalId,
-			@Valid @RequestBody EvaluationDTO dto,
 			HttpServletRequest request
 			)
 	{

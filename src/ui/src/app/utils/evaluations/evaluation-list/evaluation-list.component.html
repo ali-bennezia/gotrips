@@ -2,8 +2,11 @@
   <h6>Evaluations</h6>
   <div class="evals-list-cont-scroll">
     <app-evaluation-display
-      *ngFor="let e of data"
+      *ngFor="let e of data; let i = index"
       [evaluation]="e"
+      [placement]="i == 0 ? 'first' : i == data.length - 1 ? 'last' : 'middle'"
+      [offerId]="offerId"
+      [offerType]="offerType"
     ></app-evaluation-display>
     <ng-template #ngElseEvaluationList></ng-template>
   </div>

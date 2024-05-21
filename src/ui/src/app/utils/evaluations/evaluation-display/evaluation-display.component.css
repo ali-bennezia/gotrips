@@ -3,3 +3,47 @@
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+.eval-username {
+  color: grey;
+  font-size: 16px;
+  text-decoration: none;
+}
+
+.eval-username:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+a {
+  text-decoration: none;
+}
+
+.eval-first {
+  border-radius: 8px 8px 0px 0px;
+}
+
+.eval-middle {
+  border-radius: 0px;
+}
+
+.eval-last {
+  border-radius: 0px 0px 8px 8px;
+}
+
+.eval-first.eval-last {
+  border-radius: 8px;
+}
+
+div > .eval-menu {
+  height: 0px;
+  opacity: 0;
+
+  transition: height 100ms ease-in;
+  transition: opacity 100ms ease-in;
+}
+
+div:hover > .eval-menu {
+  height: 100%;
+  opacity: 1;
+}

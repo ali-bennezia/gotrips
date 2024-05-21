@@ -281,7 +281,6 @@ public class FlightController {
 	public ResponseEntity<?> deleteEvaluation(
 			@PathVariable("id") Long flightId,
 			@PathVariable("evaluationId") Long evalId,
-			@Valid @RequestBody EvaluationDTO dto,
 			HttpServletRequest request
 			)
 	{
