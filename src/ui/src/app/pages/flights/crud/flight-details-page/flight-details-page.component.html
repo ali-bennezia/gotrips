@@ -43,16 +43,13 @@
     </ng-template>
   </div>
   <div class="col">
-    <div class="page-cont evals-list-cont">
-      <h6>Evaluations</h6>
-      <div class="evals-list-cont-scroll">
-        <app-evaluation-list
-          offerType="flight"
-          *ngIf="data != null; else ngElseEvaluationList"
-          [offerId]="data.id"
-        ></app-evaluation-list>
-        <ng-template #ngElseEvaluationList></ng-template>
-      </div>
-    </div>
+    <app-evaluation-list
+      #evaluationList
+      offerType="flight"
+      *ngIf="data != null; else ngElseEvaluationList"
+      [offerId]="data.id"
+    >
+    </app-evaluation-list>
+    <ng-template #ngElseEvaluationList></ng-template>
   </div>
 </div>

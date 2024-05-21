@@ -1,0 +1,28 @@
+<ul class="pagination">
+  <li class="page-item" *ngIf="page > 1">
+    <button class="page-link" (click)="onClickPage(page - 1)">Previous</button>
+  </li>
+  <li class="page-item" *ngIf="page > 1">
+    <button class="page-link" (click)="onClickPage(page - 1)">
+      {{ page - 1 }}
+    </button>
+  </li>
+  <li class="page-item active">
+    <button class="page-link" (click)="onClickPage(page)">
+      {{ page }}
+    </button>
+  </li>
+  <li class="page-item">
+    <button class="page-link" (click)="onClickPage(page + 1)">
+      {{ page + 1 }}
+    </button>
+  </li>
+  <li class="page-item" *ngIf="page == 1">
+    <button class="page-link" (click)="onClickPage(page + 2)">
+      {{ page + 2 }}
+    </button>
+  </li>
+  <li class="page-item">
+    <button class="page-link" (click)="onClickPage(page + 1)">Next</button>
+  </li>
+</ul>

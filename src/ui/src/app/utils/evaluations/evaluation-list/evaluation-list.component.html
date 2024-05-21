@@ -1,4 +1,14 @@
-<app-evaluation-display
-  *ngFor="let e of data"
-  [evaluation]="e"
-></app-evaluation-display>
+<div class="page-cont evals-list-cont">
+  <h6>Evaluations</h6>
+  <div class="evals-list-cont-scroll">
+    <app-evaluation-display
+      *ngFor="let e of data"
+      [evaluation]="e"
+    ></app-evaluation-display>
+    <ng-template #ngElseEvaluationList></ng-template>
+  </div>
+  <app-pagination-controls
+    [page]="page"
+    (onSetPage)="onClickPage($event)"
+  ></app-pagination-controls>
+</div>

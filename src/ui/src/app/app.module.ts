@@ -48,6 +48,7 @@ import { StarsEvaluationInputComponent } from './utils/evaluations/stars-evaluat
 import { EvaluationInputComponent } from './utils/evaluations/evaluation-input/evaluation-input.component';
 import { EvaluationListComponent } from './utils/evaluations/evaluation-list/evaluation-list.component';
 import { EvaluationDisplayComponent } from './utils/evaluations/evaluation-display/evaluation-display.component';
+import { PaginationControlsComponent } from './utils/pagination-controls/pagination-controls.component';
 
 @NgModule({
   declarations: [
@@ -83,6 +84,7 @@ import { EvaluationDisplayComponent } from './utils/evaluations/evaluation-displ
     EvaluationInputComponent,
     EvaluationListComponent,
     EvaluationDisplayComponent,
+    PaginationControlsComponent,
   ],
   imports: [
     BrowserModule,

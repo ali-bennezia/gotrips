@@ -27,15 +27,3 @@ a {
   padding: 4px;
   cursor: pointer;
 }
-
-.evals-list-cont {
-  margin: 52px;
-  margin-top: 40px;
-  padding: 10px;
-  background-color: rgb(238, 238, 238);
-}
-
-.evals-list-cont-scroll {
-  max-height: 600px;
-  overflow-y: scroll;
-}

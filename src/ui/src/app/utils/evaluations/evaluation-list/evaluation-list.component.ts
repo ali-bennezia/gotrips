@@ -19,15 +19,23 @@ export class EvaluationListComponent implements OnInit, OnDestroy {
   data: EvaluationDetailsDto[] = [];
   loading: boolean = false;
 
+  onClickPage = (i: number) => {
+    this.page = i;
+    this.fetchList();
+  };
+
   constructor(private http: HttpClient) {}
 
   handleError(code: number) {}
 
   fetchList() {
+    if (this.loading) return;
     this.loading = true;
     this.http
       .get<EvaluationDetailsDto[]>(
-        `${environment.backendUrl}/api/${this.offerType}/${this.offerId}/evaluations/getAll?page=${this.page}`,
+        `${environment.backendUrl}/api/${this.offerType}/${
+          this.offerId
+        }/evaluations/getAll?page=${this.page - 1}`,
         { observe: 'response' }
       )
       .pipe(

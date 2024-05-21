@@ -195,7 +195,7 @@ public class HotelController {
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
 			@PathVariable("id") Long hotelId,
-			Map<String, String> params
+			@RequestParam Map<String, String> params
 			)
 	{
 		try {
@@ -239,7 +239,7 @@ public class HotelController {
 	@GetMapping("/{id}/evaluations/getAll")
 	public ResponseEntity<?> getAllEvaluations(
 			@PathVariable("id") Long hotelId,
-			Map<String, String> params
+			@RequestParam Map<String, String> params
 			)
 	{
 		try {
