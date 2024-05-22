@@ -170,17 +170,15 @@ public class ActivityController {
 
 	}
 	
-	@GetMapping("/{id}/reservations/get/{reservationId}")
+	@GetMapping("/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
-			@PathVariable("id") Long activityId,
 			@PathVariable("reservationId") Long reservationId
 			)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Optional<Activity> activityOptional = this.aRepo.findById(activityId);
 		Optional<ActivityReservation> activityResOptional = this.aResRepo.findById(reservationId);
 		
-		if ( activityOptional.isPresent() && activityResOptional.isPresent() ) {
+		if ( activityResOptional.isPresent() ) {
 			if ( activityResOptional.get().getUser().getId().equals(userDetails.getUser().getId()) ) {
 				return ResponseEntity.ok( new ActivityReservationDetailsDTO( this.aService.getReservation(reservationId) ) );
 			}else {
@@ -193,7 +191,6 @@ public class ActivityController {
 	
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
-			@PathVariable("id") Long activityId,
 			@RequestParam Map<String, String> params
 			)
 	{
@@ -201,16 +198,13 @@ public class ActivityController {
 			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
-			if ( this.aRepo.existsById(activityId) ) {
-				return ResponseEntity.ok(
-						this.aService.getReservations(userDetails.getUser().getId(), page)
-							.stream().map(fRes->{
-								return new ActivityReservationDetailsDTO(fRes);
-							}).collect(Collectors.toList())
-				);
-			}else {
-				return ResponseEntity.notFound().build();
-			}	
+			return ResponseEntity.ok(
+					this.aService.getReservations(userDetails.getUser().getId(), page)
+						.stream().map(fRes->{
+							return new ActivityReservationDetailsDTO(fRes);
+						}).collect(Collectors.toList())
+			);
+
 		} catch (NumberFormatException e) {
 			return ResponseEntity.badRequest().build();
 		} catch (IdNotFoundException e) {

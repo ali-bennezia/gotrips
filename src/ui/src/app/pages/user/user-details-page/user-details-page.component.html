@@ -50,9 +50,12 @@
         *ngFor="let c of cardDetails"
       ></app-card-details>
     </ng-template>
-    <a [routerLink]="['/user/card/form']"
-      ><button class="btn btn-add">Add a credit card</button></a
-    >
+    <a [routerLink]="['/user/card/form']">
+      <button class="btn btn-add">Add a credit card</button>
+    </a>
+    <a [routerLink]="['/reservations', 'list']">
+      <button class="btn btn-menu">Reservations</button>
+    </a>
   </span>
 
   <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">

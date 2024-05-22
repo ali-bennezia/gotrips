@@ -51,6 +51,7 @@ import { EvaluationDisplayComponent } from './utils/evaluations/evaluation-displ
 import { PaginationControlsComponent } from './utils/pagination-controls/pagination-controls.component';
 import { InteractiveListGroupComponent } from './utils/interactive-list-group/interactive-list-group.component';
 import { ReservationPayPageComponent } from './pages/reservations/reservation-pay-page/reservation-pay-page.component';
+import { ReservationsListPageComponent } from './pages/reservations/reservations-list-page/reservations-list-page.component';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { ReservationPayPageComponent } from './pages/reservations/reservation-pa
     PaginationControlsComponent,
     InteractiveListGroupComponent,
     ReservationPayPageComponent,
+    ReservationsListPageComponent,
   ],
   imports: [
     BrowserModule,

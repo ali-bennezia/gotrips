@@ -1,1 +1,20 @@
-<p>reservation-pay-page works!</p>
+<div class="page-cont">
+  <h6 class="display-6">Payment processing</h6>
+  <ng-container [ngSwitch]="this.state">
+    <span *ngSwitchCase="paymentStateEnum.ERROR">
+      <p class="alert alert-danger">Error processing payment.</p></span
+    >
+    <span *ngSwitchCase="paymentStateEnum.UNINITIALIZED">
+      <p>Initializing payment processing ...</p>
+    </span>
+    <span *ngSwitchCase="paymentStateEnum.LOADING">
+      <p>Processing payment ...</p>
+    </span>
+    <span *ngSwitchCase="paymentStateEnum.SUCCESS"
+      ><p class="alert alert-success">Payment was successfully validated.</p>
+    </span>
+  </ng-container>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
+</div>

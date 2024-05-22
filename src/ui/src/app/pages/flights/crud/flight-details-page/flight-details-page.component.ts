@@ -30,6 +30,7 @@ export class FlightDetailsPageComponent implements OnInit, OnDestroy {
 
   userPaymentMethods: CardDetailsDto[] = [];
   userPaymentList: ListGroupItem[] = [];
+  paymentMeanId: number | null = null;
   getUserPaymentMethodListItems: () => ListGroupItem[] = () => {
     return this.userPaymentMethods.map((d) => {
       return {

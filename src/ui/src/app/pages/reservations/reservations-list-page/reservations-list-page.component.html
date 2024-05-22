@@ -1,0 +1,17 @@
+<div class="page-cont">
+  <h6 class="display-6">Reservations</h6>
+  <div class="tabs">
+    <div class="tab-btn" (click)="setTab(0)">
+      <p>Flights</p>
+    </div>
+    <div class="tab-btn" (click)="setTab(1)">
+      <p>Hotels</p>
+    </div>
+    <div class="tab-btn" (click)="setTab(2)">
+      <p>Activities</p>
+    </div>
+  </div>
+  <span *ngIf="currentTab == 0"> <p>Flights</p></span>
+  <span *ngIf="currentTab == 1"><p>Hotels</p> </span>
+  <span *ngIf="currentTab == 2"><p>Activities</p> </span>
+</div>

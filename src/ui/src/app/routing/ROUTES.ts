@@ -23,6 +23,8 @@ import { HotelAddPageComponent } from '../pages/hotels/crud/hotel-add-page/hotel
 import { FlightDetailsPageComponent } from '../pages/flights/crud/flight-details-page/flight-details-page.component';
 import { ActivityDetailsPageComponent } from '../pages/activities/crud/activity-details-page/activity-details-page.component';
 import { HotelDetailsPageComponent } from '../pages/hotels/crud/hotel-details-page/hotel-details-page.component';
+import { ReservationPayPageComponent } from '../pages/reservations/reservation-pay-page/reservation-pay-page.component';
+import { ReservationsListPageComponent } from '../pages/reservations/reservations-list-page/reservations-list-page.component';
 
 const ROUTES: Routes = [
   {
@@ -115,6 +117,16 @@ const ROUTES: Routes = [
   {
     path: 'user/card/form',
     component: CardAddPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
+  },
+  {
+    path: 'reservations/pay/:offerType/:offerId/:paymentMeanId',
+    component: ReservationPayPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
+  },
+  {
+    path: 'reservations/list',
+    component: ReservationsListPageComponent,
     canActivate: [isAuthenticatedCanActivateFn],
   },
   {

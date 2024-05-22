@@ -43,16 +43,16 @@ public class SecurityConfig {
 					"/api/user/*/delete", 
 					
 					"/api/flight/*/reservations/create", 
-					"/api/flight/*/reservations/get/*",
-					"/api/flight/*/reservations/getAll",
+					"/api/flight/reservations/get/*",
+					"/api/flight/reservations/getAll",
 					
 					"/api/hotel/*/reservations/create", 
-					"/api/hotel/*/reservations/get/*",
-					"/api/hotel/*/reservations/getAll",
+					"/api/hotel/reservations/get/*",
+					"/api/hotel/reservations/getAll",
 					
 					"/api/activity/*/reservations/create", 
-					"/api/activity/*/reservations/get/*",
-					"/api/activity/*/reservations/getAll"
+					"/api/activity/reservations/get/*",
+					"/api/activity/reservations/getAll"
 					)
 			.hasAnyRole("USER", "ADMIN")
 			.requestMatchers(

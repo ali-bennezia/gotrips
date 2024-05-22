@@ -171,17 +171,15 @@ public class HotelController {
 
 	}
 	
-	@GetMapping("/{id}/reservations/get/{reservationId}")
+	@GetMapping("/reservations/get/{reservationId}")
 	public ResponseEntity<?> getReservation(
-			@PathVariable("id") Long hotelId,
 			@PathVariable("reservationId") Long reservationId
 			)
 	{
 		CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		Optional<Hotel> hotelOptional = this.hRepo.findById(hotelId);
 		Optional<HotelReservation> hotelResOptional = this.hResRepo.findById(reservationId);
 		
-		if ( hotelOptional.isPresent() && hotelResOptional.isPresent() ) {
+		if ( hotelResOptional.isPresent() ) {
 			if ( hotelResOptional.get().getUser().getId().equals(userDetails.getUser().getId()) ) {
 				return ResponseEntity.ok( new HotelReservationDetailsDTO( this.hService.getReservation(reservationId) ) );
 			}else {
@@ -194,7 +192,6 @@ public class HotelController {
 	
 	@GetMapping("/{id}/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
-			@PathVariable("id") Long hotelId,
 			@RequestParam Map<String, String> params
 			)
 	{
@@ -202,16 +199,13 @@ public class HotelController {
 			CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 			Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 			
-			if ( this.hRepo.existsById(hotelId) ) {
-				return ResponseEntity.ok(
-						this.hService.getReservations(userDetails.getUser().getId(), page)
-							.stream().map(fRes->{
-								return new HotelReservationDetailsDTO(fRes);
-							}).collect(Collectors.toList())
-				);
-			}else {
-				return ResponseEntity.notFound().build();
-			}	
+			return ResponseEntity.ok(
+					this.hService.getReservations(userDetails.getUser().getId(), page)
+						.stream().map(fRes->{
+							return new HotelReservationDetailsDTO(fRes);
+						}).collect(Collectors.toList())
+			);
+
 		} catch (NumberFormatException e) {
 			return ResponseEntity.badRequest().build();
 		} catch (IdNotFoundException e) {

@@ -39,6 +39,7 @@
         hideLabel="Hide payment means"
         showLabel="Show payment means"
         [list]="userPaymentList"
+        (onSelectValue)="paymentMeanId = $event"
       ></app-interactive-list-group>
       <ng-template #noPaymentMeansBlock
         ><p class="greyed-out">No payments means found.</p>
@@ -49,12 +50,22 @@
 
       <div>
         <h2 style="float: right">${{ data.price }}</h2>
-        <button
-          class="btn btn-primary"
-          [disabled]="userPaymentList.length <= 0"
+        <a
+          [routerLink]="[
+            '/reservations',
+            'pay',
+            'flight',
+            data.id,
+            paymentMeanId
+          ]"
         >
-          Proceed to payment
-        </button>
+          <button
+            class="btn btn-primary"
+            [disabled]="userPaymentList.length <= 0 || paymentMeanId == null"
+          >
+            Proceed to payment
+          </button></a
+        >
       </div>
     </span>
     <ng-template #ngElse>
