@@ -11,7 +11,25 @@
       <p>Activities</p>
     </div>
   </div>
-  <span *ngIf="currentTab == 0"> <p>Flights</p></span>
-  <span *ngIf="currentTab == 1"><p>Hotels</p> </span>
-  <span *ngIf="currentTab == 2"><p>Activities</p> </span>
+  <span *ngIf="currentTab == 0">
+    <app-flight-reservation-details-min
+      *ngFor="let f of flights"
+      [data]="f"
+    ></app-flight-reservation-details-min
+  ></span>
+  <span *ngIf="currentTab == 1"
+    ><app-hotel-reservation-details-min
+      *ngFor="let f of hotels"
+      [data]="f"
+    ></app-hotel-reservation-details-min>
+  </span>
+  <span *ngIf="currentTab == 2"
+    ><app-activity-reservation-details-min
+      *ngFor="let f of activities"
+      [data]="f"
+    ></app-activity-reservation-details-min>
+  </span>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
 </div>

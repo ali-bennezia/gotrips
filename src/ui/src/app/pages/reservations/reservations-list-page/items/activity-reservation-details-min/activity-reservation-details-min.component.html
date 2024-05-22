@@ -1,0 +1,15 @@
+<a
+  class="offer-details-link"
+  [routerLink]="['reservations', 'details', 'activities', data.id]"
+>
+  <div class="offer-details-min-cont">
+    <h5>
+      {{ data.activity.title }}
+    </h5>
+    <p>
+      Starting date {{ getDate(data.beginTime) | date }} End date
+      {{ getDate(data.endTime) | date }}
+    </p>
+    <p>${{ data.price }}, Reserved {{ getDate(data.paymentTime) | date }}</p>
+  </div>
+</a>

@@ -1,0 +1,15 @@
+.offer-details-min-cont {
+  border-radius: 6px;
+  background-color: rgb(241, 241, 241);
+  padding: 4px;
+}
+
+.offer-details-min-cont:hover {
+  background-color: rgb(226, 226, 226);
+  cursor: pointer;
+}
+
+.offer-details-link {
+  text-decoration: none;
+  color: black;
+}

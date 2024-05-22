@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { HotelReservationDetailsDto } from 'src/app/data/hotel/hotel-reservation-details-dto';
 import { ActivityReservationDetailsDto } from 'src/app/data/reservations/activity-reservation-details-dto';
 import { FlightReservationDetailsDto } from 'src/app/data/reservations/flight-reservation-details-dto';
 
-import { Observable, of } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -13,6 +13,7 @@ import { environment } from 'src/environments/environment';
   selector: 'app-reservations-list-page',
   templateUrl: './reservations-list-page.component.html',
   styleUrls: ['./reservations-list-page.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ReservationsListPageComponent {
   currentTab: number = -1;
@@ -20,7 +21,7 @@ export class ReservationsListPageComponent {
 
   flights: FlightReservationDetailsDto[] = [];
   hotels: HotelReservationDetailsDto[] = [];
-  activity: ActivityReservationDetailsDto[] = [];
+  activities: ActivityReservationDetailsDto[] = [];
 
   page: number = 1;
 
@@ -33,15 +34,29 @@ export class ReservationsListPageComponent {
 
   onTabClosed(i: number) {
     switch (i) {
+      case 0:
+        this.cleanupFlightReservations();
+        break;
+      case 1:
+        this.cleanupHotelReservations();
+        break;
       case 2:
-
+        this.cleanupActivityReservations();
+        break;
       default:
         break;
     }
   }
   onTabOpened(i: number) {
     switch (i) {
+      case 0:
+        this.fetchFlightReservations();
+        break;
+      case 1:
+        this.fetchHotelReservations();
+        break;
       case 2:
+        this.fetchActivityReservations();
         break;
       default:
         break;
@@ -61,6 +76,23 @@ export class ReservationsListPageComponent {
     });
   }
 
+  handleError(code: number) {
+    switch (code) {
+      case 0:
+        this.errorDisplay = 'Client-side error.';
+        break;
+      case 403:
+        this.errorDisplay = 'Insufficient authorization.';
+        break;
+      case 400:
+        this.errorDisplay = 'Incorrect parameters.';
+        break;
+      default:
+        this.errorDisplay = 'Internal server error.';
+        break;
+    }
+  }
+
   fetchList<T>(offerType: string): Observable<HttpResponse<T[]>> {
     return this.http.get<T[]>(
       `${environment.backendUrl}/api/${offerType}/reservations/getAll?page=${
@@ -75,9 +107,56 @@ export class ReservationsListPageComponent {
     );
   }
 
+  cleanupFlightReservations() {
+    if (this.flightSubscription) this.flightSubscription.unsubscribe();
+    this.flights = [];
+  }
+
+  cleanupHotelReservations() {
+    if (this.hotelSubscription) this.hotelSubscription.unsubscribe();
+    this.hotels = [];
+  }
+
+  cleanupActivityReservations() {
+    if (this.activitySubscription) this.activitySubscription.unsubscribe();
+    this.activities = [];
+  }
+
+  flightSubscription: Subscription | null = null;
   fetchFlightReservations() {
-    this.fetchList<FlightReservationDetailsDto>('flight').subscribe({
-      next: (resp) => {},
+    this.cleanupFlightReservations();
+    this.flightSubscription = this.fetchList<FlightReservationDetailsDto>(
+      'flight'
+    ).subscribe({
+      next: (resp) => {
+        this.flights = resp.body ?? [];
+      },
+      error: (err) => {},
+    });
+  }
+
+  hotelSubscription: Subscription | null = null;
+  fetchHotelReservations() {
+    this.cleanupHotelReservations();
+    this.hotelSubscription = this.fetchList<HotelReservationDetailsDto>(
+      'hotel'
+    ).subscribe({
+      next: (resp) => {
+        this.hotels = resp.body ?? [];
+      },
+      error: (err) => {},
+    });
+  }
+
+  activitySubscription: Subscription | null = null;
+  fetchActivityReservations() {
+    this.cleanupActivityReservations();
+    this.activitySubscription = this.fetchList<ActivityReservationDetailsDto>(
+      'activity'
+    ).subscribe({
+      next: (resp) => {
+        this.activities = resp.body ?? [];
+      },
       error: (err) => {},
     });
   }

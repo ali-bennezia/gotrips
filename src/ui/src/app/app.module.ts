@@ -52,6 +52,9 @@ import { PaginationControlsComponent } from './utils/pagination-controls/paginat
 import { InteractiveListGroupComponent } from './utils/interactive-list-group/interactive-list-group.component';
 import { ReservationPayPageComponent } from './pages/reservations/reservation-pay-page/reservation-pay-page.component';
 import { ReservationsListPageComponent } from './pages/reservations/reservations-list-page/reservations-list-page.component';
+import { FlightReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/flight-reservation-details-min/flight-reservation-details-min.component';
+import { HotelReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/hotel-reservation-details-min/hotel-reservation-details-min.component';
+import { ActivityReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/activity-reservation-details-min/activity-reservation-details-min.component';
 
 @NgModule({
   declarations: [
@@ -91,6 +94,9 @@ import { ReservationsListPageComponent } from './pages/reservations/reservations
     InteractiveListGroupComponent,
     ReservationPayPageComponent,
     ReservationsListPageComponent,
+    FlightReservationDetailsMinComponent,
+    HotelReservationDetailsMinComponent,
+    ActivityReservationDetailsMinComponent,
   ],
   imports: [
     BrowserModule,

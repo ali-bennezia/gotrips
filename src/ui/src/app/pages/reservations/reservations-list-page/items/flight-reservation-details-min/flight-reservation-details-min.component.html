@@ -1,0 +1,15 @@
+<a
+  class="offer-details-link"
+  [routerLink]="['/reservations', 'details', 'flights', data.id]"
+>
+  <div class="offer-details-min-cont">
+    <h5>
+      {{ data.flight.departureAirport }} → {{ data.flight.arrivalAirport }}
+    </h5>
+    <p>
+      Departure {{ data.flight.departureDate | date : "short" }} Arrival
+      {{ data.flight.landingDate | date : "short" }}
+    </p>
+    <p>${{ data.price }}, Reserved {{ getDate(data.paymentTime) | date }}</p>
+  </div>
+</a>
