@@ -1,0 +1,23 @@
+<div class="page-cont">
+  <h6 class="display-6">Flight reservation details</h6>
+  <div *ngIf="loading == false && data != null">
+    <h4>Departure</h4>
+    <p>{{ data.flight.departureAirport }}</p>
+    <p>{{ data.flight.departureDate | date : "short" }}</p>
+    <h4>Arrival</h4>
+    <p>{{ data.flight.arrivalAirport }}</p>
+    <p>{{ data.flight.landingDate | date : "short" }}</p>
+    <hr />
+    <dl>
+      <dt>Company</dt>
+      <dd>{{ data.flight.company.name }}</dd>
+    </dl>
+    <div style="font-size: 26px">
+      <p style="float: right">${{ data.price }}</p>
+      <p>Reserved {{ data.paymentTime | date }}</p>
+    </div>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
+</div>

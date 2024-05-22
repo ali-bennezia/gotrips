@@ -1,0 +1,27 @@
+<div class="page-cont">
+  <h6 class="display-6">Hotel reservation details</h6>
+  <div *ngIf="loading == false && data != null">
+    <h4>{{ data.hotel.name }}</h4>
+    <p>{{ data.hotel.description }}</p>
+    <hr />
+    <dl>
+      <dt>Company</dt>
+      <dd>{{ data.hotel.company.name }}</dd>
+      <dt>Starting date</dt>
+      <dd>{{ data.beginTime | date }}</dd>
+      <dt>End date</dt>
+      <dd>{{ data.endTime | date }}</dd>
+      <dt>Duration</dt>
+      <dd>{{ data.days }}</dd>
+      <dt>Price per night</dt>
+      <dd>{{ data.hotel.pricePerNight }}</dd>
+    </dl>
+    <div style="font-size: 26px">
+      <p style="float: right">${{ data.price }}</p>
+      <p>Reserved {{ data.paymentTime | date }}</p>
+    </div>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
+</div>

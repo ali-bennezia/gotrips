@@ -55,6 +55,9 @@ import { ReservationsListPageComponent } from './pages/reservations/reservations
 import { FlightReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/flight-reservation-details-min/flight-reservation-details-min.component';
 import { HotelReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/hotel-reservation-details-min/hotel-reservation-details-min.component';
 import { ActivityReservationDetailsMinComponent } from './pages/reservations/reservations-list-page/items/activity-reservation-details-min/activity-reservation-details-min.component';
+import { FlightReservationDetailsPageComponent } from './pages/reservations/flight-reservation-details-page/flight-reservation-details-page.component';
+import { HotelReservationDetailsPageComponent } from './pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
+import { ActivityReservationDetailsPageComponent } from './pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
 
 @NgModule({
   declarations: [
@@ -97,6 +100,9 @@ import { ActivityReservationDetailsMinComponent } from './pages/reservations/res
     FlightReservationDetailsMinComponent,
     HotelReservationDetailsMinComponent,
     ActivityReservationDetailsMinComponent,
+    FlightReservationDetailsPageComponent,
+    HotelReservationDetailsPageComponent,
+    ActivityReservationDetailsPageComponent,
   ],
   imports: [
     BrowserModule,

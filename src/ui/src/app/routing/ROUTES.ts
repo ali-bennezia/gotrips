@@ -25,6 +25,9 @@ import { ActivityDetailsPageComponent } from '../pages/activities/crud/activity-
 import { HotelDetailsPageComponent } from '../pages/hotels/crud/hotel-details-page/hotel-details-page.component';
 import { ReservationPayPageComponent } from '../pages/reservations/reservation-pay-page/reservation-pay-page.component';
 import { ReservationsListPageComponent } from '../pages/reservations/reservations-list-page/reservations-list-page.component';
+import { FlightReservationDetailsPageComponent } from '../pages/reservations/flight-reservation-details-page/flight-reservation-details-page.component';
+import { HotelReservationDetailsPageComponent } from '../pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
+import { ActivityReservationDetailsPageComponent } from '../pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
 
 const ROUTES: Routes = [
   {
@@ -127,6 +130,21 @@ const ROUTES: Routes = [
   {
     path: 'reservations/list',
     component: ReservationsListPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
+  },
+  {
+    path: 'reservations/details/flights/:id',
+    component: FlightReservationDetailsPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
+  },
+  {
+    path: 'reservations/details/hotels/:id',
+    component: HotelReservationDetailsPageComponent,
+    canActivate: [isAuthenticatedCanActivateFn],
+  },
+  {
+    path: 'reservations/details/activities/:id',
+    component: ActivityReservationDetailsPageComponent,
     canActivate: [isAuthenticatedCanActivateFn],
   },
   {
