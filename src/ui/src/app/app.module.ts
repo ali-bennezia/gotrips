@@ -14,6 +14,9 @@ import {
   ionBaseballOutline,
   ionSearchOutline,
   ionStar,
+  ionCaretBackOutline,
+  ionCaretForwardOutline,
+  ionCalendarOutline,
 } from '@ng-icons/ionicons';
 import { RouterModule } from '@angular/router';
 import ROUTES from './routing/ROUTES';
@@ -58,6 +61,7 @@ import { ActivityReservationDetailsMinComponent } from './pages/reservations/res
 import { FlightReservationDetailsPageComponent } from './pages/reservations/flight-reservation-details-page/flight-reservation-details-page.component';
 import { HotelReservationDetailsPageComponent } from './pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
 import { ActivityReservationDetailsPageComponent } from './pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
+import { CalendarComponent } from './utils/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -103,6 +107,7 @@ import { ActivityReservationDetailsPageComponent } from './pages/reservations/ac
     FlightReservationDetailsPageComponent,
     HotelReservationDetailsPageComponent,
     ActivityReservationDetailsPageComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -114,6 +119,9 @@ import { ActivityReservationDetailsPageComponent } from './pages/reservations/ac
       ionBusinessOutline,
       ionBaseballOutline,
       ionSearchOutline,
+      ionCaretBackOutline,
+      ionCaretForwardOutline,
+      ionCalendarOutline,
     }),
     RouterModule.forRoot(ROUTES),
     HttpClientModule,
