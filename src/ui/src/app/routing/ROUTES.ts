@@ -28,6 +28,7 @@ import { ReservationsListPageComponent } from '../pages/reservations/reservation
 import { FlightReservationDetailsPageComponent } from '../pages/reservations/flight-reservation-details-page/flight-reservation-details-page.component';
 import { HotelReservationDetailsPageComponent } from '../pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
 import { ActivityReservationDetailsPageComponent } from '../pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
+import { FlightsSearchPageComponent } from '../pages/flights/flights-search-page/flights-search-page.component';
 
 const ROUTES: Routes = [
   {
@@ -53,6 +54,10 @@ const ROUTES: Routes = [
   {
     path: 'flights/details/:id',
     component: FlightDetailsPageComponent,
+  },
+  {
+    path: 'flights/search',
+    component: FlightsSearchPageComponent,
   },
   {
     path: 'hotels',

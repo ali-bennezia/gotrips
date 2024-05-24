@@ -43,6 +43,7 @@ import fr.alib.gotrips.model.repository.FlightRepository;
 import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
+import fr.alib.gotrips.utils.TimeUtils;
 import io.jsonwebtoken.lang.Arrays;
 
 @Service
@@ -96,7 +97,7 @@ public class FlightService {
 				.filter(f -> {
 					return getFlightOccupiedSeats( f.getId() ) < f.getSeats() 
 							&& ( 
-									landingDate.isPresent() && new Date( f.getLandingDate().getTime() ).equals(landingDate.get()) 
+									(landingDate.isPresent() && TimeUtils.areDatesInSameDay(f.getLandingDate(), landingDate.get()))
 									|| landingDate.isEmpty() 
 								);
 				})
@@ -111,7 +112,7 @@ public class FlightService {
 				.filter(f -> {
 					return getFlightOccupiedSeats( f.getId() ) < f.getSeats()
 							&& ( 
-									departureDate.isPresent() && new Date( f.getDepartureDate().getTime() ).equals(departureDate.get()) 
+									(departureDate.isPresent() && TimeUtils.areDatesInSameDay( f.getDepartureDate(), departureDate.get()))
 									|| departureDate.isEmpty() 
 								);
 				})
@@ -143,8 +144,7 @@ public class FlightService {
 		if (sortOption != null && !sortOpts.contains(sortOption)) {
 			throw new IllegalArgumentException();
 		}
-		
-		
+				
 		try {
 			Integer order = params.get("srtordr") == null ? 1 : -1;
 			Pageable pageable = PageRequest.of(

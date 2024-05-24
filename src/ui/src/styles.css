@@ -179,3 +179,18 @@ input.ng-touched.ng-invalid {
 .eval-stars > ng-icon[name="ionStar"].grey-star {
   color: grey;
 }
+
+.search-page-cont {
+  max-width: 1100px;
+}
+
+.search-extras {
+  opacity: 1;
+}
+
+.search-extras-hidden {
+  opacity: 0;
+  user-select: none;
+  pointer-events: none;
+  position: absolute;
+}

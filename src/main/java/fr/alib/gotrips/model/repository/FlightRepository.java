@@ -14,19 +14,26 @@ import fr.alib.gotrips.model.entity.offers.Flight;
 
 @Repository
 public interface FlightRepository extends JpaRepository<Flight, Long> {
-	@Query(value = "SELECT f.* FROM FLIGHT f WHERE MATCH "
-			+ "(f.departure_airport, f.arrival_airport, "
-			+ "f.arrival_city, f.arrival_country, f.arrival_street, f.arrival_zip_code, "
-			+ "f.departure_city, f.departure_country, f.departure_street, f.departure_zip_code)"
-			+ " AGAINST (:text IN NATURAL LANGUAGE MODE) "
+	@Query(value = "SELECT f.* FROM FLIGHT f "
 			+ "WHERE "
+			+ "( :text IS NULL OR "
+			+ "( f.departure_airport LIKE '%:text%' AND "
+			+ "f.arrival_airport LIKE '%:text%' AND "
+			+ "f.arrival_city LIKE '%:text%' AND "
+			+ "f.arrival_country LIKE '%:text%' AND "
+			+ "f.arrival_street LIKE '%:text%' AND "
+			+ "f.arrival_zip_code LIKE '%:text%' AND "
+			+ "f.departure_city LIKE '%:text%' AND "
+			+ "f.departure_country LIKE '%:text%' AND "
+			+ "f.departure_street LIKE '%:text%' AND "
+			+ "f.departure_zip_code LIKE '%:text%' ) ) AND "
 			+ "( :ocntry IS NULL OR f.departure_country = :ocntry ) AND "
 			+ "( :dcntry IS NULL OR f.arrival_country = :dcntry ) AND "
 			+ "( :miprc IS NULL OR f.price >= :miprc ) AND "
 			+ "( :mxprc IS NULL OR f.price <= :mxprc ) AND "
 			+ "( :midate IS NULL OR f.departure_date = :midate ) AND "
 			+ "( :mxdate IS NULL OR f.landing_date = :mxdate ) AND "
-			+ "( :mieval IS NULL OR f.average_evalution >= :mieval ) AND "
+			+ "( :mieval IS NULL OR f.average_evaluation >= :mieval ) AND "
 			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
 			+ "", nativeQuery = true)
 	Page<Flight> findFullTextSearchAll(

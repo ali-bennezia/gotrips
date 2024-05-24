@@ -1,3 +1,5 @@
 .pagination {
-  margin: 16px;
+  margin: 0 auto;
+  margin-top: 16px;
+  width: auto;
 }

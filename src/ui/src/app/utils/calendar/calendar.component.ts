@@ -14,12 +14,19 @@ export class CalendarComponent implements OnInit {
 
   @Output()
   onSelectedDate: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output()
+  onChangedViewedMonth: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output()
+  onChangedFirstKnownDate: EventEmitter<Date> = new EventEmitter<Date>();
+  @Output()
+  onChangedLastKnownDate: EventEmitter<Date> = new EventEmitter<Date>();
 
   displayedDays: number[] = [];
   displayedFirstViewedMonthDayIndex: number = 0;
   displayedLastViewedMonthDayIndex: number = 0;
   viewedMonthFirstWeekDay: number = 0;
   firstKnownDate: Date | null = null;
+  lastKnownDate: Date | null = null;
   selectedDate: Date | null = null;
   selectedCalendarIndex: number | null = null;
 
@@ -80,11 +87,15 @@ export class CalendarComponent implements OnInit {
     } else return false;
   }
 
+  getDayDateFromDisplayIndex(displayIndex: number) {
+    let newDate = new Date(this.firstKnownDate!);
+    newDate.setDate(newDate.getDate() + displayIndex);
+    return newDate;
+  }
+
   getDayDate(calendarIndex: number) {
     let dIndex = this.getDisplayedDaysIndexFromCalendarIndex(calendarIndex);
-    let newDate = new Date(this.firstKnownDate!);
-    newDate.setDate(newDate.getDate() + dIndex);
-    return newDate;
+    return this.getDayDateFromDisplayIndex(dIndex);
   }
 
   onClickDay(calendarIndex: number) {
@@ -139,6 +150,12 @@ export class CalendarComponent implements OnInit {
     }
 
     this.firstKnownDate = new Date(val.getFullYear(), val.getMonth() - 1, 1);
+    this.lastKnownDate = this.getDayDateFromDisplayIndex(
+      this.displayedDays.length - 1
+    );
+    this.onChangedFirstKnownDate.next(this.firstKnownDate);
+    this.onChangedLastKnownDate.next(this.lastKnownDate);
+    this.onChangedViewedMonth.next(this.viewedMonth);
   }
   get viewedMonth() {
     return this._viewedMonth;

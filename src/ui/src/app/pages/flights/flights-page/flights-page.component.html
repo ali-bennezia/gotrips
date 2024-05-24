@@ -2,7 +2,7 @@
   <h3 class="display-3">Travel the world with us.</h3>
   <h6 class="display-6">Search for flights all across the world</h6>
 </div>
-<form class="search-form" (ngSubmit)="onSubmit($event)">
+<form class="search-form" (ngSubmit)="onSubmit($event)" [formGroup]="group">
   <div class="row">
     <div class="col">
       <label for="formControlDeparture" class="form-label">From</label>
@@ -12,7 +12,7 @@
         formControlName="originCountry"
         id="formControlDeparture"
       >
-        <option selected>Select country</option>
+        <option selected [value]="null">Select country</option>
         <option value="Afghanistan">Afghanistan</option>
         <option value="Åland Islands">Åland Islands</option>
         <option value="Albania">Albania</option>
@@ -307,7 +307,7 @@
         formControlName="destinationCountry"
         id="formControlArrival"
       >
-        <option selected>Select country</option>
+        <option selected [value]="null">Select country</option>
         <option value="Afghanistan">Afghanistan</option>
         <option value="Åland Islands">Åland Islands</option>
         <option value="Albania">Albania</option>
@@ -603,11 +603,22 @@
       <app-calendar
         label="Select departure date"
         [dayDisabledPredicate]="departureCalendarDaysDisabledPredicate"
+        (onSelectedDate)="onDepartureSelectedDateChanged($event)"
+        (onChangedFirstKnownDate)="departureFirstKnownDate = $event"
+        (onChangedLastKnownDate)="departureLastKnownDate = $event"
+        (onChangedViewedMonth)="onDepartureViewedMonthChanged($event)"
       ></app-calendar>
     </div>
     <div class="col">
       <label for="formControlArrival" class="form-label">Arrival date</label>
-      <app-calendar label="Select arrival date"></app-calendar>
+      <app-calendar
+        label="Select arrival date"
+        [dayDisabledPredicate]="arrivalCalendarDaysDisabledPredicate"
+        (onSelectedDate)="onArrivalSelectedDateChanged($event)"
+        (onChangedFirstKnownDate)="arrivalFirstKnownDate = $event"
+        (onChangedLastKnownDate)="arrivalLastKnownDate = $event"
+        (onChangedViewedMonth)="onArrivalViewedMonthChanged($event)"
+      ></app-calendar>
     </div>
   </div>
 
@@ -617,6 +628,7 @@
       placeholder="Queries ..."
       aria-label="Search"
       class="col-sm-9"
+      formControlName="query"
     />
     <button type="submit" class="col-sm-3">
       <ng-icon name="ionSearchOutline"></ng-icon> Search
