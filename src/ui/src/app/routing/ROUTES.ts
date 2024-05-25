@@ -32,6 +32,7 @@ import { FlightsSearchPageComponent } from '../pages/flights/flights-search-page
 import { ActivityListPageComponent } from '../pages/activities/crud/activity-list-page/activity-list-page.component';
 import { ActivityAddPageComponent } from '../pages/activities/crud/activity-add-page/activity-add-page.component';
 import { ActivitiesSearchPageComponent } from '../pages/activities/activities-search-page/activities-search-page.component';
+import { HotelsSearchPageComponent } from '../pages/hotels/hotels-search-page/hotels-search-page.component';
 
 const ROUTES: Routes = [
   {
@@ -85,6 +86,10 @@ const ROUTES: Routes = [
   {
     path: 'hotels/details/:id',
     component: HotelDetailsPageComponent,
+  },
+  {
+    path: 'hotels/search',
+    component: HotelsSearchPageComponent,
   },
   {
     path: 'activities',

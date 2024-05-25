@@ -67,6 +67,7 @@ import { ActivitiesSearchPageComponent } from './pages/activities/activities-sea
 import { ActivitiesSearchResultComponent } from './pages/activities/activities-search-page/activities-search-result/activities-search-result.component';
 import { PeriodCalendarComponent } from './utils/period-calendar/period-calendar.component';
 import { HotelsSearchPageComponent } from './pages/hotels/hotels-search-page/hotels-search-page.component';
+import { HotelsSearchResultComponent } from './pages/hotels/hotels-search-page/hotels-search-result/hotels-search-result.component';
 
 @NgModule({
   declarations: [
@@ -118,6 +119,7 @@ import { HotelsSearchPageComponent } from './pages/hotels/hotels-search-page/hot
     ActivitiesSearchResultComponent,
     PeriodCalendarComponent,
     HotelsSearchPageComponent,
+    HotelsSearchResultComponent,
   ],
   imports: [
     BrowserModule,

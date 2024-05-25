@@ -5,7 +5,6 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { ActivityDetailsDto } from 'src/app/data/activity/activity-details-dto';
 
 import { CalendarPairUnitDto } from 'src/app/data/calendar/calendar-pair-unit-dto';
-import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
 import { CalendarComponent } from 'src/app/utils/calendar/calendar.component';
 import { environment } from 'src/environments/environment';
 
