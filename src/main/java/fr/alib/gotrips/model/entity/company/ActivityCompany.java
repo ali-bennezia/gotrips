@@ -76,7 +76,7 @@ public class ActivityCompany {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(activities, address, description, id, name, user);
+		return Objects.hash(activities, address, description, id, name);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -89,7 +89,7 @@ public class ActivityCompany {
 		ActivityCompany other = (ActivityCompany) obj;
 		return Objects.equals(activities, other.activities) && Objects.equals(address, other.address)
 				&& Objects.equals(description, other.description) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name) && Objects.equals(user, other.user);
+				&& Objects.equals(name, other.name);
 	}
 	public ActivityCompany(Long id, User user, String name, String description, List<Activity> activities,
 			Address address) {

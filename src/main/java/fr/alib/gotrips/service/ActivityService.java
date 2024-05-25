@@ -173,6 +173,7 @@ public class ActivityService {
 			
 			return activityDetails;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ArrayList<ActivityDetailsDTO>();
 		}
 		
@@ -298,7 +299,7 @@ public class ActivityService {
 		
 		final Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 		Pageable pageable = PageRequest.of(page, 10);
-		return this.evalRepo.findAllByFlightId(activityId, pageable).stream().map(e -> {
+		return this.evalRepo.findAllByActivityId(activityId, pageable).stream().map(e -> {
 			return new EvaluationDetailsDTO(e);
 		}).collect(Collectors.toList());
 	}

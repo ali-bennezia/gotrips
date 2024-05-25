@@ -3,12 +3,12 @@
     <form [formGroup]="group">
       <div class="row">
         <div class="col">
-          <label for="formControlDepartureCountry">Country</label>
+          <label for="formControlCountry">Country</label>
           <select
             class="form-select"
             aria-label="Select country"
-            formControlName="departureCountry"
-            id="formControlDepartureCountry"
+            formControlName="country"
+            id="formControlCountry"
             (input)="onInput('cntry', $any($event.target!).value)"
           >
             <option selected [value]="null">Select country</option>

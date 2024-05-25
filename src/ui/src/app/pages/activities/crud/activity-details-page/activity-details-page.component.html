@@ -11,7 +11,7 @@
     <span *ngIf="data != null; else ngElse">
       <div class="row">
         <h4>{{ data.title }}</h4>
-        <h5>{{ data.description | date }}</h5>
+        <h5>{{ data.description }}</h5>
         <p>Spots: {{ data.spots }}</p>
         <h6>Address</h6>
         <p>{{ data.address.city }}, {{ data.address.country }}</p>
@@ -28,6 +28,14 @@
         [note]="roundedAverageEval()"
       ></app-stars-evaluation>
       <p>Average evaluation: {{ data.averageEvaluation }}</p>
+      <app-period-calendar
+        label="Select reservation dates"
+        (onSelectedFirstDate)="beginDate = $event"
+        (onSelectedSecondDate)="endDate = $event"
+        (onChangedFirstKnownDate)="firstKnownDate = $event"
+        (onChangedLastKnownDate)="lastKnownDate = $event"
+        [dayDisabledPredicate]="calendarDaysDisabledPredicate"
+      ></app-period-calendar>
       <app-interactive-list-group
         *ngIf="userPaymentList.length > 0; else noPaymentMeansBlock"
         hideLabel="Hide payment means"
@@ -52,10 +60,19 @@
             data.id,
             paymentMeanId
           ]"
+          [queryParams]="{
+            beginTime: beginDate?.getTime(),
+            endTime: endDate?.getTime()
+          }"
         >
           <button
             class="btn btn-primary"
-            [disabled]="userPaymentList.length <= 0 || paymentMeanId == null"
+            [disabled]="
+              userPaymentList.length <= 0 ||
+              paymentMeanId == null ||
+              beginDate == null ||
+              endDate == null
+            "
           >
             Proceed to payment
           </button></a

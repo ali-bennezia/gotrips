@@ -189,7 +189,7 @@ public class ActivityController {
 		}	
 	}
 	
-	@GetMapping("/{id}/reservations/getAll")
+	@GetMapping("/reservations/getAll")
 	public ResponseEntity<?> getAllReservations(
 			@RequestParam Map<String, String> params
 			)

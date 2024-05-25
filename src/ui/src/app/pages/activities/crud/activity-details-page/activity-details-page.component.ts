@@ -144,4 +144,13 @@ export class ActivityDetailsPageComponent {
       this.authenticationSubscription.unsubscribe();
     this.cleanup();
   }
+
+  calendarDaysDisabledPredicate = (d: Date) => {
+    return false;
+  };
+
+  beginDate: Date | null = null;
+  endDate: Date | null = null;
+  firstKnownDate: Date | null = null;
+  lastKnownDate: Date | null = null;
 }

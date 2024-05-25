@@ -1,1 +1,33 @@
-<p>activities-search-result works!</p>
+<a
+  [routerLink]="['/activities', 'details', details.id]"
+  class="search-result-link"
+>
+  <div class="search-result">
+    <div class="row">
+      <div class="col">
+        <h4>{{ details.title }}</h4>
+        <p>{{ details.description }}</p>
+        <h6>Address</h6>
+        <p>
+          {{ details.address.zipCode }} {{ details.address.city }},
+          {{ details.address.country }}
+        </p>
+      </div>
+      <div class="col">
+        <p>Spots: {{ details.spots }}</p>
+        <p>Average note: {{ details.averageEvaluation }}</p>
+        <p>Company: {{ details.company.name }}</p>
+      </div>
+
+      <hr />
+      <div>
+        <span style="float: right">
+          <app-stars-evaluation
+            [note]="details.averageEvaluation"
+          ></app-stars-evaluation
+        ></span>
+        <h3>${{ details.pricePerDay }} / day</h3>
+      </div>
+    </div>
+  </div>
+</a>

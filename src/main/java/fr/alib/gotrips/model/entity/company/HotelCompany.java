@@ -77,7 +77,7 @@ public class HotelCompany {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, description, hotels, id, name, user);
+		return Objects.hash(address, description, hotels, id, name);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -90,7 +90,7 @@ public class HotelCompany {
 		HotelCompany other = (HotelCompany) obj;
 		return Objects.equals(address, other.address) && Objects.equals(description, other.description)
 				&& Objects.equals(hotels, other.hotels) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name) && Objects.equals(user, other.user);
+				&& Objects.equals(name, other.name);
 	}
 	public HotelCompany(Long id, User user, String name, String description, List<Hotel> hotels, Address address) {
 		super();

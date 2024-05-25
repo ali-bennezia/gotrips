@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
 import { FlightReservationDto } from 'src/app/data/reservations/flight-reservation-dto';
 import { PeriodReservationDto } from 'src/app/data/reservations/period-reservation-dto';
 import { environment } from 'src/environments/environment';
 
+import { lastValueFrom } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 enum PaymentState {
@@ -15,12 +16,16 @@ enum PaymentState {
   SUCCESS,
 }
 
+export interface Period {
+  beginTime: number;
+  endTime: number;
+}
+
 interface PaymentInfo {
   offerType: string;
   offerId: number;
   paymentMeanId: number;
-  beginTime?: number;
-  endTime?: number;
+  period?: Period;
 }
 
 @Component({
@@ -33,6 +38,8 @@ export class ReservationPayPageComponent {
   state: PaymentState = PaymentState.UNINITIALIZED;
   info: PaymentInfo | null = null;
   errorDisplay: string = '';
+
+  queryParamMap: ParamMap | null = null;
 
   constructor(
     activatedRoute: ActivatedRoute,
@@ -55,6 +62,19 @@ export class ReservationPayPageComponent {
           offerId: offerId ?? -1,
           paymentMeanId: paymentMeanId ?? -1,
         };
+        if (
+          activatedRoute.snapshot.queryParamMap.has('beginTime') &&
+          activatedRoute.snapshot.queryParamMap.has('endTime')
+        ) {
+          this.info.period = {
+            beginTime: Number(
+              activatedRoute.snapshot.queryParamMap.get('beginTime')
+            ),
+            endTime: Number(
+              activatedRoute.snapshot.queryParamMap.get('endTime')
+            ),
+          };
+        }
       }
 
       if (
@@ -79,8 +99,8 @@ export class ReservationPayPageComponent {
       default:
         return {
           cardId: this.info!.paymentMeanId,
-          beginTime: this.info!.beginTime!,
-          endTime: this.info!.endTime!,
+          beginTime: this.info!.period!.beginTime,
+          endTime: this.info!.period!.endTime,
         };
     }
   }
@@ -107,7 +127,7 @@ export class ReservationPayPageComponent {
     this.state = PaymentState.LOADING;
     this.http
       .post(
-        `${environment.backendUrl}/api/flight/${this.info?.offerId}/reservations/create`,
+        `${environment.backendUrl}/api/${this.info?.offerType}/${this.info?.offerId}/reservations/create`,
         this.getDto(),
         {
           headers: {

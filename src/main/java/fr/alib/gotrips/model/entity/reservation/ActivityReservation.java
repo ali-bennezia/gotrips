@@ -156,6 +156,17 @@ public class ActivityReservation {
 	public ActivityReservation() {
 		super();
 	}
+	@Override
+	public String toString() {
+		return "ActivityReservation [id=" + id + ", user=" + user + ", activity=" + activity + ", price=" + price
+				+ ", paymentTime=" + paymentTime + ", paymentData=" + paymentData + ", spots=" + spots + ", beginDate="
+				+ beginDate + ", endDate=" + endDate + ", days=" + days + ", getId()=" + getId() + ", getUser()="
+				+ getUser() + ", getActivity()=" + getActivity() + ", getPrice()=" + getPrice() + ", getPaymentTime()="
+				+ getPaymentTime() + ", getPaymentData()=" + getPaymentData() + ", getBeginDate()=" + getBeginDate()
+				+ ", getEndDate()=" + getEndDate() + ", getSpots()=" + getSpots() + ", getDays()=" + getDays()
+				+ ", hashCode()=" + hashCode() + ", getClass()=" + getClass() + ", toString()=" + super.toString()
+				+ "]";
+	}
 
 	
 	

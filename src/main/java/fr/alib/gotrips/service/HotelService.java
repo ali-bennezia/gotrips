@@ -305,7 +305,7 @@ public class HotelService {
 		
 		final Integer page = params.get("page") != null ? Integer.valueOf(params.get("page")) : 0;
 		Pageable pageable = PageRequest.of(page, 10);
-		return this.evalRepo.findAllByFlightId(hotelId, pageable).stream().map(e -> {
+		return this.evalRepo.findAllByHotelId(hotelId, pageable).stream().map(e -> {
 			return new EvaluationDetailsDTO(e);
 		}).collect(Collectors.toList());
 	}

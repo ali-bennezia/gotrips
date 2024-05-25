@@ -129,7 +129,7 @@ export class FlightsSearchPageComponent implements AfterViewChecked {
   private _page: number = 1;
   set page(val: number) {
     this._page = val;
-    this.onInput('page', val);
+    this.onInput('page', val - 1);
   }
   get page() {
     return this._page;

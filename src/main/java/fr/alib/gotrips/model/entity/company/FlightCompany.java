@@ -76,7 +76,7 @@ public class FlightCompany {
 	}
 	@Override
 	public int hashCode() {
-		return Objects.hash(address, description, flights, id, name, user);
+		return Objects.hash(address, description, flights, id, name);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -89,7 +89,7 @@ public class FlightCompany {
 		FlightCompany other = (FlightCompany) obj;
 		return Objects.equals(address, other.address) && Objects.equals(description, other.description)
 				&& Objects.equals(flights, other.flights) && Objects.equals(id, other.id)
-				&& Objects.equals(name, other.name) && Objects.equals(user, other.user);
+				&& Objects.equals(name, other.name);
 	}
 	public FlightCompany(Long id, User user, String name, String description, List<Flight> flights, Address address) {
 		super();
