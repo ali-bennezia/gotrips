@@ -1,3 +1,4 @@
+import { AddressDto } from '../auth/address-dto';
 import { CompanyDetailsDto } from '../user/company-details-dto';
 
 export interface FlightDetailsDto {
@@ -9,4 +10,6 @@ export interface FlightDetailsDto {
   departureAirport: string;
   arrivalAirport: string;
   price: number;
+  departureAddress: AddressDto;
+  arrivalAddress: AddressDto;
 }

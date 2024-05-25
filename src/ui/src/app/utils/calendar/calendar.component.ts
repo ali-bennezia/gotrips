@@ -98,6 +98,17 @@ export class CalendarComponent implements OnInit {
     return this.getDayDateFromDisplayIndex(dIndex);
   }
 
+  selectDate(d: Date) {
+    this.selectedDate = d;
+    this.selectedCalendarIndex = null;
+    this.onSelectedDate.next(d);
+  }
+
+  selectDateNoEvent(d: Date) {
+    this.selectedDate = d;
+    this.selectedCalendarIndex = null;
+  }
+
   onClickDay(calendarIndex: number) {
     if (this.isDayDisabled(calendarIndex)) return;
     this.selectedDate = this.getDayDate(calendarIndex);

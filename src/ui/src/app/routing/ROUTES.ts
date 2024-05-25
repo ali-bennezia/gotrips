@@ -29,6 +29,8 @@ import { FlightReservationDetailsPageComponent } from '../pages/reservations/fli
 import { HotelReservationDetailsPageComponent } from '../pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
 import { ActivityReservationDetailsPageComponent } from '../pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
 import { FlightsSearchPageComponent } from '../pages/flights/flights-search-page/flights-search-page.component';
+import { ActivityListPageComponent } from '../pages/activities/crud/activity-list-page/activity-list-page.component';
+import { ActivityAddPageComponent } from '../pages/activities/crud/activity-add-page/activity-add-page.component';
 
 const ROUTES: Routes = [
   {
@@ -89,22 +91,22 @@ const ROUTES: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'activity/company/details',
+    path: 'activities/company/details',
     component: ActivityCompanyPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
   },
   {
     path: 'activities/manage',
-    component: HotelListPageComponent,
+    component: ActivityListPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
   },
   {
     path: 'activities/form',
-    component: HotelAddPageComponent,
+    component: ActivityAddPageComponent,
     canActivate: [hasRoleCanActivateFnFactory('ROLE_ACTIVITY_COMPANY')],
   },
   {
-    path: 'activities/details',
+    path: 'activities/details/:id',
     component: ActivityDetailsPageComponent,
   },
   {

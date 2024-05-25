@@ -3,6 +3,7 @@ package fr.alib.gotrips.model.dto.outbound;
 import java.util.Date;
 import java.util.Objects;
 
+import fr.alib.gotrips.model.dto.duplex.AddressDTO;
 import fr.alib.gotrips.model.entity.offers.Flight;
 
 public class FlightDetailsDTO {
@@ -14,6 +15,8 @@ public class FlightDetailsDTO {
 	private String departureAirport;
 	private String arrivalAirport;
 	float price;
+	private AddressDTO departureAddress;
+	private AddressDTO arrivalAddress;
 	public Long getId() {
 		return id;
 	}
@@ -62,10 +65,23 @@ public class FlightDetailsDTO {
 	public void setPrice(float price) {
 		this.price = price;
 	}
+	public AddressDTO getDepartureAddress() {
+		return departureAddress;
+	}
+	public void setDepartureAddress(AddressDTO departureAddress) {
+		this.departureAddress = departureAddress;
+	}
+	public AddressDTO getArrivalAddress() {
+		return arrivalAddress;
+	}
+	public void setArrivalAddress(AddressDTO arrivalAddress) {
+		this.arrivalAddress = arrivalAddress;
+	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(arrivalAirport, averageEvaluation, company, departureAirport, departureDate, id,
-				landingDate, price);
+		return Objects.hash(arrivalAddress, arrivalAirport, averageEvaluation, company, departureAddress,
+				departureAirport, departureDate, id, landingDate, price);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -76,15 +92,17 @@ public class FlightDetailsDTO {
 		if (getClass() != obj.getClass())
 			return false;
 		FlightDetailsDTO other = (FlightDetailsDTO) obj;
-		return Objects.equals(arrivalAirport, other.arrivalAirport)
+		return Objects.equals(arrivalAddress, other.arrivalAddress)
+				&& Objects.equals(arrivalAirport, other.arrivalAirport)
 				&& Float.floatToIntBits(averageEvaluation) == Float.floatToIntBits(other.averageEvaluation)
-				&& Objects.equals(company, other.company) && Objects.equals(departureAirport, other.departureAirport)
+				&& Objects.equals(company, other.company) && Objects.equals(departureAddress, other.departureAddress)
+				&& Objects.equals(departureAirport, other.departureAirport)
 				&& Objects.equals(departureDate, other.departureDate) && Objects.equals(id, other.id)
 				&& Objects.equals(landingDate, other.landingDate)
 				&& Float.floatToIntBits(price) == Float.floatToIntBits(other.price);
 	}
 	public FlightDetailsDTO(Long id, CompanyDetailsDTO company, float averageEvaluation, Date departureDate,
-			Date landingDate, String departureAirport, String arrivalAirport, float price) {
+			Date landingDate, String departureAirport, String arrivalAirport, float price, AddressDTO departureAddress, AddressDTO arrivalAddress) {
 		super();
 		this.id = id;
 		this.company = company;
@@ -94,6 +112,8 @@ public class FlightDetailsDTO {
 		this.departureAirport = departureAirport;
 		this.arrivalAirport = arrivalAirport;
 		this.price = price;
+		this.departureAddress = departureAddress;
+		this.arrivalAddress = arrivalAddress;
 	}
 	public FlightDetailsDTO() {
 		super();
@@ -108,6 +128,8 @@ public class FlightDetailsDTO {
 		this.departureAirport = flight.getDepartureAirport();
 		this.arrivalAirport = flight.getArrivalAirport();
 		this.price = flight.getPrice().floatValue();
+		this.departureAddress = new AddressDTO(flight.getDepartureAddress());
+		this.arrivalAddress = new AddressDTO(flight.getArrivalAddress());
 	}
 	
 }

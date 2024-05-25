@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CalendarPairUnitDto } from 'src/app/data/calendar/calendar-pair-unit-dto';
@@ -130,8 +130,10 @@ export class FlightsPageComponent {
     this.router.navigate(['/flights', 'search'], {
       queryParams: {
         query: qry,
-        originCountry: oCountry,
-        destinationCountry: dCountry,
+        departureCountry: oCountry,
+        arrivalCountry: dCountry,
+        departureDate: this.departureDate?.getTime(),
+        arrivalDate: this.arrivalDate?.getTime(),
       },
     });
   }

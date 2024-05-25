@@ -55,7 +55,7 @@ export class FlightDetailsPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
-    private authService: AuthService,
+    public authService: AuthService,
     activatedRoute: ActivatedRoute,
     private userService: UserService
   ) {

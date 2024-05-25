@@ -1,0 +1,30 @@
+<a
+  [routerLink]="['/flights', 'details', details.id]"
+  class="search-result-link"
+>
+  <div class="search-result">
+    <div class="row">
+      <div class="col">
+        <h4>From</h4>
+        <p>
+          {{ details.departureAddress.country }},
+          {{ details.departureAddress.city }}
+        </p>
+        <p>{{ details.departureAirport }}</p>
+        <p>{{ details.departureDate | date : "short" }}</p>
+      </div>
+      <div class="col">
+        <h4>To</h4>
+        <p>
+          {{ details.arrivalAddress.country }},
+          {{ details.arrivalAddress.city }}
+        </p>
+        <p>{{ details.arrivalAirport }}</p>
+        <p>{{ details.landingDate | date : "short" }}</p>
+      </div>
+
+      <hr />
+      <h3>${{ details.price }}</h3>
+    </div>
+  </div>
+</a>

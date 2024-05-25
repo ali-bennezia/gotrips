@@ -48,6 +48,7 @@ import fr.alib.gotrips.model.repository.HotelRepository;
 import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
 import fr.alib.gotrips.model.repository.reservation.HotelReservationRepository;
+import fr.alib.gotrips.utils.SanitationUtils;
 import io.jsonwebtoken.lang.Arrays;
 
 @Service
@@ -162,14 +163,14 @@ public class HotelService {
 							order == 1 ? Sort.by(params.get("srtby")).ascending() : Sort.by(params.get("srtby")).descending()
 			);
 			
-			Page<Hotel> result = this.hRepo.findFullTextSearchAll(
-					params.get("qry"), 
-					params.get("cntry"), 
-					params.get("city"), 
-					Float.valueOf( params.get("miprc") ), 
-					Float.valueOf( params.get("mxprc") ), 
-					Float.valueOf( params.get("mieval") ), 
-					Float.valueOf( params.get("mxeval") ), 
+			Page<Hotel> result = this.hRepo.search(
+					SanitationUtils.stringGetNullIfEmpty(params.get("qry")), 
+					SanitationUtils.stringGetNullIfEmpty(params.get("cntry")), 
+					SanitationUtils.stringGetNullIfEmpty(params.get("city")), 
+					SanitationUtils.floatGetNullIfEmpty(params.get("miprc")), 
+					SanitationUtils.floatGetNullIfEmpty(params.get("mxprc")), 
+					SanitationUtils.floatGetNullIfEmpty(params.get("mieval")), 
+					SanitationUtils.floatGetNullIfEmpty(params.get("mxeval")), 
 					pageable
 					);
 			

@@ -9,7 +9,7 @@
             aria-label="Select country"
             formControlName="departureCountry"
             id="formControlDepartureCountry"
-            (input)="onInput()"
+            (input)="onInput('ocntry', $any($event.target!).value)"
           >
             <option selected [value]="null">Select country</option>
             <option value="Afghanistan">Afghanistan</option>
@@ -315,7 +315,7 @@
             aria-label="Select country"
             formControlName="arrivalCountry"
             id="formControlArrivalCountry"
-            (input)="onInput()"
+            (input)="onInput('dcntry', $any($event.target!).value)"
           >
             <option selected [value]="null">Select country</option>
             <option value="Afghanistan">Afghanistan</option>
@@ -624,6 +624,7 @@
             (onChangedFirstKnownDate)="departureFirstKnownDate = $event"
             (onChangedLastKnownDate)="departureLastKnownDate = $event"
             (onChangedViewedMonth)="onDepartureViewedMonthChanged($event)"
+            #departureCalendar
           ></app-calendar>
         </div>
         <div class="col">
@@ -636,6 +637,7 @@
             (onChangedFirstKnownDate)="arrivalFirstKnownDate = $event"
             (onChangedLastKnownDate)="arrivalLastKnownDate = $event"
             (onChangedViewedMonth)="onArrivalViewedMonthChanged($event)"
+            #arrivalCalendar
           ></app-calendar>
         </div>
         <button
@@ -665,7 +667,7 @@
               step="0.01"
               placeholder="Enter minimum price ..."
               formControlName="minPrice"
-              (input)="onInput()"
+              (input)="onInput('miprc', $any($event.target!).value)"
             />
           </div>
           <div class="col form-group">
@@ -677,7 +679,7 @@
               step="0.01"
               placeholder="Enter maximum price ..."
               formControlName="maxPrice"
-              (input)="onInput()"
+              (input)="onInput('mxprc', $any($event.target!).value)"
             />
           </div>
           <div class="col form-group">
@@ -689,7 +691,7 @@
               step="0.01"
               placeholder="Enter minimum evaluation ..."
               formControlName="minEval"
-              (input)="onInput()"
+              (input)="onInput('mieval', $any($event.target!).value)"
             />
           </div>
           <div class="col form-group">
@@ -701,7 +703,7 @@
               step="0.01"
               placeholder="Enter maximum evaluation ..."
               formControlName="maxEval"
-              (input)="onInput()"
+              (input)="onInput('mxeval', $any($event.target!).value)"
             />
           </div>
           <div class="col form-group">
@@ -710,7 +712,7 @@
               class="form-control"
               id="formControlSortBy"
               formControlName="sortBy"
-              (input)="onInput()"
+              (input)="onInput('srtby', $any($event.target!).value)"
             >
               <option selected [value]="null">Select sort by option</option>
               <option [value]="s[1]" *ngFor="let s of sortingOptions">
@@ -724,7 +726,7 @@
               class="form-control"
               id="formControlSortOrder"
               formControlName="sortOrder"
-              (input)="onInput()"
+              (input)="onInput('srtordr', $any($event.target!).value)"
             >
               <option selected [value]="null">Select sort order option</option>
               <option [value]="1">Ascending</option>
@@ -745,10 +747,16 @@
           </div>
         </div>
       </span>
-      <p>{{ getSearchOptions() | json }}</p>
-      <p>{{ getUrlParametersString() }}</p>
     </form>
   </div>
+  <p>{{ getSearchOptions() | json }}</p>
+  <p>{{ getUrlParametersString() }}</p>
+</div>
+<div class="search-result-cont">
+  <app-flights-search-result
+    *ngFor="let d of results"
+    [details]="d"
+  ></app-flights-search-result>
 </div>
 <div style="width: 100%">
   <div style="width: 100px; margin: 0 auto">

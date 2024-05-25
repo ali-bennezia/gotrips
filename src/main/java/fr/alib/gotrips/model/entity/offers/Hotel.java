@@ -154,6 +154,7 @@ public class Hotel {
 	public Hotel(HotelDTO dto) {
 		super();
 		this.applyDTO(dto);
+		this.averageEvaluation = new BigDecimal("0");
 	}
 	public Hotel() {
 		super();

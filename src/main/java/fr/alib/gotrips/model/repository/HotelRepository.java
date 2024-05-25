@@ -15,19 +15,27 @@ import fr.alib.gotrips.model.entity.offers.Hotel;
 
 @Repository
 public interface HotelRepository extends JpaRepository<Hotel, Long> {
-	@Query(value = "SELECT f.* FROM HOTEL f WHERE MATCH "
-			+ "(f.city, f.country, f.street, f.zip_code)"
-			+ " AGAINST (:text IN NATURAL LANGUAGE MODE) "
-			+ "WHERE "
-			+ "( :cntry IS NULL OR f.country = :cntry ) AND "
-			+ "( :city IS NULL OR f.city = :city ) AND "
-			+ "( :miprc IS NULL OR f.price_per_night >= :miprc ) AND "
-			+ "( :mxprc IS NULL OR f.price_per_night <= :mxprc ) AND "
-			+ "( :mieval IS NULL OR f.average_evaluation >= :mieval ) AND "
-			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
+
+	@Query(value = "SELECT * FROM HOTEL h WHERE "
+			+ "( :query IS NULL OR "
+			+ "("
+			+ " ( h.city LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( h.country LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( h.street LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( h.zip_code LIKE CONCAT('%', :query, '%') ) "
+			+ ")"
+			+ ") AND "
+			+ "("
+			+ "( :cntry IS NULL OR h.country LIKE CONCAT('%', :cntry, '%') ) AND "
+			+ "( :city IS NULL OR h.city LIKE CONCAT('%', :city, '%') ) AND "
+			+ "( :miprc IS NULL OR h.price_per_night >= :miprc ) AND "
+			+ "( :mxprc IS NULL OR h.price_per_night <= :mxprc ) AND "
+			+ "( :mieval IS NULL OR h.average_evaluation >= :mieval ) AND "
+			+ "( :mxeval IS NULL OR h.average_evaluation <= :mxeval )"
+			+ ")"
 			+ "", nativeQuery = true)
-	Page<Hotel> findFullTextSearchAll(
-			@Param("text") String text, 
+	Page<Hotel> search(
+			@Param("query") String query, 
 			@Param("cntry") String country,
 			@Param("city") String city,
 			@Param("miprc") Float minPrice,

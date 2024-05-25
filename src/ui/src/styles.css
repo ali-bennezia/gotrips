@@ -194,3 +194,30 @@ input.ng-touched.ng-invalid {
   pointer-events: none;
   position: absolute;
 }
+
+.search-result-cont {
+  margin-top: 16px;
+  width: 100vw;
+  max-height: 2000px;
+}
+
+.search-result {
+  margin: 0 auto;
+  margin-top: 8px;
+  padding: 8px;
+  max-width: 800px;
+  background-color: white;
+  border-radius: 6px;
+  color: black;
+  border: solid 4px rgb(224, 224, 224);
+  transition: 100ms scale ease-in;
+}
+
+.search-result:hover {
+  scale: 1.05;
+  cursor: pointer;
+}
+
+.search-result-link {
+  text-decoration: none;
+}

@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col">
     <app-evaluation-input
+      *ngIf="authService.authenticated"
       [targetId]="data?.id!"
       (onSentEvaluation)="handleSentEvaluation($event)"
     ></app-evaluation-input>

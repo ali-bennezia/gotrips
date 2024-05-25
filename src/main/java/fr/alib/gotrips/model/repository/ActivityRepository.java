@@ -15,19 +15,29 @@ import fr.alib.gotrips.model.entity.offers.Hotel;
 
 @Repository
 public interface ActivityRepository extends JpaRepository<Activity, Long> {
-	@Query(value = "SELECT f.* FROM ACTIVITY f WHERE MATCH "
-			+ "(f.city, f.country, f.street, f.zip_code, f.description, f.title )"
-			+ " AGAINST (:text IN NATURAL LANGUAGE MODE) "
-			+ "WHERE "
-			+ "( :cntry IS NULL OR f.country = :cntry ) AND "
-			+ "( :city IS NULL OR f.city = :city ) AND "
-			+ "( :miprc IS NULL OR f.price_per_day >= :miprc ) AND "
-			+ "( :mxprc IS NULL OR f.price_per_day <= :mxprc ) AND "
-			+ "( :mieval IS NULL OR f.average_evaluation >= :mieval ) AND "
-			+ "( :mxeval IS NULL OR f.average_evaluation <= :mxeval )"
+
+	@Query(value = "SELECT * FROM ACTIVITY a WHERE "
+			+ "( :query IS NULL OR "
+			+ "("
+			+ " ( a.city LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( a.country LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( a.street LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( a.zip_code LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( a.description LIKE CONCAT('%', :query, '%') ) OR "
+			+ " ( a.title LIKE CONCAT('%', :query, '%') ) "
+			+ ")"
+			+ ") AND "
+			+ "("
+			+ "( :cntry IS NULL OR a.country LIKE CONCAT('%', :cntry, '%') ) AND "
+			+ "( :city IS NULL OR a.city LIKE CONCAT('%', :city, '%') ) AND "
+			+ "( :miprc IS NULL OR a.price_per_night >= :miprc ) AND "
+			+ "( :mxprc IS NULL OR a.price_per_night <= :mxprc ) AND "
+			+ "( :mieval IS NULL OR a.average_evaluation >= :mieval ) AND "
+			+ "( :mxeval IS NULL OR a.average_evaluation <= :mxeval )"
+			+ ")"
 			+ "", nativeQuery = true)
-	Page<Activity> findFullTextSearchAll(
-			@Param("text") String text, 
+	Page<Activity> search(
+			@Param("query") String query, 
 			@Param("cntry") String country,
 			@Param("city") String city,
 			@Param("miprc") Float minPrice,

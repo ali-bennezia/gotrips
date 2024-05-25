@@ -1,1 +1,53 @@
-<p>activity-list-page works!</p>
+<div class="page-cont" style="max-width: 1100px">
+  <h6 class="display-6">Manage activities</h6>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Identifier</th>
+        <th scope="col">Title</th>
+        <th scope="col">Average evaluation</th>
+        <th scope="col">Company</th>
+        <th scope="col">Price per day</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of list">
+        <th scope="row">{{ data.id }}</th>
+        <td>{{ data.title }}</td>
+        <td>{{ data.averageEvaluation }}</td>
+        <td>{{ data.company.name }}</td>
+        <td>{{ data.pricePerDay }}</td>
+        <td>
+          <a [routerLink]="['/activities', 'details', data.id]">
+            <button class="btn btn-menu" [disabled]="isRowLoading(data.id)">
+              Details
+            </button>
+          </a>
+          <a
+            [routerLink]="['/activities', 'form']"
+            [queryParams]="{ id: data.id }"
+            ><button class="btn btn-menu" [disabled]="isRowLoading(data.id)">
+              Edit
+            </button></a
+          >
+          <button
+            class="btn btn-danger"
+            [disabled]="isRowLoading(data.id)"
+            (click)="deleteActivity(data.id)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <a [routerLink]="['/activities', 'form']">
+      <button class="btn btn-menu">Register an activity</button>
+    </a>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
+</div>

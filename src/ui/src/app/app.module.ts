@@ -62,6 +62,9 @@ import { FlightReservationDetailsPageComponent } from './pages/reservations/flig
 import { HotelReservationDetailsPageComponent } from './pages/reservations/hotel-reservation-details-page/hotel-reservation-details-page.component';
 import { ActivityReservationDetailsPageComponent } from './pages/reservations/activity-reservation-details-page/activity-reservation-details-page.component';
 import { CalendarComponent } from './utils/calendar/calendar.component';
+import { FlightsSearchResultComponent } from './pages/flights/flights-search-page/flights-search-result/flights-search-result.component';
+import { ActivitiesSearchPageComponent } from './pages/activities/activities-search-page/activities-search-page.component';
+import { ActivitiesSearchResultComponent } from './pages/activities/activities-search-page/activities-search-result/activities-search-result.component';
 
 @NgModule({
   declarations: [
@@ -108,6 +111,9 @@ import { CalendarComponent } from './utils/calendar/calendar.component';
     HotelReservationDetailsPageComponent,
     ActivityReservationDetailsPageComponent,
     CalendarComponent,
+    FlightsSearchResultComponent,
+    ActivitiesSearchPageComponent,
+    ActivitiesSearchResultComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,1 +1,79 @@
-<p>activity-details-page works!</p>
+<div class="row">
+  <div class="col">
+    <app-evaluation-input
+      *ngIf="authService.authenticated"
+      [targetId]="data?.id!"
+      (onSentEvaluation)="handleSentEvaluation($event)"
+    ></app-evaluation-input>
+  </div>
+  <div class="col page-cont" style="height: 100%">
+    <h6 class="display-6">Activity details</h6>
+    <span *ngIf="data != null; else ngElse">
+      <div class="row">
+        <h4>{{ data.title }}</h4>
+        <h5>{{ data.description | date }}</h5>
+        <p>Spots: {{ data.spots }}</p>
+        <h6>Address</h6>
+        <p>{{ data.address.city }}, {{ data.address.country }}</p>
+        <p>{{ data.address.street }}, {{ data.address.zipCode }}</p>
+      </div>
+      <hr />
+      <a
+        [routerLink]="['/activities', 'company', 'details']"
+        [queryParams]="{ id: data.id }"
+      >
+        <p class="company-name">{{ data.company.name }}</p>
+      </a>
+      <app-stars-evaluation
+        [note]="roundedAverageEval()"
+      ></app-stars-evaluation>
+      <p>Average evaluation: {{ data.averageEvaluation }}</p>
+      <app-interactive-list-group
+        *ngIf="userPaymentList.length > 0; else noPaymentMeansBlock"
+        hideLabel="Hide payment means"
+        showLabel="Show payment means"
+        [list]="userPaymentList"
+        (onSelectValue)="paymentMeanId = $event"
+      ></app-interactive-list-group>
+      <ng-template #noPaymentMeansBlock
+        ><p class="greyed-out">No payments means found.</p>
+        <a [routerLink]="['/user', 'details']" [queryParams]="{ tab: 2 }"
+          ><button class="btn btn-menu">Manage payment information</button></a
+        >
+      </ng-template>
+
+      <div>
+        <h2 style="float: right">${{ data.pricePerDay }} / day</h2>
+        <a
+          [routerLink]="[
+            '/reservations',
+            'pay',
+            'activity',
+            data.id,
+            paymentMeanId
+          ]"
+        >
+          <button
+            class="btn btn-primary"
+            [disabled]="userPaymentList.length <= 0 || paymentMeanId == null"
+          >
+            Proceed to payment
+          </button></a
+        >
+      </div>
+    </span>
+    <ng-template #ngElse>
+      <p class="greyed-out">Loading details ...</p>
+    </ng-template>
+  </div>
+  <div class="col">
+    <app-evaluation-list
+      #evaluationList
+      offerType="activity"
+      *ngIf="data != null; else ngElseEvaluationList"
+      [offerId]="data.id"
+    >
+    </app-evaluation-list>
+    <ng-template #ngElseEvaluationList></ng-template>
+  </div>
+</div>

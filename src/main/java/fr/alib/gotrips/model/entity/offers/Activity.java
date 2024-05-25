@@ -159,6 +159,7 @@ public class Activity {
 	{
 		super();
 		this.applyDTO(dto);
+		this.averageEvaluation = new BigDecimal("0");
 	}
 	public Activity() {
 		super();

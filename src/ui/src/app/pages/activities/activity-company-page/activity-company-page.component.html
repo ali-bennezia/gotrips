@@ -1,1 +1,28 @@
-<p>activity-company-page works!</p>
+<div class="page-cont">
+  <h3 class="display-7">Activity company data</h3>
+
+  <dl>
+    <dt>Owner identifier</dt>
+    <dd>{{ company.userId }}</dd>
+    <dt>Name</dt>
+    <dd>{{ company.name }}</dd>
+    <dt>Description</dt>
+    <dd>{{ company.description }}</dd>
+  </dl>
+
+  <div>
+    <a [routerLink]="['/activities', 'manage']">
+      <button class="btn btn-menu">Manage activities</button>
+    </a>
+    <a
+      [routerLink]="['/user', 'details']"
+      [queryParams]="{ id: company.userId }"
+    >
+      <button class="btn btn-menu">Owner details</button>
+    </a>
+  </div>
+
+  <p class="alert alert-danger" *ngIf="this.errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </p>
+</div>

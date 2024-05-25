@@ -1,0 +1,33 @@
+.center-title {
+  margin-top: 32px;
+}
+.center-title * {
+  text-align: center;
+}
+
+.query-form-group {
+  margin: 8px;
+  margin-top: 16px;
+}
+
+.query-form-group > input {
+  border-radius: 8px 0px 0px 8px;
+}
+
+.query-form-group > button {
+  border-radius: 0px 8px 8px 0px;
+  position: relative;
+}
+
+.query-form-group > input,
+.query-form-group > button {
+  border: none;
+  outline: solid 1px grey;
+  height: 40px;
+}
+
+.query-form-group > button > ng-icon {
+  position: absolute;
+  left: 28px;
+  top: 0px;
+}

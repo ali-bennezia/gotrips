@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import fr.alib.gotrips.exception.CompanyNotFoundException;
@@ -43,6 +44,7 @@ import fr.alib.gotrips.model.repository.FlightRepository;
 import fr.alib.gotrips.model.repository.UserRepository;
 import fr.alib.gotrips.model.repository.company.FlightCompanyRepository;
 import fr.alib.gotrips.model.repository.reservation.FlightReservationRepository;
+import fr.alib.gotrips.utils.SanitationUtils;
 import fr.alib.gotrips.utils.TimeUtils;
 import io.jsonwebtoken.lang.Arrays;
 
@@ -132,6 +134,7 @@ public class FlightService {
 				.collect(Collectors.toList());
 	}
 	
+	@Transactional(propagation = Propagation.NEVER)
 	public List<FlightDetailsDTO> getFlights(Map<String, String> params) throws IllegalArgumentException
 	{
 		for (String key : params.keySet()) {
@@ -146,7 +149,8 @@ public class FlightService {
 		}
 				
 		try {
-			Integer order = params.get("srtordr") == null ? 1 : -1;
+			Integer order = params.get("srtordr") == null  ? 1 : Integer.valueOf(params.get("srtordr"));
+			if (!order.equals(1) && !order.equals(-1)) order = 1;
 			Pageable pageable = PageRequest.of(
 					params.get("page") != null ? Integer.parseInt(params.get("page")) : 0, 
 					10,
@@ -154,17 +158,17 @@ public class FlightService {
 							Sort.unsorted() : 
 							order == 1 ? Sort.by(params.get("srtby")).ascending() : Sort.by(params.get("srtby")).descending()
 			);
-			
-			Page<Flight> result = this.fRepo.findFullTextSearchAll(
-					params.get("qry"), 
-					params.get("ocntry"), 
-					params.get("dcntry"), 
-					Float.valueOf( params.get("miprc") ), 
-					Float.valueOf( params.get("mxprc") ), 
-					new Date( Long.valueOf(params.get("midate")) ), 
-					new Date( Long.valueOf(params.get("mxdate")) ), 
-					Float.valueOf( params.get("mieval") ), 
-					Float.valueOf( params.get("mxeval") ), 
+						
+			Page<Flight> result = this.fRepo.search(
+					SanitationUtils.stringGetNullIfEmpty(params.get("qry")),
+					SanitationUtils.stringGetNullIfEmpty(params.get("ocntry")),
+					SanitationUtils.stringGetNullIfEmpty(params.get("dcntry")),
+					SanitationUtils.floatGetNullIfEmpty(params.get("miprc")),
+					SanitationUtils.floatGetNullIfEmpty(params.get("mxprc")),
+					SanitationUtils.dateGetNullIfEmptyFromTimestamp(params.get("midate")),
+					SanitationUtils.dateGetNullIfEmptyFromTimestamp(params.get("mxdate")),
+					SanitationUtils.floatGetNullIfEmpty(params.get("mieval")),
+					SanitationUtils.floatGetNullIfEmpty(params.get("mxeval")),
 					pageable
 					);
 			
@@ -174,6 +178,7 @@ public class FlightService {
 			
 			return flightDetails;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return new ArrayList<FlightDetailsDTO>();
 		}
 		
