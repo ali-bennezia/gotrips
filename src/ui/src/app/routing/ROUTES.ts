@@ -31,6 +31,7 @@ import { ActivityReservationDetailsPageComponent } from '../pages/reservations/a
 import { FlightsSearchPageComponent } from '../pages/flights/flights-search-page/flights-search-page.component';
 import { ActivityListPageComponent } from '../pages/activities/crud/activity-list-page/activity-list-page.component';
 import { ActivityAddPageComponent } from '../pages/activities/crud/activity-add-page/activity-add-page.component';
+import { ActivitiesSearchPageComponent } from '../pages/activities/activities-search-page/activities-search-page.component';
 
 const ROUTES: Routes = [
   {
@@ -108,6 +109,10 @@ const ROUTES: Routes = [
   {
     path: 'activities/details/:id',
     component: ActivityDetailsPageComponent,
+  },
+  {
+    path: 'activities/search',
+    component: ActivitiesSearchPageComponent,
   },
   {
     path: 'user/register',

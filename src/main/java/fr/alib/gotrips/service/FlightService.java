@@ -178,7 +178,6 @@ public class FlightService {
 			
 			return flightDetails;
 		} catch (Exception e) {
-			e.printStackTrace();
 			return new ArrayList<FlightDetailsDTO>();
 		}
 		

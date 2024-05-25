@@ -1,0 +1,178 @@
+<div class="dropdown">
+  <button
+    class="btn btn-secondary dropdown-toggle calendar-btn"
+    type="button"
+    data-bs-toggle="dropdown"
+    aria-expanded="false"
+  >
+    {{ selectedFirstDate == null ? label : (selectedFirstDate | date) }} -
+    {{ selectedSecondDate == null ? "..." : (selectedSecondDate | date) }}
+  </button>
+
+  <div class="dropdown-menu calendar-dropdown" (click)="onClickInside($event)">
+    <div class="row">
+      <p
+        class="col calendar-arrow-col"
+        (click)="onClickViewPreviousMonth($event)"
+      >
+        <ng-icon name="ionCaretBackOutline"></ng-icon>
+      </p>
+      <p class="col-md-1" style="width: auto">
+        {{ viewedMonth | date : "MMMM" }}, {{ viewedMonth | date : "y" }}
+      </p>
+      <p class="col calendar-arrow-col" (click)="onClickViewNextMonth($event)">
+        <ng-icon name="ionCaretForwardOutline"></ng-icon>
+      </p>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Su</th>
+          <th scope="col">Mo</th>
+          <th scope="col">Tu</th>
+          <th scope="col">We</th>
+          <th scope="col">Th</th>
+          <th scope="col">Fr</th>
+          <th scope="col">Sa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of [0, 1, 2, 3, 4, 5]">
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 1),
+              activated:
+                isSameDay(i * 7 + 1) ||
+                isDayWithinSelectedPeriod(i * 7 + 1) ||
+                isDayWithinHoveredPeriod(i * 7 + 1),
+              disabled: isDayDisabled(i * 7 + 1),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 1) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 1)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 1)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 1)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 1)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 2),
+              activated:
+                isSameDay(i * 7 + 2) ||
+                isDayWithinSelectedPeriod(i * 7 + 2) ||
+                isDayWithinHoveredPeriod(i * 7 + 2),
+              disabled: isDayDisabled(i * 7 + 2),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 2) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 2)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 2)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 2)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 2)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 3),
+              activated:
+                isSameDay(i * 7 + 3) ||
+                isDayWithinSelectedPeriod(i * 7 + 3) ||
+                isDayWithinHoveredPeriod(i * 7 + 3),
+              disabled: isDayDisabled(i * 7 + 3),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 3) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 3)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 3)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 3)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 3)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 4),
+              activated:
+                isSameDay(i * 7 + 4) ||
+                isDayWithinSelectedPeriod(i * 7 + 4) ||
+                isDayWithinHoveredPeriod(i * 7 + 4),
+              disabled: isDayDisabled(i * 7 + 4),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 4) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 4)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 4)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 4)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 4)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 5),
+              activated:
+                isSameDay(i * 7 + 5) ||
+                isDayWithinSelectedPeriod(i * 7 + 5) ||
+                isDayWithinHoveredPeriod(i * 7 + 5),
+              disabled: isDayDisabled(i * 7 + 5),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 5) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 5)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 5)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 5)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 5)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 6),
+              activated:
+                isSameDay(i * 7 + 6) ||
+                isDayWithinSelectedPeriod(i * 7 + 6) ||
+                isDayWithinHoveredPeriod(i * 7 + 6),
+              disabled: isDayDisabled(i * 7 + 6),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 6) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 6)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 6)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 6)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 6)]
+            }}
+          </td>
+          <td
+            [ngClass]="{
+              othermonth: !isDayInViewedMonth(i * 7 + 7),
+              activated:
+                isSameDay(i * 7 + 7) ||
+                isDayWithinSelectedPeriod(i * 7 + 7) ||
+                isDayWithinHoveredPeriod(i * 7 + 7),
+              disabled: isDayDisabled(i * 7 + 7),
+              noncontiguous:
+                isDayWithinHoveredPeriod(i * 7 + 7) && !hoveredPeriodContiguous
+            }"
+            (click)="onClickDay(i * 7 + 7)"
+            (mouseenter)="onMouseEnterCalendarDate($event, i * 7 + 7)"
+            (mouseleave)="onMouseEnterLeaveCalendarDate($event, i * 7 + 7)"
+          >
+            {{
+              displayedDays[getDisplayedDaysIndexFromCalendarIndex(i * 7 + 7)]
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

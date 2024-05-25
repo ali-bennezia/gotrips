@@ -1,28 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AfterViewChecked, Component, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivityDetailsDto } from 'src/app/data/activity/activity-details-dto';
 
 import { CalendarPairUnitDto } from 'src/app/data/calendar/calendar-pair-unit-dto';
 import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
 import { CalendarComponent } from 'src/app/utils/calendar/calendar.component';
-import { areDatesOnSameDay } from 'src/app/utils/dateUtils';
 import { environment } from 'src/environments/environment';
-
-interface SearchOptions {
-  beginCountry?: string;
-  endCountry?: string;
-  beginDate?: Date;
-  endDate?: Date;
-  minPrice?: number;
-  maxPrice?: number;
-  minEval?: number;
-  maxEval?: number;
-  sortBy?: string;
-  sortOrder?: number;
-  query?: string;
-  page?: number;
-}
 
 interface InputPair {
   key: string;
@@ -34,7 +19,7 @@ interface InputPair {
   templateUrl: './activities-search-page.component.html',
   styleUrls: ['./activities-search-page.component.css'],
 })
-export class ActivitiesSearchPageComponent {
+export class ActivitiesSearchPageComponent implements AfterViewChecked {
   beginDate: Date | null = null;
   endDate: Date | null = null;
 
@@ -96,15 +81,15 @@ export class ActivitiesSearchPageComponent {
     activatedRoute: ActivatedRoute
   ) {
     this.group = builder.group({
-      beginCountry: [null],
-      endCountry: [null],
+      query: [null],
+      country: [null],
+      city: [null],
       minPrice: [null],
       maxPrice: [null],
       minEval: [null],
       maxEval: [null],
       sortBy: [null],
       sortOrder: [null],
-      query: [null],
     });
 
     activatedRoute.queryParamMap.subscribe((params) => {
@@ -114,18 +99,16 @@ export class ActivitiesSearchPageComponent {
 
   getSearchOptions(newInput?: InputPair) {
     let opts: any = {
-      ocntry: this.group.get('beginCountry')?.value,
-      dcntry: this.group.get('endCountry')?.value,
-      midate: this.beginDate?.getTime(),
-      mxdate: this.endDate?.getTime(),
+      qry: this.group.get('query')?.value,
+      page: this.page - 1,
+      cntry: this.group.get('country')?.value,
+      city: this.group.get('city')?.value,
       miprc: this.group.get('minPrice')?.value,
       mxprc: this.group.get('maxPrice')?.value,
       mieval: this.group.get('minEval')?.value,
       mxeval: this.group.get('maxEval')?.value,
       srtby: this.group.get('sortBy')?.value,
       srtordr: this.group.get('sortOrder')?.value,
-      qry: this.group.get('query')?.value,
-      page: this.page - 1,
     };
     if (newInput != undefined) {
       opts[newInput.key] = newInput.value;
@@ -149,13 +132,13 @@ export class ActivitiesSearchPageComponent {
     return params.toString();
   }
 
-  results: FlightDetailsDto[] = [];
+  results: ActivityDetailsDto[] = [];
 
   fetchResults(newInput?: InputPair) {
     var strParams = this.getUrlParametersString(newInput);
     console.log(strParams);
     this.http
-      .get<FlightDetailsDto[]>(
+      .get<ActivityDetailsDto[]>(
         `${environment.backendUrl}/api/activity/search${
           strParams != '' && strParams ? `?${strParams}` : ''
         }`
@@ -176,9 +159,7 @@ export class ActivitiesSearchPageComponent {
     }, 100);
   }
 
-  ngOnInit(): void {
-    this.fetchResults();
-  }
+  ngOnInit(): void {}
 
   ngAfterViewChecked(): void {
     if (!this.params || this.initializedParams) return;
@@ -197,5 +178,6 @@ export class ActivitiesSearchPageComponent {
         new Date(new Date(Number(this.params.get('endDate'))))
       );
     }
+    this.fetchResults();
   }
 }

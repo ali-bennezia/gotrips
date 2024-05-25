@@ -65,6 +65,7 @@ import { CalendarComponent } from './utils/calendar/calendar.component';
 import { FlightsSearchResultComponent } from './pages/flights/flights-search-page/flights-search-result/flights-search-result.component';
 import { ActivitiesSearchPageComponent } from './pages/activities/activities-search-page/activities-search-page.component';
 import { ActivitiesSearchResultComponent } from './pages/activities/activities-search-page/activities-search-result/activities-search-result.component';
+import { PeriodCalendarComponent } from './utils/period-calendar/period-calendar.component';
 
 @NgModule({
   declarations: [
@@ -114,6 +115,7 @@ import { ActivitiesSearchResultComponent } from './pages/activities/activities-s
     FlightsSearchResultComponent,
     ActivitiesSearchPageComponent,
     ActivitiesSearchResultComponent,
+    PeriodCalendarComponent,
   ],
   imports: [
     BrowserModule,

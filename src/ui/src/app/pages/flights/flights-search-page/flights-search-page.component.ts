@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { CalendarPairUnitDto } from 'src/app/data/calendar/calendar-pair-unit-dto';
@@ -8,21 +8,6 @@ import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
 import { CalendarComponent } from 'src/app/utils/calendar/calendar.component';
 import { areDatesOnSameDay } from 'src/app/utils/dateUtils';
 import { environment } from 'src/environments/environment';
-
-interface SearchOptions {
-  departureCountry?: string;
-  arrivalCountry?: string;
-  departureDate?: Date;
-  arrivalDate?: Date;
-  minPrice?: number;
-  maxPrice?: number;
-  minEval?: number;
-  maxEval?: number;
-  sortBy?: string;
-  sortOrder?: number;
-  query?: string;
-  page?: number;
-}
 
 interface InputPair {
   key: string;
@@ -34,7 +19,7 @@ interface InputPair {
   templateUrl: './flights-search-page.component.html',
   styleUrls: ['./flights-search-page.component.css'],
 })
-export class FlightsSearchPageComponent implements OnInit, AfterViewChecked {
+export class FlightsSearchPageComponent implements AfterViewChecked {
   departureCalendarDaysDisabledPredicate: (date: Date) => boolean = (
     d: Date
   ) => {
@@ -232,7 +217,6 @@ export class FlightsSearchPageComponent implements OnInit, AfterViewChecked {
       )
       .subscribe({
         next: (data) => {
-          console.log(this.results);
           this.results = data ?? [];
         },
         error: (err) => {},
@@ -244,10 +228,6 @@ export class FlightsSearchPageComponent implements OnInit, AfterViewChecked {
       let newInput: InputPair = { key: inputName, value: value };
       this.fetchResults(newInput);
     }, 100);
-  }
-
-  ngOnInit(): void {
-    this.fetchResults();
   }
 
   ngAfterViewChecked(): void {
@@ -267,5 +247,6 @@ export class FlightsSearchPageComponent implements OnInit, AfterViewChecked {
         new Date(new Date(Number(this.params.get('arrivalDate'))))
       );
     }
+    this.fetchResults();
   }
 }

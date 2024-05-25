@@ -1,0 +1,86 @@
+.calendar-btn {
+  margin-top: 0px;
+  margin: 0 auto;
+  background-color: white;
+  color: black;
+  height: 38px;
+  padding-right: 48px;
+  position: static;
+  width: 100%;
+}
+
+.calendar-btn:active {
+  background-color: white;
+  color: black;
+}
+
+.calendar-dropdown {
+  min-width: 200px;
+  padding: 8px;
+  user-select: none;
+}
+
+.calendar-dropdown > .row > p.col {
+  margin: 0px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.calendar-dropdown > .row > p.col > ng-icon {
+  position: static;
+  margin: 0 auto;
+  font-size: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+td,
+th {
+  text-align: center;
+}
+
+td.othermonth {
+  color: grey;
+}
+
+td.disabled {
+  color: rgb(206, 206, 206);
+}
+
+td.disabled:hover {
+  cursor: default;
+  background: none;
+}
+
+td.activated {
+  background-color: rgb(171, 224, 224);
+  border-radius: 4px;
+}
+
+td.noncontiguous {
+  background-color: rgba(243, 114, 114, 0.473);
+  border-radius: 4px;
+}
+
+td:hover {
+  background-color: rgb(214, 214, 214);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+td.activated:hover {
+  background-color: rgb(140, 175, 214);
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.calendar-arrow-col:hover {
+  cursor: pointer;
+}
+
+td.noncontiguous:hover {
+  background-color: rgba(167, 57, 57, 0.473);
+  border-radius: 4px;
+}
