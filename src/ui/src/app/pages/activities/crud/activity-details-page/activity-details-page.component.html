@@ -51,7 +51,12 @@
       </ng-template>
 
       <div>
-        <h2 style="float: right">${{ data.pricePerDay }} / day</h2>
+        <div style="float: right">
+          <h2>${{ data.pricePerDay }} / day</h2>
+          <h2 *ngIf="beginDate != null && endDate != null">
+            Total ${{ data.pricePerDay * totalDays }}
+          </h2>
+        </div>
         <a
           [routerLink]="[
             '/reservations',

@@ -12,9 +12,9 @@
       <dt>End date</dt>
       <dd>{{ data.endTime | date }}</dd>
       <dt>Duration</dt>
-      <dd>{{ data.days }}</dd>
+      <dd>{{ data.days }} days</dd>
       <dt>Price per day</dt>
-      <dd>{{ data.activity.pricePerDay }}</dd>
+      <dd>${{ data.activity.pricePerDay }}</dd>
     </dl>
     <div style="font-size: 26px">
       <p style="float: right">${{ data.price }}</p>

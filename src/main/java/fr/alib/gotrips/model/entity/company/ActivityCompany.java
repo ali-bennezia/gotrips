@@ -34,7 +34,7 @@ public class ActivityCompany {
 	@Column(nullable = true, unique = false)
 	private String description;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "activity_company_activity_id", referencedColumnName = "id")
 	private List<Activity> activities = new ArrayList<Activity>();
 	@Embedded
 	private Address address;

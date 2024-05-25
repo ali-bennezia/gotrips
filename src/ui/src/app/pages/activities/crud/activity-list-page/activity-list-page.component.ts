@@ -13,7 +13,7 @@ import { ActivityDetailsDto } from 'src/app/data/activity/activity-details-dto';
   templateUrl: './activity-list-page.component.html',
   styleUrls: ['./activity-list-page.component.css'],
 })
-export class ActivityListPageComponent {
+export class ActivityListPageComponent implements OnInit {
   fetchingSubscription!: Subscription;
   loading: boolean = false;
   errorDisplay: string = '';
@@ -110,6 +110,4 @@ export class ActivityListPageComponent {
   ngOnInit(): void {
     this.fetchList();
   }
-
-  ngOnDestroy(): void {}
 }

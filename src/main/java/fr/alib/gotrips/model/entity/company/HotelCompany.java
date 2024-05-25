@@ -35,7 +35,7 @@ public class HotelCompany {
 	@Column(nullable = true, unique = false)
 	private String description;
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "hotel_company_hotel_id", referencedColumnName = "id")
 	private List<Hotel> hotels = new ArrayList<Hotel>();
 	@Embedded
 	private Address address;

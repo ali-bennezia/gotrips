@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 
@@ -13,7 +13,7 @@ import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
   templateUrl: './flight-list-page.component.html',
   styleUrls: ['./flight-list-page.component.css'],
 })
-export class FlightListPageComponent implements OnInit, OnDestroy {
+export class FlightListPageComponent implements OnInit {
   fetchingSubscription!: Subscription;
   loading: boolean = false;
   errorDisplay: string = '';
@@ -110,6 +110,4 @@ export class FlightListPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fetchList();
   }
-
-  ngOnDestroy(): void {}
 }

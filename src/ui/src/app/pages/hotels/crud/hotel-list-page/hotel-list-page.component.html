@@ -1,0 +1,53 @@
+<div class="page-cont" style="max-width: 1100px">
+  <h6 class="display-6">Manage hotels</h6>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Identifier</th>
+        <th scope="col">Name</th>
+        <th scope="col">Average evaluation</th>
+        <th scope="col">Company</th>
+        <th scope="col">Price per night</th>
+        <th scope="col">Rooms</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of list">
+        <th scope="row">{{ data.id }}</th>
+        <td>{{ data.name }}</td>
+        <td>{{ data.averageEvaluation }}</td>
+        <td>{{ data.company.name }}</td>
+        <td>{{ data.pricePerNight }}</td>
+        <td>{{ data.rooms }}</td>
+        <td>
+          <a [routerLink]="['/hotels', 'details', data.id]">
+            <button class="btn btn-menu" [disabled]="isRowLoading(data.id)">
+              Details
+            </button>
+          </a>
+          <a [routerLink]="['/hotels', 'form']" [queryParams]="{ id: data.id }"
+            ><button class="btn btn-menu" [disabled]="isRowLoading(data.id)">
+              Edit
+            </button></a
+          >
+          <button
+            class="btn btn-danger"
+            [disabled]="isRowLoading(data.id)"
+            (click)="deleteHotel(data.id)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <a [routerLink]="['/hotels', 'form']">
+      <button class="btn btn-menu">Register a hotel</button>
+    </a>
+  </div>
+  <div class="alert alert-danger" *ngIf="errorDisplay.trim() != ''">
+    {{ errorDisplay }}
+  </div>
+</div>

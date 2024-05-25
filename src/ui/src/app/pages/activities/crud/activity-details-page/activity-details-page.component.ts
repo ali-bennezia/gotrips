@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/auth/auth.service';
-import { FlightDetailsDto } from 'src/app/data/flight/flight-details-dto';
 
 import { environment } from 'src/environments/environment';
 
@@ -14,6 +13,9 @@ import { CardDetailsDto } from 'src/app/data/user/card-details-dto';
 import { UserService } from 'src/app/services/user.service';
 import { ListGroupItem } from 'src/app/utils/interactive-list-group/interactive-list-group.component';
 import { ActivityDetailsDto } from 'src/app/data/activity/activity-details-dto';
+
+import { areDatesOnSameDay } from 'src/app/utils/dateUtils';
+import { CalendarPairUnitDto } from 'src/app/data/calendar/calendar-pair-unit-dto';
 
 @Component({
   selector: 'app-activity-details-page',
@@ -101,6 +103,7 @@ export class ActivityDetailsPageComponent {
       .subscribe({
         next: (resp) => {
           this.data = resp.body;
+          this.tryFetchRservationDates();
         },
         error: (err) => {
           switch (err.status) {
@@ -145,12 +148,67 @@ export class ActivityDetailsPageComponent {
     this.cleanup();
   }
 
+  availableReservationDates: CalendarPairUnitDto[] = [];
+
+  fetchAvailableReservationDates() {
+    this.http
+      .get<CalendarPairUnitDto[]>(
+        `${environment.backendUrl}/api/activity/${
+          this.data?.id
+        }/calendar/search/${this.firstKnownDate?.getTime()}/${this.lastKnownDate?.getTime()}`,
+        {
+          observe: 'response',
+        }
+      )
+      .subscribe({
+        next: (resp) => {
+          this.availableReservationDates = resp.body ?? [];
+        },
+        error: (err) => {},
+      });
+  }
+
   calendarDaysDisabledPredicate = (d: Date) => {
-    return false;
+    return !(
+      this.availableReservationDates
+        .filter((o) => areDatesOnSameDay(new Date(o.timestamp), d))
+        .map((o) => o.found)
+        .filter((o) => o == true).length > 0
+    );
   };
+
+  tryFetchRservationDates() {
+    if (
+      this.firstKnownDate != null &&
+      this.lastKnownDate != null &&
+      this.data != null
+    )
+      this.fetchAvailableReservationDates();
+  }
 
   beginDate: Date | null = null;
   endDate: Date | null = null;
-  firstKnownDate: Date | null = null;
-  lastKnownDate: Date | null = null;
+  private _firstKnownDate: Date | null = null;
+  private _lastKnownDate: Date | null = null;
+  get firstKnownDate() {
+    return this._firstKnownDate;
+  }
+  set firstKnownDate(val: Date | null) {
+    this._firstKnownDate = val;
+    this.tryFetchRservationDates();
+  }
+  get lastKnownDate() {
+    return this._lastKnownDate;
+  }
+  get totalDays() {
+    if (this.beginDate == null || this.endDate == null) return 0;
+    return (
+      (this.endDate.getTime() - this.beginDate.getTime()) / (1000 * 3600 * 24) +
+      1
+    );
+  }
+  set lastKnownDate(val: Date | null) {
+    this._lastKnownDate = val;
+    this.tryFetchRservationDates();
+  }
 }

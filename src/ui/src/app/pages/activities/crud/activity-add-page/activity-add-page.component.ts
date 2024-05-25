@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddressDto } from 'src/app/data/auth/address-dto';
-import { FlightDto } from 'src/app/data/flight/flight-dto';
 import { environment } from 'src/environments/environment';
 
 import { tap } from 'rxjs/operators';

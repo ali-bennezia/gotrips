@@ -47,7 +47,7 @@ public class Hotel {
 	private Address address;
 	@Column( nullable = false, unique = false, precision = 2, scale = 1 )
 	private BigDecimal averageEvaluation;
-	@Column( precision = 4, scale = 2 )
+	@Column( precision = 12, scale = 2 )
 	private BigDecimal pricePerNight;
 	public Long getId() {
 		return id;
