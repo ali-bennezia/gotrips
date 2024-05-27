@@ -4,6 +4,7 @@
       *ngIf="authService.authenticated"
       [targetId]="data?.id!"
       (onSentEvaluation)="handleSentEvaluation($event)"
+      targetType="flight"
     ></app-evaluation-input>
   </div>
   <div class="col page-cont" style="height: 100%">

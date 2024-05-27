@@ -22,6 +22,8 @@ import { StarsEvaluationInputComponent } from '../stars-evaluation-input/stars-e
 export class EvaluationInputComponent {
   note!: number;
   @Input()
+  targetType!: string;
+  @Input()
   targetId!: number;
   group!: FormGroup;
   loading: boolean = false;
@@ -58,7 +60,7 @@ export class EvaluationInputComponent {
     let dto: EvaluationDto = this.getDto();
     this.http
       .post(
-        `${environment.backendUrl}/api/flight/${this.targetId}/evaluations/create`,
+        `${environment.backendUrl}/api/${this.targetType}/${this.targetId}/evaluations/create`,
         dto,
         {
           headers: {

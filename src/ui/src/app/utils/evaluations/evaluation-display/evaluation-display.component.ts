@@ -45,7 +45,7 @@ export class EvaluationDisplayComponent {
     public authService: AuthService,
     private http: HttpClient,
     private evaluationListComponent: EvaluationListComponent,
-    private builder: FormBuilder
+    builder: FormBuilder
   ) {
     this.group = builder.group({
       title: ['', Validators.required],

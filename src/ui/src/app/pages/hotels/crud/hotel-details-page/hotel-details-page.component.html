@@ -1,1 +1,102 @@
-<p>hotel-details-page works!</p>
+<div class="row">
+  <div class="col">
+    <app-evaluation-input
+      *ngIf="authService.authenticated"
+      [targetId]="data?.id!"
+      (onSentEvaluation)="handleSentEvaluation($event)"
+      targetType="hotel"
+    ></app-evaluation-input>
+  </div>
+  <div class="col page-cont" style="height: 100%">
+    <h6 class="display-6">Hotel details</h6>
+    <span *ngIf="data != null; else ngElse">
+      <div class="row">
+        <h4>{{ data.name }}</h4>
+        <h5>{{ data.description }}</h5>
+        <p>Rooms: {{ data.rooms }}</p>
+        <h6>Address</h6>
+        <p>{{ data.address.city }}, {{ data.address.country }}</p>
+        <p>{{ data.address.street }}, {{ data.address.zipCode }}</p>
+      </div>
+      <hr />
+      <a
+        [routerLink]="['/hotels', 'company', 'details']"
+        [queryParams]="{ id: data.id }"
+      >
+        <p class="company-name">{{ data.company.name }}</p>
+      </a>
+      <app-stars-evaluation
+        [note]="roundedAverageEval()"
+      ></app-stars-evaluation>
+      <p>Average evaluation: {{ data.averageEvaluation }}</p>
+      <app-period-calendar
+        label="Select reservation dates"
+        (onSelectedFirstDate)="beginDate = $event"
+        (onSelectedSecondDate)="endDate = $event"
+        (onChangedFirstKnownDate)="firstKnownDate = $event"
+        (onChangedLastKnownDate)="lastKnownDate = $event"
+        [dayDisabledPredicate]="calendarDaysDisabledPredicate"
+      ></app-period-calendar>
+      <app-interactive-list-group
+        *ngIf="userPaymentList.length > 0; else noPaymentMeansBlock"
+        hideLabel="Hide payment means"
+        showLabel="Show payment means"
+        [list]="userPaymentList"
+        (onSelectValue)="paymentMeanId = $event"
+      ></app-interactive-list-group>
+      <ng-template #noPaymentMeansBlock
+        ><p class="greyed-out">No payments means found.</p>
+        <a [routerLink]="['/user', 'details']" [queryParams]="{ tab: 2 }"
+          ><button class="btn btn-menu">Manage payment information</button></a
+        >
+      </ng-template>
+
+      <div>
+        <div style="float: right">
+          <h2>${{ data.pricePerNight }} / day</h2>
+          <h2 *ngIf="beginDate != null && endDate != null">
+            Total ${{ data.pricePerNight * totalDays }}
+          </h2>
+        </div>
+        <a
+          [routerLink]="[
+            '/reservations',
+            'pay',
+            'hotel',
+            data.id,
+            paymentMeanId
+          ]"
+          [queryParams]="{
+            beginTime: beginDate?.getTime(),
+            endTime: endDate?.getTime()
+          }"
+        >
+          <button
+            class="btn btn-primary"
+            [disabled]="
+              userPaymentList.length <= 0 ||
+              paymentMeanId == null ||
+              beginDate == null ||
+              endDate == null
+            "
+          >
+            Proceed to payment
+          </button></a
+        >
+      </div>
+    </span>
+    <ng-template #ngElse>
+      <p class="greyed-out">Loading details ...</p>
+    </ng-template>
+  </div>
+  <div class="col">
+    <app-evaluation-list
+      #evaluationList
+      offerType="hotel"
+      *ngIf="data != null; else ngElseEvaluationList"
+      [offerId]="data.id"
+    >
+    </app-evaluation-list>
+    <ng-template #ngElseEvaluationList></ng-template>
+  </div>
+</div>

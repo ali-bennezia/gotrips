@@ -36,6 +36,11 @@ import { HotelsSearchPageComponent } from '../pages/hotels/hotels-search-page/ho
 
 const ROUTES: Routes = [
   {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'flights',
+  },
+  {
     path: 'flights',
     component: FlightsPageComponent,
     pathMatch: 'full',
